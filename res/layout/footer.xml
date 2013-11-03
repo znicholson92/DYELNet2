@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Footer -->
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#1483D9"
+        android:paddingBottom="2dip"
+        android:paddingLeft="2dip"
+        android:paddingRight="2dip"
+        android:paddingTop="2dip" >
+
+    	<Button
+    	    android:id="@+id/button_connect"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignParentBottom="true"
+    	    android:layout_centerHorizontal="true"
+    	    android:onClick="connectToDatabase"
+    	    android:orientation="horizontal"
+    	    android:background="#DAE3EB"
+    	    android:layout_marginRight="4dip"
+        	android:layout_marginLeft="8dip"
+        	android:layout_weight="1"
+    	    android:text="Connect" />
+
+    	<Button
+	        android:id="@+id/button_login"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:orientation="horizontal"
+        	android:onClick="gotoMenu"
+        	android:background="#DAE3EB"
+        	android:layout_marginRight="4dip"
+        	android:layout_marginLeft="8dip"
+        	android:layout_weight="1"
+        	android:text="Menu" />
+    </LinearLayout>

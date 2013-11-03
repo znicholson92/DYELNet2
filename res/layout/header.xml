@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    
+<!--  Header -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation = "horizontal"
+        android:background="#1483D9">
+
+
+        <TextView android:id="@+id/status_bar"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_marginRight="4dip"
+        	android:layout_marginLeft="4dip"
+            android:text="hello"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+        />
+        <TextView android:id="@+id/username"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_marginRight="4dip"
+        	android:layout_marginLeft="4dip"
+            android:text=""
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+        />
+    </LinearLayout>
+
