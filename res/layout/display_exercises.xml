@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <include layout="@layout/header"/>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exercise List"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <CheckBox
+        android:id="@+id/CheckBox07"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:text="Forearms"
+         />
+
+    <CheckBox
+        android:id="@+id/CheckBox06"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:text="Arms" />
+
+    <CheckBox
+        android:id="@+id/CheckBox05"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:text="Chest"/>
+
+    <CheckBox
+        android:id="@+id/CheckBox04"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:text="Back" />
+
+    <CheckBox
+        android:id="@+id/CheckBox03"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:text="Legs" />
+
+    <CheckBox
+        android:id="@+id/CheckBox02"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:text="Shoulders" />
+    
+    <View
+    	android:layout_width="fill_parent"
+    	android:layout_height="1dp"
+    	android:background="@android:color/darker_gray"/>
+    
+    <HorizontalScrollView
+            android:id="@+id/horizontalScrollView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <LinearLayout
+                android:id="@+id/linear_scroll"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+        
+                    <!-- Column Header -->
+
+                    <LinearLayout
+                        android:id="@+id/col_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#10A3A3" >
+
+                        <TextView android:id="@+id/col1"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text="col1"
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col2"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text="col2"
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col3"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text="col_3"
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col4"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text="col_4"
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col5"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text="col5"
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                    </LinearLayout>
+                 
+                    <!-- List Divider -->
+                    <View android:layout_width="fill_parent"
+                        android:layout_height="1dip"
+                        android:background="?android:attr/listDivider" />
+                
+                    <ListView
+                        android:id="@+id/listView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="392dp"
+                        android:orientation="horizontal" >
+                    </ListView>
+                   
+            </LinearLayout>
+            
+    </HorizontalScrollView>
+
+     <include layout="@layout/footer"/>
+
+
+</TableLayout>
