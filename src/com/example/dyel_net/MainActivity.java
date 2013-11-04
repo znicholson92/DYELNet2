@@ -7,6 +7,7 @@ import java.util.Calendar;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.app.*;
@@ -75,9 +76,23 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.login);
 	}
 	
+	/***************MAIN GOTO RELAY**************************/
+	public void clickedListItem(View v)
+	{
+		TextView tv = (TextView)v;
+		
+	}
+	
+	/***************MAIN MENU FUNCTIONALITY******************/
 	public void gotoLogin(View v)
 	{
 		setContentView(R.layout.login);
+	}
+	
+	public void gotoUserData(View v)
+	{
+		setContentView(R.layout.userdata);
+		userdata_load();
 	}
 	
 	public void gotoMenu(View v)
@@ -115,6 +130,7 @@ public class MainActivity extends Activity {
         
 	}
 	
+	/****************SETTINGS METHODS************************/
 	public void loadUserInfo()
 	{
 		String JSONstring = con.readQuery("SELECT * FROM User WHERE username=" + con.username());
@@ -180,12 +196,7 @@ public class MainActivity extends Activity {
 			changes_bar.setVisibility(View.VISIBLE);
 	}
 	
-	public void gotoUserData(View v)
-	{
-		setContentView(R.layout.userdata);
-		userdata_load();
-	}
-
+	/****************USER DATA METHODS***********************/
 	public void userdata_load()
 	{
 		String SQL =  "SELECT * FROM userdata WHERE " + 
@@ -260,6 +271,48 @@ public class MainActivity extends Activity {
 			changes_bar.setVisibility(View.VISIBLE);
 	}
 	
+	/***************REGISTRATION METHODS*********************/
+    public void CreateUser(View view)
+    {
+        String username;
+        String password;
+        String firstName;
+        String lastName;
+        String DOB;
+        String sex;
+        String Query;
+        
+        EditText userNameET = (EditText) findViewById(R.id.createuser_edit_username);
+        EditText passwordET = (EditText) findViewById(R.id.createuser_edit_password);                
+        EditText firstNameET = (EditText) findViewById(R.id.createuser_edit_firstName);
+        EditText lastNameET = (EditText) findViewById(R.id.createuser_edit_lastName);
+        EditText dateOfBirthET = (EditText) findViewById(R.id.createuser_dateofbirth);
+        EditText sexET = (EditText) findViewById(R.id.createuser_edit_sex);
+
+
+        username = userNameET.getText().toString();
+        password = passwordET.getText().toString();
+        firstName = firstNameET.getText().toString();
+        lastName = lastNameET.getText().toString();
+        DOB = dateOfBirthET.getText().toString();
+        sex = sexET.getText().toString();
+        //location = locationET.getText().toString();
+        
+        Query = "INSERT INTO  `dyel-net_main`.`user` "
+                        +"(`username` , `firstname` , `lastname` , `dateofbirth` , `sex`)"
+                        +"VALUES ( "
+                        +"'"+username+"', "
+                        +"'"+password+"', "
+                        +"'"+firstName+"', "
+                        +"'"+lastName+"', "
+                        +"'"+DOB+"', "
+                        +"'"+sex+"');";
+        connection con = new connection("dyel-net_admin", "teamturtle", this);
+        con.writeQuery(Query);
+        ////writeQuery -> boolean
+        Log.w("1", "user info created");
+        setContentView(R.layout.login);
+    }
 	
 	
 }

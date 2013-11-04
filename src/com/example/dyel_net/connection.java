@@ -82,8 +82,8 @@ public class connection
 	public void readQuery(String SQL, ListView l)
 	{
 		_connection task = new _connection();
-		task.execute("read", SQL, "update");
 		list = l;
+		task.execute("read", SQL, "update");
 	}
 
 	public String readQuery(String SQL)

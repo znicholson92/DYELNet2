@@ -36,5 +36,6 @@
     <style name="NormalFont">
         <item name="android:textSize">19sp</item>
     </style>
+    <style name="a">2</style>
 
 </resources>

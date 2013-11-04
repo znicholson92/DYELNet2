@@ -51,11 +51,24 @@
 	        android:text="@string/user_name" />
 	
 	    <EditText
-	        android:id="@+id/edit_username"
+	        android:id="@+id/createuser_edit_username"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:hint="@string/user_create_enter" />
+
+	    <TextView
+	        android:id="@+id/password"
+	        style="@style/NormalFont"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Password" />
 	
+	    <EditText
+	        android:id="@+id/createuser_edit_password"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/user_create_enter" />
+	    	
 	    <TextView
 	        android:id="@+id/firstName"
 	        style="@style/NormalFont"
@@ -64,7 +77,7 @@
 	        android:text="@string/first_name" />
 	
 	    <EditText
-	        android:id="@+id/edit_firstName"
+	        android:id="@+id/createuser_edit_firstName"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:hint="@string/user_create_enter" />
@@ -77,7 +90,7 @@
 	        android:text="@string/last_name" />
 	
 	    <EditText
-	        android:id="@+id/edit_lastName"
+	        android:id="@+id/createuser_edit_lastName"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:hint="@string/user_create_enter" />
@@ -94,16 +107,23 @@
 	        android:layout_height="wrap_content"
 	        android:onClick="showDatePickerDialog"
 	        android:text="@string/pick_date" />
-	
+	    
 	    <TextView
-	        android:id="@+id/location"
+	        android:id="@+id/createuser_dateofbirth"
 	        style="@style/NormalFont"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/location" />
+	        android:text="" />
+	
+	    <TextView
+	        android:id="@+id/sex"
+	        style="@style/NormalFont"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Sex" />
 	
 	    <EditText
-	        android:id="@+id/edit_location"
+	        android:id="@+id/createuser_edit_sex"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:hint="@string/user_create_enter" />
