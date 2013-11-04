@@ -102,18 +102,43 @@
 	        android:layout_height="wrap_content"
 	        android:text="@string/date_of_birth" />
 	
-	    <Button
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:onClick="showDatePickerDialog"
-	        android:text="@string/pick_date" />
 	    
-	    <TextView
-	        android:id="@+id/createuser_dateofbirth"
-	        style="@style/NormalFont"
-	        android:layout_width="wrap_content"
+	    <LinearLayout
+	        android:id="@+id/datelinearlayout"
+	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:text="" />
+	        android:orientation="horizontal" >
+		    <EditText
+		        android:id="@+id/createuser_dateofbirth_day"
+		        style="@style/NormalFont"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="" />
+		   <TextView
+		        android:id="@+id/dash1"
+		        style="@style/NormalFont"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text=" - " />
+		    <EditText
+		        android:id="@+id/createuser_dateofbirth_month"
+		        style="@style/NormalFont"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="" />
+		    <TextView
+		        android:id="@+id/dash2"
+		        style="@style/NormalFont"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text=" - " />
+		    <EditText
+		        android:id="@+id/createuser_dateofbirth_year"
+		        style="@style/NormalFont"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="" />
+	    </LinearLayout>
 	
 	    <TextView
 	        android:id="@+id/sex"

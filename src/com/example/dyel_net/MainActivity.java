@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.View;
 import android.app.*;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -286,7 +287,9 @@ public class MainActivity extends Activity {
         EditText passwordET = (EditText) findViewById(R.id.createuser_edit_password);                
         EditText firstNameET = (EditText) findViewById(R.id.createuser_edit_firstName);
         EditText lastNameET = (EditText) findViewById(R.id.createuser_edit_lastName);
-        EditText dateOfBirthET = (EditText) findViewById(R.id.createuser_dateofbirth);
+        EditText dateOfBirthETy = (EditText) findViewById(R.id.createuser_dateofbirth_year);
+        EditText dateOfBirthETm = (EditText) findViewById(R.id.createuser_dateofbirth_month);
+        EditText dateOfBirthETd = (EditText) findViewById(R.id.createuser_dateofbirth_day);
         EditText sexET = (EditText) findViewById(R.id.createuser_edit_sex);
 
 
@@ -294,22 +297,20 @@ public class MainActivity extends Activity {
         password = passwordET.getText().toString();
         firstName = firstNameET.getText().toString();
         lastName = lastNameET.getText().toString();
-        DOB = dateOfBirthET.getText().toString();
+        DOB = dateOfBirthETy.getText().toString()+"-"+dateOfBirthETm.getText().toString()+"-"+dateOfBirthETd.getText().toString();
         sex = sexET.getText().toString();
-        //location = locationET.getText().toString();
         
         Query = "INSERT INTO  `dyel-net_main`.`user` "
                         +"(`username` , `firstname` , `lastname` , `dateofbirth` , `sex`)"
                         +"VALUES ( "
                         +"'"+username+"', "
-                        +"'"+password+"', "
                         +"'"+firstName+"', "
                         +"'"+lastName+"', "
                         +"'"+DOB+"', "
                         +"'"+sex+"');";
         connection con = new connection("dyel-net_admin", "teamturtle", this);
         con.writeQuery(Query);
-        ////writeQuery -> boolean
+
         Log.w("1", "user info created");
         setContentView(R.layout.login);
     }
