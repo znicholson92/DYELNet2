@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
 		EditText un_box = (EditText) findViewById(R.id.usernameText);
 		EditText pw_box = (EditText) findViewById(R.id.passwordText);
 
-		connection con = new connection(un_box.getText().toString(), pw_box.getText().toString(), this);
+		con = new connection(un_box.getText().toString(), pw_box.getText().toString(), this);
 
 		while(con.working())
 		{
