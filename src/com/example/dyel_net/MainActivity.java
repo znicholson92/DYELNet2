@@ -1,11 +1,18 @@
 package com.example.dyel_net;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import android.os.Bundle;
 import android.app.Activity;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.View;
 import android.app.*;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,7 +44,7 @@ public class MainActivity extends Activity {
 		EditText un_box = (EditText) findViewById(R.id.usernameText);
 		EditText pw_box = (EditText) findViewById(R.id.passwordText);
 
-		connection con = new connection(un_box.getText().toString(), pw_box.getText().toString(), this);
+		con = new connection(un_box.getText().toString(), pw_box.getText().toString(), this);
 
 		while(con.working())
 		{
@@ -124,15 +131,11 @@ public class MainActivity extends Activity {
 				EditText lastname = (EditText)findViewById(R.id.settings_lastname);
 				EditText dateofbirth = (EditText)findViewById(R.id.settings_dateofbirth);
 				EditText sex = (EditText)findViewById(R.id.settings_sex);
-				EditText weight = (EditText)findViewById(R.id.settings_weight);
-				EditText bodyfat = (EditText)findViewById(R.id.settings_bodyfat);
 				
 				firstname.setText(j.get("firstname").toString());
 				lastname.setText(j.get("lastname").toString());
 				dateofbirth.setText(j.get("dateofbirth").toString());
 				sex.setText(j.get("sex").toString());
-				//weight.setText(j.get("weight").toString());
-				//bodyfat.setText(j.get("bodyfat").toString());
 			
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -143,21 +146,121 @@ public class MainActivity extends Activity {
 	
 	public void saveUserInfo(View v)
 	{
+		Button b = (Button)v;
+		
 		EditText firstname = (EditText)findViewById(R.id.settings_firstname);
 		EditText lastname = (EditText)findViewById(R.id.settings_lastname);
 		EditText dateofbirth = (EditText)findViewById(R.id.settings_dateofbirth);
 		EditText sex = (EditText)findViewById(R.id.settings_sex);
-		EditText weight = (EditText)findViewById(R.id.settings_weight);
-		EditText bodyfat = (EditText)findViewById(R.id.settings_bodyfat);
 		
-		String SQL = "UPDATE user SET " + 
-					 "firstname='" + firstname.getText().toString() + "'," + 
-					 "lastname='" + lastname.getText().toString() + "'," + 
-					 "dateofbirth='" + dateofbirth.getText().toString() + "'," + 
-					 "sex='" + sex.getText().toString() + "'," + 
-					 "WHERE username='" + con.username() + "'" ;
-				
-		con.writeQuery(SQL);
+		if(b.getText().toString() != "Cancel")
+		{
+			String SQL = "UPDATE user SET " + 
+						 "firstname='" + firstname.getText().toString() + "'," + 
+						 "lastname='" + lastname.getText().toString() + "'," + 
+						 "dateofbirth='" + dateofbirth.getText().toString() + "'," + 
+						 "sex='" + sex.getText().toString() + "'," + 
+						 "WHERE username='" + con.username() + "'" ;
+					
+			con.writeQuery(SQL);
+		}
+		else
+		{
+			loadUserInfo();
+		}
+		LinearLayout changes_bar = (LinearLayout) findViewById(R.id.settings_changesbar);
+		changes_bar.setVisibility(View.INVISIBLE);
 	}
+	
+	public void changedUserInfo(View v)
+	{
+		LinearLayout changes_bar = (LinearLayout) findViewById(R.id.settings_changesbar);
+		
+		if(changes_bar.getVisibility() == View.INVISIBLE)
+			changes_bar.setVisibility(View.VISIBLE);
+	}
+	
+	public void gotoUserData(View v)
+	{
+		setContentView(R.layout.userdata);
+		userdata_load();
+	}
+
+	public void userdata_load()
+	{
+		String SQL =  "SELECT * FROM userdata WHERE " + 
+					  "username='" + con.username() + "'" +
+					  "AND isGoal=" + false + " " + 
+					  "ORDER BY datetime DESC";
+					  
+		String JSONstring = con.readQuery(SQL);
+		JSONObject jsonObject;
+		if(JSONstring.length() > 10)
+		{
+			try 
+			{
+				jsonObject = new JSONObject(JSONstring);
+				JSONArray jArray = jsonObject.getJSONArray("data");
+				JSONObject j = jArray.getJSONObject(0);
+			
+				EditText bodyfat = (EditText)findViewById(R.id.userdata_bodyfat);
+				EditText restinghr = (EditText)findViewById(R.id.userdata_restinghr);
+				EditText weight = (EditText)findViewById(R.id.userdata_weight);
+				EditText notes = (EditText)findViewById(R.id.userdata_notes);
+				
+				bodyfat.setText(j.get("bodyfat").toString());
+				restinghr.setText(j.get("restinghr").toString());
+				weight.setText(j.get("weight").toString());
+				notes.setText(j.get("notes").toString());
+			
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void userdata_update(View v)
+	{
+		Button b = (Button)v;
+		
+		EditText bodyfat = (EditText)findViewById(R.id.userdata_bodyfat);
+		EditText restinghr = (EditText)findViewById(R.id.userdata_restinghr);
+		EditText weight = (EditText)findViewById(R.id.userdata_weight);
+		EditText notes = (EditText)findViewById(R.id.userdata_notes);
+		
+		if(b.getText().toString() != "Cancel")
+		{
+			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+			
+			String SQL = "INSERT INTO userdata VALUES( " + 
+						 "bodyfat='" + bodyfat.getText().toString() + "'," + 
+						 "restinghr='" + restinghr.getText().toString() + "'," + 
+						 "weight='" + weight.getText().toString() + "'," + 
+						 "notes='" + notes.getText().toString() + "'," + 
+						 "datetime=" + timeStamp + "'," +
+						 "isgoal=" + false + ") " + 
+						 "WHERE username='" + con.username() + "'";
+					
+			con.writeQuery(SQL);
+		}
+		else
+		{
+			userdata_load();
+		}
+		LinearLayout changes_bar = (LinearLayout) findViewById(R.id.userdata_changesbar);
+		changes_bar.setVisibility(View.INVISIBLE);
+	}
+	
+	public void userdata_changed(View v)
+	{
+		LinearLayout changes_bar = (LinearLayout) findViewById(R.id.userdata_changesbar);
+		
+		if(changes_bar.getVisibility() == View.INVISIBLE)
+			changes_bar.setVisibility(View.VISIBLE);
+	}
+	
+	
+	
 }
 

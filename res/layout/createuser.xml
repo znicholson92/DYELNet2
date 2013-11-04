@@ -4,5 +4,138 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/register_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#1483D9"
+        android:paddingBottom="2dip"
+        android:paddingLeft="2dip"
+        android:paddingRight="2dip"
+        android:paddingTop="2dip"
+        android:orientation="horizontal" >
+        
+        <Button
+            android:id="@+id/register_backbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:background="#DAE3EB"
+            android:orientation="horizontal"
+            android:padding="5dip"
+            android:onClick="gotoLogin"
+            android:text="Back" />
+        
+        <TextView
+            style="@style/CodeFont.Red.Big"
+            android:layout_height="match_parent"
+            android:text="Enter your information"
+            android:textSize="16dip"
+            android:gravity="center"
+            android:typeface="monospace" />
+    
+    </LinearLayout>
+    
+    <!-- Body -->
+    <LinearLayout
+        android:id="@+id/register_body"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >  
 
+	    <TextView
+	        android:id="@+id/username"
+	        style="@style/NormalFont"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/user_name" />
+	
+	    <EditText
+	        android:id="@+id/edit_username"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/user_create_enter" />
+	
+	    <TextView
+	        android:id="@+id/firstName"
+	        style="@style/NormalFont"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/first_name" />
+	
+	    <EditText
+	        android:id="@+id/edit_firstName"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/user_create_enter" />
+	
+	    <TextView
+	        android:id="@+id/lastName"
+	        style="@style/NormalFont"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/last_name" />
+	
+	    <EditText
+	        android:id="@+id/edit_lastName"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/user_create_enter" />
+	
+	    <TextView
+	        android:id="@+id/date_of_birth"
+	        style="@style/NormalFont"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/date_of_birth" />
+	
+	    <Button
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="showDatePickerDialog"
+	        android:text="@string/pick_date" />
+	
+	    <TextView
+	        android:id="@+id/location"
+	        style="@style/NormalFont"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/location" />
+	
+	    <EditText
+	        android:id="@+id/edit_location"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/user_create_enter" />
+    </LinearLayout>
+    
+    <!-- Footer -->
+    <LinearLayout
+        android:id="@+id/register_footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#1483D9"
+        android:paddingBottom="2dip"
+        android:paddingLeft="2dip"
+        android:paddingRight="2dip"
+        android:paddingTop="2dip"
+        android:orientation="horizontal" >
+
+    	<Button
+    	    android:id="@+id/button_connect"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignParentBottom="true"
+    	    android:layout_centerHorizontal="true"
+    	    android:orientation="horizontal"
+    	    android:background="#DAE3EB"
+    	    android:layout_marginRight="4dip"
+        	android:layout_marginLeft="8dip"
+        	android:layout_weight="3"
+        	android:onClick="CreateUser"
+    	    android:text="Register" />
+
+ 
+    </LinearLayout>
+    
 </LinearLayout>

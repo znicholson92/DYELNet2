@@ -13,33 +13,33 @@
          android:layout_width="wrap_content"
          android:gravity="center"
          android:width="65dip"
-         android:height="30dip" />
+         android:height="20dip" />
  
      <TextView android:id="@+id/cell2"
          android:layout_height="fill_parent"
          android:layout_width="wrap_content"
          android:gravity="center"
          android:width="65dip"
-         android:height="30dip"  android:layout_weight="1"/>
+         android:height="20dip"  android:layout_weight="1"/>
  
      <TextView android:id="@+id/cell3"
          android:layout_height="fill_parent"
          android:layout_width="wrap_content"
          android:gravity="center"
          android:width="65dip"
-         android:height="30dip"  android:layout_weight="1"/>
+         android:height="20dip"  android:layout_weight="1"/>
      
      <TextView android:id="@+id/cell4"
          android:layout_height="fill_parent"
          android:layout_width="wrap_content"
          android:gravity="center"
          android:width="65dip"
-         android:height="30dip"  android:layout_weight="1"/>
+         android:height="20dip"  android:layout_weight="1"/>
  
      <TextView android:id="@+id/cell5"
          android:layout_height="fill_parent"
          android:layout_width="wrap_content"
          android:gravity="center"
          android:width="65dip"
-         android:height="30dip"   android:layout_weight="1"/>
+         android:height="20dip"   android:layout_weight="1"/>
 </LinearLayout>
