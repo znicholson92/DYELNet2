@@ -281,7 +281,7 @@ public class MainActivity extends Activity {
         String lastName;
         String DOB;
         String sex;
-        String Query;
+        String SQL;
         
         EditText userNameET = (EditText) findViewById(R.id.createuser_edit_username);
         EditText passwordET = (EditText) findViewById(R.id.createuser_edit_password);                
@@ -300,7 +300,7 @@ public class MainActivity extends Activity {
         DOB = dateOfBirthETy.getText().toString()+"-"+dateOfBirthETm.getText().toString()+"-"+dateOfBirthETd.getText().toString();
         sex = sexET.getText().toString();
         
-        Query = "INSERT INTO  `dyel-net_main`.`user` "
+        SQL = "INSERT INTO  `dyel-net_main`.`user` "
                         +"(`username` , `firstname` , `lastname` , `dateofbirth` , `sex`)"
                         +"VALUES ( "
                         +"'"+username+"', "
@@ -309,8 +309,21 @@ public class MainActivity extends Activity {
                         +"'"+DOB+"', "
                         +"'"+sex+"');";
         connection con = new connection("dyel-net_admin", "teamturtle", this);
-        con.writeQuery(Query);
-
+        
+        String create_account_query = "CREATE USER '" + username + " '@'engr-cpanel-mysql.engr.illinois.edu' IDENTIFIED BY '" + password + "';" +
+        "grant all privileges on dyel-net.* to '" + username + "'@'engr-cpanel-mysql.engr.illinois.edu' identified by '" + password + "';";
+        
+        try {
+    		ProgressDialog.show(this, "Loading", "Creating account...");
+        	con.writeQuery(create_account_query);
+        	Thread.sleep(1000);
+        	con.writeQuery(SQL);
+			Thread.sleep(2500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
         Log.w("1", "user info created");
         setContentView(R.layout.login);
     }
