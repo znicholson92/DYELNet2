@@ -275,14 +275,7 @@ public class MainActivity extends Activity {
 	/***************REGISTRATION METHODS*********************/
     public void CreateUser(View view)
     {
-        String username;
-        String password;
-        String firstName;
-        String lastName;
-        String DOB;
-        String sex;
-        String SQL;
-        
+
         EditText userNameET = (EditText) findViewById(R.id.createuser_edit_username);
         EditText passwordET = (EditText) findViewById(R.id.createuser_edit_password);                
         EditText firstNameET = (EditText) findViewById(R.id.createuser_edit_firstName);
@@ -292,15 +285,14 @@ public class MainActivity extends Activity {
         EditText dateOfBirthETd = (EditText) findViewById(R.id.createuser_dateofbirth_day);
         EditText sexET = (EditText) findViewById(R.id.createuser_edit_sex);
 
-
-        username = userNameET.getText().toString();
-        password = passwordET.getText().toString();
-        firstName = firstNameET.getText().toString();
-        lastName = lastNameET.getText().toString();
-        DOB = dateOfBirthETy.getText().toString()+"-"+dateOfBirthETm.getText().toString()+"-"+dateOfBirthETd.getText().toString();
-        sex = sexET.getText().toString();
+        String username = userNameET.getText().toString();
+        String password = passwordET.getText().toString();
+        String firstName = firstNameET.getText().toString();
+        String lastName = lastNameET.getText().toString();
+        String DOB = dateOfBirthETy.getText().toString()+"-"+dateOfBirthETm.getText().toString()+"-"+dateOfBirthETd.getText().toString();
+        String sex = sexET.getText().toString();
         
-        SQL = "INSERT INTO  `dyel-net_main`.`user` "
+        String SQL = "INSERT INTO  `dyel-net_main`.`user` "
                         +"(`username` , `firstname` , `lastname` , `dateofbirth` , `sex`)"
                         +"VALUES ( "
                         +"'"+username+"', "
@@ -308,10 +300,12 @@ public class MainActivity extends Activity {
                         +"'"+lastName+"', "
                         +"'"+DOB+"', "
                         +"'"+sex+"');";
-        connection con = new connection("dyel-net_admin", "teamturtle", this);
         
-        String create_account_query = "CREATE USER '" + username + " '@'engr-cpanel-mysql.engr.illinois.edu' IDENTIFIED BY '" + password + "';" +
-        "grant all privileges on dyel-net.* to '" + username + "'@'engr-cpanel-mysql.engr.illinois.edu' identified by '" + password + "';";
+        String create_account_query = "CREATE USER '" + username + " '@'engr-cpanel-mysql.engr.illinois.edu' " + 
+        							  "IDENTIFIED BY '" + password + "';" +
+        							  "grant all privileges on dyel-net.* to '" + username + "'@'engr-cpanel-mysql.engr.illinois.edu' identified by '" + password + "';";
+        
+        connection con = new connection("dyel-net_admin", "teamturtle", this);
         
         try {
     		ProgressDialog.show(this, "Loading", "Creating account...");
@@ -324,8 +318,10 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
         
-        Log.w("1", "user info created");
+        con.logout();
+        
         setContentView(R.layout.login);
+        
     }
 	
 	

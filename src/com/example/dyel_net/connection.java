@@ -64,21 +64,25 @@ public class connection
 		}
 	}
 	
+	//gets the boolean value of whether or not the async task is running
 	public boolean working()
 	{
 		return working;
 	}
 	
+	//gets the boolean value of whether or not the user is logged in
 	public boolean loggedin()
 	{
 		return loggedin;
 	}
 	
+	//gets the logged in username
 	public String username()
 	{
 		return username;
 	}
 	
+	//send a transaction and write the results to the listview
 	public void readQuery(String SQL, ListView l)
 	{
 		_connection task = new _connection();
@@ -86,6 +90,7 @@ public class connection
 		task.execute("read", SQL, "update");
 	}
 
+	//send a transaction and return the results as a JSON string
 	public String readQuery(String SQL)
 	{
 		_connection task = new _connection();
@@ -93,12 +98,14 @@ public class connection
 		return result;
 	}
 	
+	//send a transaction that modifies the database and does not return anything
 	public void writeQuery(String SQL)
 	{
 		_connection task = new _connection();
 		task.execute("write", SQL);
 	}
 	
+	//logs out the current user
 	public void logout()
 	{
 		list = null;
@@ -109,6 +116,7 @@ public class connection
 		success = false;
 	}
 	
+	//async task to communicate with MySQL
 	private class _connection  extends AsyncTask<String, Void, Boolean>
 	{
 		private ArrayList<HashMap<String, String>> tableList = new ArrayList<HashMap<String, String>>();
@@ -139,56 +147,57 @@ public class connection
 		}
 	
 		@Override
-		protected void onPostExecute(Boolean update) {
-		
-        if(update)
-        {
-        	try{
-        		JSONObject jsonObject = new JSONObject(result);
-        		JSONArray jArray = jsonObject.getJSONArray("data");
-        		
-        		TextView Col1 = (TextView)app.findViewById(R.id.col1);
-        		TextView Col2 = (TextView)app.findViewById(R.id.col2);
-        		TextView Col3 = (TextView)app.findViewById(R.id.col3);
-        		TextView Col4 = (TextView)app.findViewById(R.id.col4);
-        		TextView Col5 = (TextView)app.findViewById(R.id.col5);
-        		
-        		TextView[] Columns = new TextView[] {Col1, Col2, Col3, Col4, Col5};
-        		
-            	for(int i=0; i < jArray.length(); i++) {
-            		HashMap<String, String> map = new HashMap<String, String>();
-                	JSONObject j = jArray.getJSONObject(i);
-
-                	@SuppressWarnings("unchecked")
-					Iterator<String> iter = j.keys();
-                	int col= 0;
-                    while (iter.hasNext()) {
-                        String key = iter.next();
-                        String value = (String)j.get(key);
-                        map.put(key, value);
-                        Log.w(key, value);
-                        Columns[col].setText(key);
-                        col++;
-                    }
-                	tableList.add(map);
-            	}
-            	
-        		SimpleAdapter myAdapter = 
-        				new SimpleAdapter(app, 
-        								  tableList, 
-        								  R.layout.my_list_item,
-        								  new String[] {(String) Col1.getText(), (String) Col2.getText(),(String) Col3.getText() ,(String) Col4.getText(), (String) Col5.getText()}, 
-        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
-
-        		list.setAdapter(myAdapter);	
-
-        	
-            	
-        	} catch (JSONException e) {
-            	Log.e("JSONException", "Error: " + e.toString());
-        		}
-        	}
-        	this.cancel(false);
+		protected void onPostExecute(Boolean update) 
+		{
+	        if(update)	//true if we want to update the listview
+	        {
+	        	try{
+	        		JSONObject jsonObject = new JSONObject(result);
+	        		JSONArray jArray = jsonObject.getJSONArray("data");
+	        		
+	        		TextView Col1 = (TextView)app.findViewById(R.id.col1);
+	        		TextView Col2 = (TextView)app.findViewById(R.id.col2);
+	        		TextView Col3 = (TextView)app.findViewById(R.id.col3);
+	        		TextView Col4 = (TextView)app.findViewById(R.id.col4);
+	        		TextView Col5 = (TextView)app.findViewById(R.id.col5);
+	        		
+	        		TextView[] Columns = new TextView[] {Col1, Col2, Col3, Col4, Col5};
+	        		
+	        		//parse JSON string
+	            	for(int i=0; i < jArray.length(); i++) {
+	            		HashMap<String, String> map = new HashMap<String, String>();
+	                	JSONObject j = jArray.getJSONObject(i);
+	
+	                	@SuppressWarnings("unchecked")
+						Iterator<String> iter = j.keys();
+	                	int col= 0;
+	                    while (iter.hasNext()) {
+	                        String key = iter.next();
+	                        String value = (String)j.get(key);
+	                        map.put(key, value);
+	                        Log.w(key, value);
+	                        Columns[col].setText(key);
+	                        col++;
+	                    }
+	                	tableList.add(map);
+	            	}
+	            	
+	        		SimpleAdapter myAdapter = 
+	        				new SimpleAdapter(app, 
+	        								  tableList, 
+	        								  R.layout.my_list_item,
+	        								  new String[] {(String) Col1.getText(), (String) Col2.getText(),(String) Col3.getText() ,(String) Col4.getText(), (String) Col5.getText()}, 
+	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
+	
+	        		list.setAdapter(myAdapter);	
+	
+	        	
+	            	
+	        	} catch (JSONException e) {
+	            	Log.e("JSONException", "Error: " + e.toString());
+	        		}
+	        	}
+	        	this.cancel(false);
     	}
 	
 		private String ReadQuery(String SQL)
