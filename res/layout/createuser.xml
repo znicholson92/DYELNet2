@@ -3,184 +3,242 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <!-- Header -->
+
     <LinearLayout
         android:id="@+id/register_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#1483D9"
+        android:orientation="horizontal"
         android:paddingBottom="2dip"
         android:paddingLeft="2dip"
         android:paddingRight="2dip"
-        android:paddingTop="2dip"
-        android:orientation="horizontal" >
-        
+        android:paddingTop="2dip" >
+
         <Button
             android:id="@+id/register_backbutton"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:background="#DAE3EB"
+            android:onClick="gotoLogin"
             android:orientation="horizontal"
             android:padding="5dip"
-            android:onClick="gotoLogin"
             android:text="Back" />
-        
+
         <TextView
             style="@style/CodeFont.Red.Big"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:text="Enter your information"
             android:textSize="16dip"
-            android:gravity="center"
             android:typeface="monospace" />
-    
     </LinearLayout>
-    
+
     <!-- Body -->
+
     <LinearLayout
         android:id="@+id/register_body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >  
+        android:orientation="horizontal" >
 
-	    <TextView
-	        android:id="@+id/username"
-	        style="@style/NormalFont"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/user_name" />
-	
-	    <EditText
-	        android:id="@+id/createuser_edit_username"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:hint="@string/user_create_enter" />
+        <LinearLayout
+            android:id="@+id/register_bodycol1"
+            android:layout_width="141dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-	    <TextView
-	        android:id="@+id/password"
-	        style="@style/NormalFont"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Password" />
-	
-	    <EditText
-	        android:id="@+id/createuser_edit_password"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:hint="@string/user_create_enter" />
-	    	
-	    <TextView
-	        android:id="@+id/firstName"
-	        style="@style/NormalFont"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/first_name" />
-	
-	    <EditText
-	        android:id="@+id/createuser_edit_firstName"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:hint="@string/user_create_enter" />
-	
-	    <TextView
-	        android:id="@+id/lastName"
-	        style="@style/NormalFont"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/last_name" />
-	
-	    <EditText
-	        android:id="@+id/createuser_edit_lastName"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:hint="@string/user_create_enter" />
-	
-	    <TextView
-	        android:id="@+id/date_of_birth"
-	        style="@style/NormalFont"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/date_of_birth" />
-	
-	    
-	    <LinearLayout
-	        android:id="@+id/datelinearlayout"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="horizontal" >
-		    <EditText
-		        android:id="@+id/createuser_dateofbirth_day"
-		        style="@style/NormalFont"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="" />
-		   <TextView
-		        android:id="@+id/dash1"
-		        style="@style/NormalFont"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text=" - " />
-		    <EditText
-		        android:id="@+id/createuser_dateofbirth_month"
-		        style="@style/NormalFont"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="" />
-		    <TextView
-		        android:id="@+id/dash2"
-		        style="@style/NormalFont"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text=" - " />
-		    <EditText
-		        android:id="@+id/createuser_dateofbirth_year"
-		        style="@style/NormalFont"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="" />
-	    </LinearLayout>
-	
-	    <TextView
-	        android:id="@+id/sex"
-	        style="@style/NormalFont"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Sex" />
-	
-	    <EditText
-	        android:id="@+id/createuser_edit_sex"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:hint="@string/user_create_enter" />
+            <TextView
+                android:id="@+id/username"
+                style="@style/NormalFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:height="40dip"
+                android:text="@string/user_name" />
+
+            <TextView
+                android:id="@+id/password"
+                style="@style/NormalFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:height="40dip"
+                android:text="Password" />
+
+            <TextView
+                android:id="@+id/firstName"
+                style="@style/NormalFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:height="40dip"
+                android:text="@string/first_name" />
+
+            <TextView
+                android:id="@+id/lastName"
+                style="@style/NormalFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:height="40dip"
+                android:text="@string/last_name" />
+
+            <TextView
+                android:id="@+id/date_of_birth"
+                style="@style/NormalFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:height="40dip"
+                android:text="@string/date_of_birth" />
+
+            <TextView
+                android:id="@+id/sex"
+                style="@style/NormalFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:height="40dip"
+                android:text="Sex" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/register_bodycol2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/createuser_edit_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:height="40dip"
+                android:hint="@string/user_create_enter" />
+
+            <EditText
+                android:id="@+id/createuser_edit_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="40dip"
+                android:hint="@string/user_create_enter" />
+
+            <EditText
+                android:id="@+id/createuser_edit_firstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="40dip"
+                android:hint="@string/user_create_enter" />
+
+            <EditText
+                android:id="@+id/createuser_edit_lastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="40dip"
+                android:hint="@string/user_create_enter" />
+
+            <LinearLayout
+                android:id="@+id/datelinearlayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:height="40dip"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/createuser_dateofbirth_day"
+                    style="@style/NormalFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.20"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/dash1"
+                    style="@style/NormalFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "
+                     />
+
+                <EditText
+                    android:id="@+id/createuser_dateofbirth_month"
+                    style="@style/NormalFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.18"
+                    android:text=""
+                     />
+
+                <TextView
+                    android:id="@+id/dash2"
+                    style="@style/NormalFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "
+                     />
+
+                <EditText
+                    android:id="@+id/createuser_dateofbirth_year"
+                    style="@style/NormalFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.32"
+                    android:text=""/>
+            </LinearLayout>
+
+            <RadioGroup
+        		android:id="@+id/radioGroup1"
+       			android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+                android:height="40dip"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/createuser_radiobuttonM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male" />
+
+                <RadioButton
+                    android:id="@+id/createuser_radiobuttonF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female" />
+            </RadioGroup>
+        </LinearLayout>
     </LinearLayout>
-    
+
     <!-- Footer -->
+
     <LinearLayout
         android:id="@+id/register_footer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#1483D9"
+        android:orientation="horizontal"
         android:paddingBottom="2dip"
         android:paddingLeft="2dip"
         android:paddingRight="2dip"
-        android:paddingTop="2dip"
-        android:orientation="horizontal" >
+        android:paddingTop="2dip" >
 
-    	<Button
-    	    android:id="@+id/button_connect"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_alignParentBottom="true"
-    	    android:layout_centerHorizontal="true"
-    	    android:orientation="horizontal"
-    	    android:background="#DAE3EB"
-    	    android:layout_marginRight="4dip"
-        	android:layout_marginLeft="8dip"
-        	android:layout_weight="3"
-        	android:onClick="CreateUser"
-    	    android:text="Register" />
-
- 
+        <Button
+            android:id="@+id/button_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="8dip"
+            android:layout_marginRight="4dip"
+            android:layout_weight="3"
+            android:background="#DAE3EB"
+            android:onClick="CreateUser"
+            android:orientation="horizontal"
+            android:text="Register" />
     </LinearLayout>
-    
+
+
+
 </LinearLayout>
