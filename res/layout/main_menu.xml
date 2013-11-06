@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content"
                                 android:layout_weight="1"
                         android:minHeight="80dp"
-                        android:text="Button" />
+                        android:text="TestWorkout" />
 
                     <Button
                         android:id="@+id/menu_button_6"

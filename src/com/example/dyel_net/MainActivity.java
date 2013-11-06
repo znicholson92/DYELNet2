@@ -168,7 +168,9 @@ public class MainActivity extends Activity {
 
 	public void gotoLayout(int layout)
 	{
-		previous_layouts.push((Integer)current_layout);
+		if(current_layout != null)
+			previous_layouts.push(current_layout);
+		
 		setContentView(layout);
 		current_layout = (Integer)layout;
 	}
@@ -226,6 +228,12 @@ public class MainActivity extends Activity {
 	public void gotoTestApp(View v)
 	{
 		gotoLayout(R.layout.activity_main);
+	}
+
+	public void TestWorkingout(View v)
+	{
+		
+		
 	}
 	
 	/****************SETTINGS METHODS************************/
