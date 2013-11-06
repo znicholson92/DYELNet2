@@ -41,9 +41,13 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	/**************MACRO CONSTANTS***************************/
+	public final long DBL_CLICK_THRESHOLD = 500;  //in milliseconds
+	
+	/**************GLOBAL VARIABLES**************************/
 	public connection con;
-	public Stack<Integer> previous_layouts;
-	public int current_layout;
+	Stack<Integer> previous_layouts;
+	int current_layout;
 	
 	public void login(View v)
 	{
@@ -78,16 +82,77 @@ public class MainActivity extends Activity {
 		con.logout();
 		TextView username_bar = (TextView) findViewById(R.id.usernameText);
 		username_bar.setText("");
-		setContentView(R.layout.login);
+		gotoLayout(R.layout.login);
 	}
 	
 	/***************MAIN GOTO RELAY**************************/
 	public void clickedListItem(View v)
 	{
-		TextView tv = (TextView)v;
+		LinearLayout L = (LinearLayout)v.getParent();
+		L.setBackgroundColor(0xFF5D65F5);	//highlight row
+	
+		if(checkDoubleClick(v))
+		{
+			doubleClickedListItem(v);
+			L.setBackgroundColor(0x005D65F5);	//unhighlight row
+		}
+	}
+	
+	private void doubleClickedListItem(View v)
+	{
+		TextView tv = (TextView)v;	
+		
+		switch(current_layout)
+		{
+			case R.layout.workingout_routine:
+				cli_workingout_routine(tv);
+            	break;
+			case R.layout.routine_view:
+				cli_routine_view(tv);
+            	break;
+  
+		}
+	}
+	
+	private long lastClickedTime = (long) 0;
+	private View lastClickedItem = null;
+	
+	private boolean checkDoubleClick(View v)
+	{
+		//determine if there was a double click
+		long timestamp = System.currentTimeMillis();
+		if((timestamp - lastClickedTime < DBL_CLICK_THRESHOLD) && (lastClickedItem == v))
+		{
+			return true;
+		}
+		else
+		{
+			lastClickedItem = v;
+			lastClickedTime = timestamp;
+			return false;
+		}
+	}
+	
+	/****************CLICKED LIST ITEM************************/
+	
+	private void cli_workingout_routine(TextView TV)
+	{
+		LinearLayout L = (LinearLayout)TV.getParent();
+		for(int i = 0; i < L.getChildCount(); ++i)
+		{
+		
+		}
 		
 	}
 	
+	private void cli_routine_view(TextView TV)
+	{
+		
+	}
+
+
+		
+	/***************NAVIGATION FUNCTIONALITY*****************/
 	public void gotoBack(View v)
 	{
 		if(!previous_layouts.isEmpty())
@@ -96,8 +161,14 @@ public class MainActivity extends Activity {
 			setContentView(current_layout);
 		}
 	}
+
+	public void gotoLayout(int layout)
+	{
+		previous_layouts.push(current_layout);
+		setContentView(layout);
+		current_layout = layout;
+	}
 	
-	/***************MAIN MENU FUNCTIONALITY******************/
 	public void gotoLogin(View v)
 	{
 		current_layout = R.layout.login;
@@ -106,9 +177,7 @@ public class MainActivity extends Activity {
 	
 	public void gotoUserData(View v)
 	{
-		previous_layouts.push(R.layout.main_menu);
-		setContentView(R.layout.userdata);
-		current_layout = R.layout.userdata;
+		gotoLayout(R.layout.userdata);
 		userdata_load();
 	}
 	
@@ -121,30 +190,21 @@ public class MainActivity extends Activity {
 	
 	public void gotoCreateUser(View v)
 	{
-		previous_layouts.push(R.layout.login);
-		setContentView(R.layout.createuser);
-		current_layout = R.layout.createuser;
+		gotoLayout(R.layout.createuser);
 	}
 	
 	public void gotoSettings(View v)
 	{
-		previous_layouts.push(R.layout.main_menu);
-		setContentView(R.layout.settings);
-		current_layout = R.layout.settings;
+		gotoLayout(R.layout.settings);
 		loadUserInfo();
-	}
-	
-	public void gotoTestApp(View v)
-	{
-		setContentView(R.layout.activity_main);
 	}
 	
 	public void gotoWorkingOut_Routine(View v)
 	{
-		previous_layouts.push(current_layout);
-		current_layout = R.layout.workingout_routine;
+		gotoLayout(R.layout.workingout_routine);
 	}
 	
+	/****************TESTING METHODS*************************/
 	public void connectToDatabase(View v)
 	{
 		ListView listView = (ListView) findViewById(R.id.listView1);
@@ -159,6 +219,10 @@ public class MainActivity extends Activity {
         
 	}
 
+	public void gotoTestApp(View v)
+	{
+		gotoLayout(R.layout.activity_main);
+	}
 	
 	/****************SETTINGS METHODS************************/
 	public void loadUserInfo()
