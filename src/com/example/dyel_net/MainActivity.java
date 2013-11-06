@@ -3,7 +3,9 @@ package com.example.dyel_net;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Stack;
 
+import android.R.layout;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.format.DateFormat;
@@ -40,6 +42,8 @@ public class MainActivity extends Activity {
 	}
 	
 	public connection con;
+	public Stack<Integer> previous_layouts;
+	public int current_layout;
 	
 	public void login(View v)
 	{
@@ -84,37 +88,61 @@ public class MainActivity extends Activity {
 		
 	}
 	
+	public void gotoBack(View v)
+	{
+		if(!previous_layouts.isEmpty())
+		{
+			current_layout = previous_layouts.pop();
+			setContentView(current_layout);
+		}
+	}
+	
 	/***************MAIN MENU FUNCTIONALITY******************/
 	public void gotoLogin(View v)
 	{
+		current_layout = R.layout.login;
 		setContentView(R.layout.login);
 	}
 	
 	public void gotoUserData(View v)
 	{
+		previous_layouts.push(R.layout.main_menu);
 		setContentView(R.layout.userdata);
+		current_layout = R.layout.userdata;
 		userdata_load();
 	}
 	
 	public void gotoMenu(View v)
 	{
+		previous_layouts.clear();
 		setContentView(R.layout.main_menu);
+		current_layout = R.layout.main_menu;
 	}
 	
 	public void gotoCreateUser(View v)
 	{
+		previous_layouts.push(R.layout.login);
 		setContentView(R.layout.createuser);
+		current_layout = R.layout.createuser;
 	}
 	
 	public void gotoSettings(View v)
 	{
+		previous_layouts.push(R.layout.main_menu);
 		setContentView(R.layout.settings);
+		current_layout = R.layout.settings;
 		loadUserInfo();
 	}
 	
 	public void gotoTestApp(View v)
 	{
 		setContentView(R.layout.activity_main);
+	}
+	
+	public void gotoWorkingOut_Routine(View v)
+	{
+		previous_layouts.push(current_layout);
+		current_layout = R.layout.workingout_routine;
 	}
 	
 	public void connectToDatabase(View v)
@@ -130,6 +158,7 @@ public class MainActivity extends Activity {
 		}
         
 	}
+
 	
 	/****************SETTINGS METHODS************************/
 	public void loadUserInfo()

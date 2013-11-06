@@ -12,18 +12,18 @@
         android:paddingTop="2dip" >
 
     	<Button
-    	    android:id="@+id/button_connect"
+    	    android:id="@+id/button_back_footer"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
     	    android:layout_alignParentBottom="true"
     	    android:layout_centerHorizontal="true"
-    	    android:onClick="connectToDatabase"
+    	    android:onClick="gotoBack"
     	    android:orientation="horizontal"
     	    android:background="#DAE3EB"
     	    android:layout_marginRight="4dip"
         	android:layout_marginLeft="8dip"
         	android:layout_weight="1"
-    	    android:text="Connect" />
+    	    android:text="Back" />
 
     	<Button
 	        android:id="@+id/button_login"

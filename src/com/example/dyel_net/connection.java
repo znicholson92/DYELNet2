@@ -39,6 +39,7 @@ public class connection
 	private MainActivity app;
 	private ListView list;
 	
+	//constructor, represents the user logging in, tests the connection and either returns success or fails and logs out
 	public connection(String un, String pw, MainActivity _app)
 	{
 		username = un;
@@ -121,6 +122,7 @@ public class connection
 	{
 		private ArrayList<HashMap<String, String>> tableList = new ArrayList<HashMap<String, String>>();
 		
+		//executes async task, relays to the appropriate method
 		@Override
 		protected Boolean doInBackground(String... params) 
 		{	
@@ -146,6 +148,7 @@ public class connection
 			return false; 
 		}
 	
+		//handles the post execution. If "update" is true, write the data to the bound ListView
 		@Override
 		protected void onPostExecute(Boolean update) 
 		{
@@ -200,33 +203,36 @@ public class connection
 	        	this.cancel(false);
     	}
 	
+		//sends a transaction to MySQL, returns the result as a JSON string
 		private String ReadQuery(String SQL)
 		{
 			try {
-			String host = "http://web.engr.illinois.edu/~dyel-net/readquery.php";
-			List<BasicNameValuePair> nvps = null;
-        	HttpParams httpParameters = new BasicHttpParams();
-        
-        	int timeoutConnection = 20000;
-        	HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-        	int timeoutSocket = 20000;
-        	HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-
-        	HttpClient httpclient = new DefaultHttpClient(httpParameters);
-        	HttpPost httpPost = new HttpPost(host);
-        	HttpResponse response;
-        	nvps = new ArrayList<BasicNameValuePair>();  
-        	nvps.add(new BasicNameValuePair("user", username ));
-        	nvps.add(new BasicNameValuePair("pw", password ));
-        	nvps.add(new BasicNameValuePair("sql", SQL));
-        	httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-        	response = httpclient.execute(httpPost);
-        	String htmlresponse;
-			htmlresponse = EntityUtils.toString(response.getEntity());
-			return htmlresponse;
+				String host = "http://web.engr.illinois.edu/~dyel-net/readquery.php";
+				List<BasicNameValuePair> nvps = null;
+	        	HttpParams httpParameters = new BasicHttpParams();
+	        
+	        	int timeoutConnection = 20000;
+	        	HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+	        	int timeoutSocket = 20000;
+	        	HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+	
+	        	HttpClient httpclient = new DefaultHttpClient(httpParameters);
+	        	HttpPost httpPost = new HttpPost(host);
+	        	
+	        	nvps = new ArrayList<BasicNameValuePair>();  
+	        	nvps.add(new BasicNameValuePair("user", username ));
+	        	nvps.add(new BasicNameValuePair("pw", password ));
+	        	nvps.add(new BasicNameValuePair("sql", SQL));
+	        	
+	        	httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+	        	HttpResponse response = httpclient.execute(httpPost);
+	        	String htmlresponse = EntityUtils.toString(response.getEntity());
+				
+				return htmlresponse;
+				
 			} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -236,6 +242,7 @@ public class connection
         
 		}
 	
+		//sends a transaction to MySQL
 		private Boolean WriteQuery(String SQL)
 		{		        
 		try {
@@ -267,40 +274,44 @@ public class connection
 	      
 		}
 		
+		//tests the connection to MySQL using the given username and password
 		private boolean testConnection()
 		{	
 			try {
-					String host = "http://web.engr.illinois.edu/~dyel-net/testconnection.php";
-					List<BasicNameValuePair> nvps = null;
-					HttpParams httpParameters = new BasicHttpParams();
-	        
-					int timeoutConnection = 20000;
-					HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-					int timeoutSocket = 20000;
-					HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+				String host = "http://web.engr.illinois.edu/~dyel-net/testconnection.php";
+				List<BasicNameValuePair> nvps = null;
+				HttpParams httpParameters = new BasicHttpParams();
+        
+				int timeoutConnection = 20000;
+				HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+				int timeoutSocket = 20000;
+				HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
-					HttpClient httpclient = new DefaultHttpClient(httpParameters);
-					HttpPost httpPost = new HttpPost(host);
-					nvps = new ArrayList<BasicNameValuePair>();  
-					nvps.add(new BasicNameValuePair("user", username ));
-					nvps.add(new BasicNameValuePair("pw", password ));
-					httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-					HttpResponse response = httpclient.execute(httpPost);
-					String htmlresponse;
-					htmlresponse = EntityUtils.toString(response.getEntity());
-					if(htmlresponse.length() < 10)
-						return true;
-					else
-						return false;
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// 	TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (Exception e) {
-					
-				}
+				HttpClient httpclient = new DefaultHttpClient(httpParameters);
+				HttpPost httpPost = new HttpPost(host);
+				
+				nvps = new ArrayList<BasicNameValuePair>();  
+				nvps.add(new BasicNameValuePair("user", username ));
+				nvps.add(new BasicNameValuePair("pw", password ));
+				
+				httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+				HttpResponse response = httpclient.execute(httpPost);
+				String htmlresponse = EntityUtils.toString(response.getEntity());
+				
+				if(htmlresponse.length() < 10)
+					return true;
+				else
+					return false;
+				
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// 	TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				
+			}
 			return false;
 		}
 	}
