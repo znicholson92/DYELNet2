@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -42,12 +43,12 @@ public class MainActivity extends Activity {
 	}
 	
 	/**************MACRO CONSTANTS***************************/
-	public final long DBL_CLICK_THRESHOLD = 500;  //in milliseconds
+	public final long DBL_CLICK_THRESHOLD = 600;  //in milliseconds
 	
 	/**************GLOBAL VARIABLES**************************/
 	public connection con;
 	Stack<Integer> previous_layouts;
-	int current_layout;
+	Integer current_layout;
 	
 	public void login(View v)
 	{
@@ -98,6 +99,7 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	// TODO
 	private void doubleClickedListItem(View v)
 	{
 		TextView tv = (TextView)v;	
@@ -135,6 +137,7 @@ public class MainActivity extends Activity {
 	
 	/****************CLICKED LIST ITEM************************/
 	
+	// TODO
 	private void cli_workingout_routine(TextView TV)
 	{
 		LinearLayout L = (LinearLayout)TV.getParent();
@@ -145,6 +148,7 @@ public class MainActivity extends Activity {
 		
 	}
 	
+	// TODO
 	private void cli_routine_view(TextView TV)
 	{
 		
@@ -158,15 +162,15 @@ public class MainActivity extends Activity {
 		if(!previous_layouts.isEmpty())
 		{
 			current_layout = previous_layouts.pop();
-			setContentView(current_layout);
+			setContentView((int)current_layout);
 		}
 	}
 
 	public void gotoLayout(int layout)
 	{
-		previous_layouts.push(current_layout);
+		previous_layouts.push((Integer)current_layout);
 		setContentView(layout);
-		current_layout = layout;
+		current_layout = (Integer)layout;
 	}
 	
 	public void gotoLogin(View v)
@@ -376,14 +380,19 @@ public class MainActivity extends Activity {
         EditText dateOfBirthETy = (EditText) findViewById(R.id.createuser_dateofbirth_year);
         EditText dateOfBirthETm = (EditText) findViewById(R.id.createuser_dateofbirth_month);
         EditText dateOfBirthETd = (EditText) findViewById(R.id.createuser_dateofbirth_day);
-        EditText sexET = (EditText) findViewById(R.id.createuser_edit_sex);
-
+        RadioButton sexM = (RadioButton) findViewById(R.id.createuser_radiobuttonM);
+        RadioButton sexF = (RadioButton) findViewById(R.id.createuser_radiobuttonF);
+        
         String username = userNameET.getText().toString();
         String password = passwordET.getText().toString();
         String firstName = firstNameET.getText().toString();
         String lastName = lastNameET.getText().toString();
         String DOB = dateOfBirthETy.getText().toString()+"-"+dateOfBirthETm.getText().toString()+"-"+dateOfBirthETd.getText().toString();
-        String sex = sexET.getText().toString();
+        String sex;
+        if(sexM.isChecked())
+        	sex = "M";
+        else
+        	sex = "F";
         
         String SQL = "INSERT INTO  `dyel-net_main`.`user` "
                         +"(`username` , `firstname` , `lastname` , `dateofbirth` , `sex`)"
