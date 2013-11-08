@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <!-- Column Header -->
+
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/col_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#10A3A3" >
+
+                        <TextView android:id="@+id/col1"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col2"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col3"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col4"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col5"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                    </LinearLayout>

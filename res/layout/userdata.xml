@@ -2,102 +2,105 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    
-     <include layout="@layout/header"/>
-    
-    <!--  Body -->
+    android:orientation="vertical" >
+
+    <include layout="@layout/header" />
+
+    <!-- Body -->
+
     <LinearLayout
         android:id="@+id/settings_body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation = "horizontal">
-    
-	    <LinearLayout
-	        android:layout_width="126dp"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical" >
-	        
-	        <TextView
-	            android:id="@+id/textView1"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:gravity="center"
-	            android:height="40dip"
-	            android:text="Resting HR" />
-	        
-	        <TextView
-	        android:id="@+id/textView1"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:height="40dip"
-	        android:gravity="center"
-	        android:text="Weight (LBS)" />
-	        
-	        <TextView
-	        android:id="@+id/textView2"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="center"
-	        android:height="40dip"
-	        android:text="Body Fat" />
+        android:layout_weight="0.42"
+        android:orientation="horizontal" >
 
-	        <TextView
-	            android:id="@+id/textView2"
-	            android:layout_width="fill_parent"
-	            android:layout_height="118dp"
-	            android:gravity="center"
-	            android:height="40dip"
-	            android:text="Notes" />
-	        
-	    </LinearLayout>
-	    
-	    <LinearLayout
-	        android:layout_width="185dp"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical" >
-	
-		    <EditText
-		        android:id="@+id/userdata_restinghr"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:height="40dip"
-		        android:ems="10" />
-		
-		    <EditText
-		        android:id="@+id/userdata_weight"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:height="40dip"
-		        android:ems="10" />
-		    
-		    <EditText
-		        android:id="@+id/userdata_bodyfat"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:height="40dip"
-		        android:ems="10" />
+        <LinearLayout
+            android:layout_width="126dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-		    <EditText
-		        android:id="@+id/userdata_notes"
-		        android:layout_width="match_parent"
-		        android:layout_height="150dp"
-		        android:ems="10"
-		        android:height="40dip" >
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="40dip"
+                android:text="Resting HR" />
 
-		        <requestFocus />
-		    </EditText>
-	
-	    </LinearLayout>
-	    
-	    
-	    
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="40dip"
+                android:text="Weight (LBS)" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="40dip"
+                android:text="Body Fat" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="fill_parent"
+                android:layout_height="118dp"
+                android:gravity="center"
+                android:height="40dip"
+                android:text="Notes" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/userdata_restinghr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:onClick="userdata_changed"
+                android:height="40dip" />
+
+            <EditText
+                android:id="@+id/userdata_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:onClick="userdata_changed"
+                android:height="40dip" />
+
+            <EditText
+                android:id="@+id/userdata_bodyfat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:onClick="userdata_changed"
+                android:height="40dip" />
+
+            <EditText
+                android:id="@+id/userdata_notes"
+                android:layout_width="match_parent"
+                android:layout_height="173dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:onClick="userdata_changed"
+                android:height="40dip" >
+
+                <requestFocus />
+            </EditText>
+        </LinearLayout>
     </LinearLayout>
-    
+
     <LinearLayout
         android:id="@+id/userdata_changesbar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.14"
         android:orientation="horizontal" >
 
         <Button
@@ -119,8 +122,7 @@
             android:onClick="userdata_update"
             android:text="Cancel" />
     </LinearLayout>
-    
-    <include layout="@layout/footer"/>
 
+    <include layout="@layout/footer" />
 
 </LinearLayout>

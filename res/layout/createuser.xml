@@ -42,6 +42,7 @@
         android:id="@+id/register_body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.76"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -90,10 +91,10 @@
                 android:id="@+id/date_of_birth"
                 style="@style/NormalFont"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="54dp"
                 android:gravity="center_vertical"
                 android:height="40dip"
-                android:text="@string/date_of_birth" />
+                android:text="Date of Birth (MM-DD-YYYY)" />
 
             <TextView
                 android:id="@+id/sex"
@@ -144,11 +145,11 @@
                 android:id="@+id/datelinearlayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:height="40dip"
+                android:height="60dip"
                 android:orientation="horizontal" >
 
                 <EditText
-                    android:id="@+id/createuser_dateofbirth_day"
+                    android:id="@+id/createuser_dateofbirth_month"
                     style="@style/NormalFont"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -160,25 +161,22 @@
                     style="@style/NormalFont"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" - "
-                     />
+                    android:text=" - " />
 
                 <EditText
-                    android:id="@+id/createuser_dateofbirth_month"
+                    android:id="@+id/createuser_dateofbirth_day"
                     style="@style/NormalFont"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.18"
-                    android:text=""
-                     />
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/dash2"
                     style="@style/NormalFont"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" - "
-                     />
+                    android:text=" - " />
 
                 <EditText
                     android:id="@+id/createuser_dateofbirth_year"
@@ -186,26 +184,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.32"
-                    android:text=""/>
+                    android:text="" />
             </LinearLayout>
 
             <RadioGroup
-        		android:id="@+id/radioGroup1"
-       			android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-                android:height="40dip"
+                android:id="@+id/radioGroup1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:height="70dip"
                 android:orientation="horizontal" >
 
                 <RadioButton
                     android:id="@+id/createuser_radiobuttonM"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="55dp"
+                    android:height="50dip"
                     android:text="Male" />
 
                 <RadioButton
                     android:id="@+id/createuser_radiobuttonF"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
+                    android:height="50dip"
                     android:text="Female" />
             </RadioGroup>
         </LinearLayout>
@@ -238,7 +238,5 @@
             android:orientation="horizontal"
             android:text="Register" />
     </LinearLayout>
-
-
 
 </LinearLayout>

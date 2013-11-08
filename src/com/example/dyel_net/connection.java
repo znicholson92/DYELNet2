@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -38,6 +39,7 @@ public class connection
 	private String result;
 	private MainActivity app;
 	private ListView list;
+	private Stack<String> previous_SQL = new Stack<String>();
 	
 	//constructor, represents the user logging in, tests the connection and either returns success or fails and logs out
 	public connection(String un, String pw, MainActivity _app)
@@ -96,9 +98,39 @@ public class connection
 	{
 		_connection task = new _connection();
 		task.execute("read", SQL, "NO");
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return result;
 	}
 	
+	//back button functionality for listview query menus
+	//sets query to listview as the previous one
+	public boolean goBack(int pops, ListView l)
+	{
+		if(pops > 0)
+		{
+			String SQL = null;
+			for(int i = 0; i < pops; ++i)
+				SQL = previous_SQL.pop();
+			
+			readQuery(SQL, l);
+			
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public void pushBack(String SQL)
+	{
+		previous_SQL.push(SQL);
+	}
+	
+	//TODO make it return boolean value if successful or not
 	//send a transaction that modifies the database and does not return anything
 	public void writeQuery(String SQL)
 	{
@@ -125,7 +157,7 @@ public class connection
 		//executes async task, relays to the appropriate method
 		@Override
 		protected Boolean doInBackground(String... params) 
-		{	
+		{	Log.w("SQL", params[1]);
 			if(params[0] == "read")
 			{
 				result = ReadQuery(params[1]);
@@ -142,6 +174,10 @@ public class connection
 		    else if(params[0] == "test")
 		    {
 		    	success = testConnection();
+		    	String SQL = "select * from user where username ='"+ username + "' AND password='"+password;
+		    	if(ReadQuery(SQL).length() < 10)
+		    		success = false;
+		 
 		    	return false;
 		    }
 		        
@@ -220,14 +256,14 @@ public class connection
 	        	HttpPost httpPost = new HttpPost(host);
 	        	
 	        	nvps = new ArrayList<BasicNameValuePair>();  
-	        	nvps.add(new BasicNameValuePair("user", username ));
-	        	nvps.add(new BasicNameValuePair("pw", password ));
+	        	nvps.add(new BasicNameValuePair("user", "dyel-net_admin" ));
+	        	nvps.add(new BasicNameValuePair("pw", "teamturtle" ));
 	        	nvps.add(new BasicNameValuePair("sql", SQL));
 	        	
 	        	httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 	        	HttpResponse response = httpclient.execute(httpPost);
 	        	String htmlresponse = EntityUtils.toString(response.getEntity());
-				
+	        	
 				return htmlresponse;
 				
 			} catch (ParseException e) {
@@ -257,8 +293,8 @@ public class connection
 			HttpClient httpclient = new DefaultHttpClient(httpParameters);
 			HttpPost httpPost = new HttpPost(host);
 			nvps = new ArrayList<BasicNameValuePair>();  
-			nvps.add(new BasicNameValuePair("user", username ));
-			nvps.add(new BasicNameValuePair("pw", password ));
+			nvps.add(new BasicNameValuePair("user", "dyel-net_admin" ));
+			nvps.add(new BasicNameValuePair("pw", "teamturtle" ));
 			nvps.add(new BasicNameValuePair("sql", SQL));
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 			httpclient.execute(httpPost);
@@ -291,8 +327,8 @@ public class connection
 				HttpPost httpPost = new HttpPost(host);
 				
 				nvps = new ArrayList<BasicNameValuePair>();  
-				nvps.add(new BasicNameValuePair("user", username ));
-				nvps.add(new BasicNameValuePair("pw", password ));
+				nvps.add(new BasicNameValuePair("user", "dyel-net_admin" ));
+				nvps.add(new BasicNameValuePair("pw", "teamturtle" ));
 				
 				httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 				HttpResponse response = httpclient.execute(httpPost);
