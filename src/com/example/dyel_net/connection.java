@@ -39,7 +39,7 @@ public class connection
 	private String result;
 	private MainActivity app;
 	private ListView list;
-	private Stack<String> previous_SQL = new Stack<String>();
+	
 	
 	//constructor, represents the user logging in, tests the connection and either returns success or fails and logs out
 	public connection(String un, String pw, MainActivity _app)
@@ -107,28 +107,6 @@ public class connection
 		return result;
 	}
 	
-	//back button functionality for listview query menus
-	//sets query to listview as the previous one
-	public boolean goBack(int pops, ListView l)
-	{
-		if(pops > 0)
-		{
-			String SQL = null;
-			for(int i = 0; i < pops; ++i)
-				SQL = previous_SQL.pop();
-			
-			readQuery(SQL, l);
-			
-			return true;
-		}
-		else
-			return false;
-	}
-	
-	public void pushBack(String SQL)
-	{
-		previous_SQL.push(SQL);
-	}
 	
 	//TODO make it return boolean value if successful or not
 	//send a transaction that modifies the database and does not return anything
@@ -190,6 +168,7 @@ public class connection
 		{
 	        if(update)	//true if we want to update the listview
 	        {
+	        	
 	        	try{
 	        		JSONObject jsonObject = new JSONObject(result);
 	        		JSONArray jArray = jsonObject.getJSONArray("data");
@@ -201,6 +180,7 @@ public class connection
 	        		TextView Col5 = (TextView)app.findViewById(R.id.col5);
 	        		
 	        		TextView[] Columns = new TextView[] {Col1, Col2, Col3, Col4, Col5};
+	        		//Columns[col].setText("");
 	        		
 	        		//parse JSON string
 	            	for(int i=0; i < jArray.length(); i++) {
@@ -214,7 +194,7 @@ public class connection
 	                        String key = iter.next();
 	                        String value = (String)j.get(key);
 	                        map.put(key, value);
-	                        Log.w(key, value);
+	                        //Log.w(key, value);
 	                        Columns[col].setText(key);
 	                        col++;
 	                    }
@@ -228,9 +208,8 @@ public class connection
 	        								  new String[] {(String) Col1.getText(), (String) Col2.getText(),(String) Col3.getText() ,(String) Col4.getText(), (String) Col5.getText()}, 
 	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
 	
-	        		list.setAdapter(myAdapter);	
-	
-	        	
+	        		list.setAdapter(myAdapter);
+	        		
 	            	
 	        	} catch (JSONException e) {
 	            	Log.e("JSONException", "Error: " + e.toString());

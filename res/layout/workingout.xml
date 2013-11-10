@@ -1,0 +1,86 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/workingout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+     >
+
+<RelativeLayout
+    android:id="@+id/workingout_routine"
+    android:layout_width="fill_parent"
+    android:layout_height="439dp" >
+
+    <LinearLayout
+        android:id="@+id/working_out_body"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/include1"
+        android:orientation="vertical" >
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
+        <LinearLayout
+            android:id="@+id/working_out_topbar"
+            android:layout_width="fill_parent"
+            android:layout_height="32dp"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="334dp" >
+
+            <LinearLayout
+                android:id="@+id/linear_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    layout="@layout/columnheader" />
+
+                <!-- List Divider -->
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:background="?android:attr/listDivider" />
+
+                <ListView
+                    android:id="@+id/workingout_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="392dp"
+                    android:orientation="horizontal" >
+                </ListView>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <include
+        android:layout_alignParentBottom="true"
+        layout="@layout/workingout_slider" />
+
+    <TextView
+        android:id="@+id/workingout_topbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:text="" />
+
+</RelativeLayout>
+
+<include
+    android:layout_height="24dp"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@+id/horizontalScrollView1"
+    layout="@layout/footer" />
+
+</LinearLayout>

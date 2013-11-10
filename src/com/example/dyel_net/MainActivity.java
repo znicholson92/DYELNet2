@@ -51,27 +51,29 @@ public class MainActivity extends Activity {
 	public connection con;
 	Stack<Integer> previous_layouts = new Stack<Integer>();
 	Integer current_layout;
-	//Stack<String> previous_SQL = new Stack<String>();
+	
+	/**************PROCESS CLASSES***************************/
+	public Workout workout;
+	
 	
 	public void login(View v)
 	{
+		ProgressDialog pd = null ;
+		pd = ProgressDialog.show(this, "Loading", "Logging in...");
+		
 		EditText un_box = (EditText) findViewById(R.id.usernameText);
 		EditText pw_box = (EditText) findViewById(R.id.passwordText);
 
 		con = new connection(un_box.getText().toString(), pw_box.getText().toString(), this);
 		
-		ProgressDialog pd = null ;
-		
 		while(con.working())
-		{Log.w("Working", "WORKING");
-			pd = ProgressDialog.show(this, "Loading", "Logging in...");
+		{
+			//pd = ProgressDialog.show(this, "Loading", "Logging in...");
 		}
 		
-		if (pd != null)
-			pd.cancel();
 		
 		for(int i=0; i < 5; ++i)
-		{
+		{	
 			if(con.loggedin())
 			{
 				setContentView(R.layout.main_menu);
@@ -79,6 +81,8 @@ public class MainActivity extends Activity {
 				username_bar.setText(un_box.getText().toString());
 				un_box.setText("");
 				pw_box.setText("");
+				if (pd != null)
+					pd.cancel();
 				return;
 			}
 			else
@@ -95,6 +99,9 @@ public class MainActivity extends Activity {
 		showDialog("Invalid Login");
 		un_box.setText("");
 		pw_box.setText("");
+		if (pd != null)
+			pd.cancel();
+		
 	}
 	
 	public void logout(View v)
@@ -110,7 +117,7 @@ public class MainActivity extends Activity {
 	{
 		LinearLayout L = (LinearLayout)v.getParent();
 		L.setBackgroundColor(0xFF5D65F5);	//highlight row
-		Log.w("LISTITEMCLICKED", "LISTITEMCLICKED");
+		
 		if(checkDoubleClick(v))
 		{
 			doubleClickedListItem(v);
@@ -125,12 +132,9 @@ public class MainActivity extends Activity {
 		
 		switch(current_layout)
 		{
-			case R.layout.workingout_routine:
-				cli_workingout_routine(tv);
+			case R.layout.workingout:
+				cli_workingout(tv);
             	break;
-            	
-			case R.layout.workingout_exercise:
-				break;
 				
 			case R.layout.routine_view:
 				cli_routine_view(tv);
@@ -160,13 +164,32 @@ public class MainActivity extends Activity {
 	
 	/****************CLICKED LIST ITEM************************/
 	
-	// TODO
-	private void cli_workingout_routine(TextView TV)
+	private void cli_workingout(TextView TV)
+	{
+		String status = workout.getStatus();
+		
+		if(status == "session")
+		{
+			cli_workingout_session(TV);
+		}
+		else if (status == "exercise")
+		{
+			cli_workingout_exercise(TV);
+		}
+	}
+	
+	
+	private void cli_workingout_session(TextView TV)
 	{	
 		LinearLayout L = (LinearLayout)TV.getParent();
-		TextView exerciseTV = (TextView)L.getChildAt(0);
-		workingout_viewExercise(exerciseTV.getText().toString());
-		gotoLayout(R.layout.workingout_exercise);
+		TextView exerciseTV = (TextView)L.getChildAt(1);
+		workout.viewExercise(exerciseTV.getText().toString());
+	}
+	
+	private void cli_workingout_exercise(TextView TV)
+	{
+		LinearLayout L = (LinearLayout)TV.getParent();
+		workout.editSet(L);
 	}
 	
 	// TODO
@@ -180,6 +203,7 @@ public class MainActivity extends Activity {
 	/***************NAVIGATION FUNCTIONALITY*****************/
 	public void gotoBack(View v)
 	{
+		//TODO add conditional for if in Workout
 		if(!previous_layouts.isEmpty())
 		{
 			current_layout = previous_layouts.pop();
@@ -228,7 +252,7 @@ public class MainActivity extends Activity {
 	
 	public void gotoWorkingOut_Routine(View v)
 	{
-		gotoLayout(R.layout.workingout_routine);
+		gotoLayout(R.layout.workingout);
 	}
 	
 	/****************TESTING METHODS*************************/
@@ -253,42 +277,13 @@ public class MainActivity extends Activity {
 
 	public void gotoTestWorkout(View v)
 	{	
-		gotoLayout(R.layout.workingout_routine);
-		dayID = "1";
-		workingout_viewSession();
+		workout = new Workout(this);
+		gotoLayout(R.layout.workingout);
+		workout.dayID = "1";
+		workout.viewSession("Back Day");
 	}
 	
-	
-	/***********************WORKING OUT METHODS********************************/
-	
-	String dayID = null;
-	
-	public void workingout_viewSession()
-	{
-		
-		String SQL = "SELECT exercise.name, count(*) As 'Sets' FROM _set " + 
-					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID WHERE _set.dayID = " + dayID +
-					 " GROUP BY _set.exerciseID";
-		
-		ListView l = (ListView)findViewById(R.id.workingout_listView);
-		con.readQuery(SQL, l);
-		
-	}
-	
-	public void workingout_viewExercise(String exercise)
-	{
-		String SQL = "SELECT setnumber, reps, weight FROM _set " +
-					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " +
-					 " WHERE dayID = " + dayID + 
-					 " AND exercise.name='" + exercise + "'" +
-					 " AND isReal = 0 " +
-					 " ORDER BY setnumber ASC";
-		
-		ListView l = (ListView)findViewById(R.id.workingout_listView);
-		con.readQuery(SQL, l);
-		
-	}
-	
+
 	/****************SETTINGS METHODS************************/
 	public void loadUserInfo()
 	{

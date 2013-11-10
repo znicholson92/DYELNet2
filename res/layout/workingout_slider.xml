@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SlidingDrawer
+    			xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/workingout_slidingDrawer"
+                android:layout_width="match_parent"
+                android:layout_height="420dp"
+                android:content="@+id/workingout_slidingdrawer_content"
+                android:handle="@+id/workingout_handle" >
+
+            <Button
+                android:id="@+id/workingout_handle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@android:style/Theme.Holo"
+                android:text="More" />
+
+            <LinearLayout
+                android:id="@+id/workingout_slidingdrawer_content"
+                android:layout_width="match_parent"
+                android:layout_height="387dp"
+                android:orientation="vertical" >
+                
+                <Button
+	                android:id="@+id/workingout_newworkout_button"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Add" />
+                
+                <Button
+	                android:id="@+id/workingout_finishworkout_button"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Finish" />
+                
+                <Button
+	                android:id="@+id/workingout_deleteworkout_button"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:text="Delete" />
+                
+            </LinearLayout>
+        </SlidingDrawer>
