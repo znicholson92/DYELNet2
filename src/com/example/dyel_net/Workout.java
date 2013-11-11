@@ -16,16 +16,21 @@ public class Workout
 	private Stack<String> previous_SQL = new Stack<String>();
 	private String status;
 	private boolean running = false;
-	
-	public String dayID = null;
-	
+	private String dayID = null;
 	private LinearLayout col_head;
+	private String name;
+	private ListView listview;
+	private TextView topbar;
 	
-	public Workout(MainActivity a)
+	public Workout(MainActivity a, String dID, String n)
 	{
 		app = a;
 		running = true;
 		col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
+		dayID = dID;
+		name = n;
+		listview = (ListView)app.findViewById(R.id.workingout_listView);
+		topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
 	}
 	
 	public void cancel()
@@ -38,17 +43,16 @@ public class Workout
 		return running;
 	}
 	
-	public void viewSession(String name)
+	private void viewSession()
 	{
 		String SQL = "SELECT exercise.name, count(*) As 'Sets' FROM _set " + 
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID WHERE _set.dayID = " + dayID +
 					 " GROUP BY _set.exerciseID";
 		
-		ListView l = (ListView)app.findViewById(R.id.workingout_listView);
-		app.con.readQuery(SQL, l, col_head);
-		
-		TextView t = (TextView)app.findViewById(R.id.working_out_topbar_text);
-		t.setText(name);
+
+		app.con.readQuery(SQL, listview, col_head);
+
+		topbar.setText(name);
 		
 		pushBack(SQL);
 		status = "session";
@@ -64,11 +68,10 @@ public class Workout
 					 " AND isReal = 0 " +
 					 " ORDER BY setnumber ASC";
 		
-		ListView l = (ListView)app.findViewById(R.id.workingout_listView);
-		app.con.readQuery(SQL, l, col_head);
 		
-		TextView t = (TextView)app.findViewById(R.id.working_out_topbar_text);
-		t.setText(exercise);
+		app.con.readQuery(SQL, listview, col_head);
+		
+		topbar.setText(exercise);
 		
 		pushBack(SQL);
 		status = "exercise";
@@ -85,6 +88,10 @@ public class Workout
 		
 	}
 	
+	public String getSQL()
+	{
+		return previous_SQL.peek();
+	}
 	
 	public String getStatus()
 	{
@@ -93,15 +100,16 @@ public class Workout
 	
 	//back button functionality for listview query menus
 	//sets query to listview as the previous one
-	public boolean goBack(int pops, ListView l)
+	public boolean goBack()
 	{
-		if(pops > 0 && !previous_SQL.isEmpty())
+		if(!previous_SQL.isEmpty())
 		{
 			String SQL = null;
-			for(int i = 0; i < pops && !previous_SQL.isEmpty(); ++i)
-				SQL = previous_SQL.pop();
+			SQL = previous_SQL.pop();
 			
-			app.con.readQuery(SQL, l, col_head);
+			app.con.readQuery(SQL, listview, col_head);
+			
+			topbar.setText(name);
 			
 			return true;
 		}

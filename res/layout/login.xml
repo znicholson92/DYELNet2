@@ -70,4 +70,14 @@
         android:onClick="login"
         android:text="Login" />
 
+    <TextView
+        android:id="@+id/invalidlogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passwordText"
+        android:layout_centerHorizontal="true"
+        android:textColor="#F50515"
+        android:visibility="gone"
+        android:text="Invalid Login" />
+
 </RelativeLayout>
