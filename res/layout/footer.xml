@@ -14,7 +14,7 @@
     	<Button
     	    android:id="@+id/button_back_footer"
     	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
+    	    android:layout_height="40dip"
     	    android:layout_alignParentBottom="true"
     	    android:layout_centerHorizontal="true"
     	    android:onClick="gotoBack"
@@ -28,7 +28,7 @@
     	<Button
 	        android:id="@+id/button_login"
         	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
+        	android:layout_height="40dip"
         	android:orientation="horizontal"
         	android:onClick="gotoMenu"
         	android:background="#DAE3EB"

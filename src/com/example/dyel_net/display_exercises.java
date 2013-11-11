@@ -1,4 +1,4 @@
-package com.example.dyel_net;
+/*package com.example.dyel_net;
 
 import android.view.View;
 import android.widget.CheckBox;
@@ -27,12 +27,12 @@ public class display_exercises {
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			string_append("forearms");
+			//string_append("forearms");
 		}
 		
 		if (temp.isChecked() == false)
 		{
-			string_remove("forearms");
+			//string_remove("forearms");
 		}
 	}
 	
@@ -41,12 +41,12 @@ public class display_exercises {
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			string_append("arms");
+			//string_append("arms");
 		}
 		
 		if (temp.isChecked() == false)
 		{
-			string_remove("arms");
+			//string_remove("arms");
 		}
 	}
 	
@@ -55,12 +55,12 @@ public class display_exercises {
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			string_append("chest");
+			//string_append("chest");
 		}
 		
 		if (temp.isChecked() == false)
 		{
-			string_remove("chest");
+			//string_remove("chest");
 		}
 	}
 	
@@ -107,3 +107,4 @@ public class display_exercises {
 	}
 
 }
+*/

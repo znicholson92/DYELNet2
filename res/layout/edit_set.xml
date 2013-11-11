@@ -9,7 +9,7 @@
     <!-- Body -->
 
     <LinearLayout
-        android:id="@+id/settings_body"
+        android:id="@+id/edit_exercise_body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.42"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:height="40dip"
-                android:text="Resting HR" />
+                android:text="Name" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -39,14 +39,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:height="40dip"
-                android:text="Body Fat" />
+                android:text="Reps" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="118dp"
                 android:gravity="center"
                 android:height="40dip"
-                android:text="Notes" />
+                android:text="Set Number" />
         </LinearLayout>
 
         <LinearLayout

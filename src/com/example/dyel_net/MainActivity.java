@@ -8,6 +8,8 @@ import java.util.Stack;
 import android.R.layout;
 import android.os.Bundle;
 import android.app.Activity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
@@ -47,35 +49,59 @@ public class MainActivity extends Activity {
 	
 	/**************GLOBAL VARIABLES**************************/
 	public connection con;
-	Stack<Integer> previous_layouts;
+	Stack<Integer> previous_layouts = new Stack<Integer>();
 	Integer current_layout;
+	
+	/**************PROCESS CLASSES***************************/
+	public Workout workout;
+	
 	
 	public void login(View v)
 	{
+		ProgressDialog pd = null ;
+		pd = ProgressDialog.show(this, "Loading", "Logging in...");
+		
 		EditText un_box = (EditText) findViewById(R.id.usernameText);
 		EditText pw_box = (EditText) findViewById(R.id.passwordText);
 
 		con = new connection(un_box.getText().toString(), pw_box.getText().toString(), this);
-
+		
 		while(con.working())
 		{
-			ProgressDialog.show(this, "Loading", "Logging in...");
+			//pd = ProgressDialog.show(this, "Loading", "Logging in...");
 		}
 		
-		if(con.loggedin())
-		{
-			setContentView(R.layout.main_menu);
-			TextView username_bar = (TextView) findViewById(R.id.username);
-			username_bar.setText(un_box.getText().toString());
-		}
-		else
+		
+		for(int i=0; i < 5; ++i)
 		{	
-			AlertDialog dialog = new AlertDialog.Builder(this).create();
-            dialog.setTitle("Invalid Login");
-            dialog.show();
+			if(con.loggedin())
+			{
+				setContentView(R.layout.main_menu);
+				TextView username_bar = (TextView) findViewById(R.id.username);
+				username_bar.setText(un_box.getText().toString());
+				un_box.setText("");
+				pw_box.setText("");
+				if (pd != null)
+					pd.cancel();
+				return;
+			}
+			else
+			{	
+	            try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
+		
+		showDialog("Invalid Login");
 		un_box.setText("");
 		pw_box.setText("");
+		if (pd != null)
+			pd.cancel();
+		
 	}
 	
 	public void logout(View v)
@@ -91,7 +117,7 @@ public class MainActivity extends Activity {
 	{
 		LinearLayout L = (LinearLayout)v.getParent();
 		L.setBackgroundColor(0xFF5D65F5);	//highlight row
-	
+		
 		if(checkDoubleClick(v))
 		{
 			doubleClickedListItem(v);
@@ -106,9 +132,10 @@ public class MainActivity extends Activity {
 		
 		switch(current_layout)
 		{
-			case R.layout.workingout_routine:
-				cli_workingout_routine(tv);
+			case R.layout.workingout:
+				cli_workingout(tv);
             	break;
+				
 			case R.layout.routine_view:
 				cli_routine_view(tv);
             	break;
@@ -137,15 +164,32 @@ public class MainActivity extends Activity {
 	
 	/****************CLICKED LIST ITEM************************/
 	
-	// TODO
-	private void cli_workingout_routine(TextView TV)
+	private void cli_workingout(TextView TV)
+	{
+		String status = workout.getStatus();
+		
+		if(status == "session")
+		{
+			cli_workingout_session(TV);
+		}
+		else if (status == "exercise")
+		{
+			cli_workingout_exercise(TV);
+		}
+	}
+	
+	
+	private void cli_workingout_session(TextView TV)
+	{	
+		LinearLayout L = (LinearLayout)TV.getParent();
+		TextView exerciseTV = (TextView)L.getChildAt(1);
+		workout.viewExercise(exerciseTV.getText().toString());
+	}
+	
+	private void cli_workingout_exercise(TextView TV)
 	{
 		LinearLayout L = (LinearLayout)TV.getParent();
-		for(int i = 0; i < L.getChildCount(); ++i)
-		{
-		
-		}
-		
+		workout.editSet(L);
 	}
 	
 	// TODO
@@ -159,6 +203,7 @@ public class MainActivity extends Activity {
 	/***************NAVIGATION FUNCTIONALITY*****************/
 	public void gotoBack(View v)
 	{
+		//TODO add conditional for if in Workout
 		if(!previous_layouts.isEmpty())
 		{
 			current_layout = previous_layouts.pop();
@@ -168,7 +213,9 @@ public class MainActivity extends Activity {
 
 	public void gotoLayout(int layout)
 	{
-		previous_layouts.push((Integer)current_layout);
+		if(current_layout != null)
+			previous_layouts.push(current_layout);
+		
 		setContentView(layout);
 		current_layout = (Integer)layout;
 	}
@@ -205,7 +252,7 @@ public class MainActivity extends Activity {
 	
 	public void gotoWorkingOut_Routine(View v)
 	{
-		gotoLayout(R.layout.workingout_routine);
+		gotoLayout(R.layout.workingout);
 	}
 	
 	/****************TESTING METHODS*************************/
@@ -227,35 +274,77 @@ public class MainActivity extends Activity {
 	{
 		gotoLayout(R.layout.activity_main);
 	}
+
+	public void gotoTestWorkout(View v)
+	{	
+		workout = new Workout(this);
+		gotoLayout(R.layout.workingout);
+		workout.dayID = "1";
+		workout.viewSession("Back Day");
+	}
 	
+
 	/****************SETTINGS METHODS************************/
 	public void loadUserInfo()
 	{
-		String JSONstring = con.readQuery("SELECT * FROM User WHERE username=" + con.username());
+		EditText firstname = (EditText)findViewById(R.id.settings_firstname);
+		EditText lastname = (EditText)findViewById(R.id.settings_lastname);
+		EditText dateofbirth = (EditText)findViewById(R.id.settings_dateofbirth);
+		RadioButton sexM = (RadioButton)findViewById(R.id.settings_sexM);
+		RadioButton sexF = (RadioButton)findViewById(R.id.settings_sexF);
+		
+		String JSONstring = con.readQuery("SELECT * FROM user WHERE username='" + con.username() + "'");
 		JSONObject jsonObject;
+
 		if(JSONstring.length() > 10)
 		{
 			try 
 			{
+		        
 				jsonObject = new JSONObject(JSONstring);
 				JSONArray jArray = jsonObject.getJSONArray("data");
 				JSONObject j = jArray.getJSONObject(0);
-			
-				EditText firstname = (EditText)findViewById(R.id.settings_firstname);
-				EditText lastname = (EditText)findViewById(R.id.settings_lastname);
-				EditText dateofbirth = (EditText)findViewById(R.id.settings_dateofbirth);
-				EditText sex = (EditText)findViewById(R.id.settings_sex);
 				
 				firstname.setText(j.get("firstname").toString());
 				lastname.setText(j.get("lastname").toString());
 				dateofbirth.setText(j.get("dateofbirth").toString());
-				sex.setText(j.get("sex").toString());
+				
+				if(j.get("sex").toString().equalsIgnoreCase("M"))
+					sexM.setChecked(true);
+				else
+					sexF.setChecked(true);
 			
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		LinearLayout changes_bar = (LinearLayout) findViewById(R.id.settings_changesbar);
+		changes_bar.setVisibility(View.INVISIBLE);
+		
+		TextWatcher changebarWatcher = new TextWatcher() {
+			 
+			@Override
+		   public void afterTextChanged(Editable s) { 
+		   }
+		 
+		   public void beforeTextChanged(CharSequence s, int start, 
+		     int count, int after) {
+		   }
+		 
+		   public void onTextChanged(CharSequence s, int start, 
+		     int before, int count) {
+			   LinearLayout changes_bar = (LinearLayout) findViewById(R.id.settings_changesbar);
+			   changes_bar.setVisibility(View.VISIBLE);
+		   }
+		  };
+		  
+	  firstname.addTextChangedListener(changebarWatcher);
+	  lastname.addTextChangedListener(changebarWatcher);
+	  dateofbirth.addTextChangedListener(changebarWatcher);
+	  sexM.addTextChangedListener(changebarWatcher);
+	  sexF.addTextChangedListener(changebarWatcher);
+	  
 	}
 	
 	public void saveUserInfo(View v)
@@ -265,15 +354,22 @@ public class MainActivity extends Activity {
 		EditText firstname = (EditText)findViewById(R.id.settings_firstname);
 		EditText lastname = (EditText)findViewById(R.id.settings_lastname);
 		EditText dateofbirth = (EditText)findViewById(R.id.settings_dateofbirth);
-		EditText sex = (EditText)findViewById(R.id.settings_sex);
+		RadioButton sexM = (RadioButton)findViewById(R.id.settings_sexM);
+		RadioButton sexF = (RadioButton)findViewById(R.id.settings_sexF);
 		
 		if(b.getText().toString() != "Cancel")
 		{
+			String sex;
+			if(sexM.isChecked())
+				sex = "M";
+			else
+				sex = "F";
+			
 			String SQL = "UPDATE user SET " + 
 						 "firstname='" + firstname.getText().toString() + "'," + 
 						 "lastname='" + lastname.getText().toString() + "'," + 
 						 "dateofbirth='" + dateofbirth.getText().toString() + "'," + 
-						 "sex='" + sex.getText().toString() + "'," + 
+						 "sex='" + sex + "'," + 
 						 "WHERE username='" + con.username() + "'" ;
 					
 			con.writeQuery(SQL);
@@ -297,13 +393,19 @@ public class MainActivity extends Activity {
 	/****************USER DATA METHODS***********************/
 	public void userdata_load()
 	{
+		EditText bodyfat = (EditText)findViewById(R.id.userdata_bodyfat);
+		EditText restinghr = (EditText)findViewById(R.id.userdata_restinghr);
+		EditText weight = (EditText)findViewById(R.id.userdata_weight);
+		EditText notes = (EditText)findViewById(R.id.userdata_notes);
+		
 		String SQL =  "SELECT * FROM userdata WHERE " + 
 					  "username='" + con.username() + "'" +
 					  "AND isGoal=" + false + " " + 
 					  "ORDER BY datetime DESC";
-					  
+		Log.w("SQL", SQL);
 		String JSONstring = con.readQuery(SQL);
 		JSONObject jsonObject;
+		
 		if(JSONstring.length() > 10)
 		{
 			try 
@@ -311,14 +413,9 @@ public class MainActivity extends Activity {
 				jsonObject = new JSONObject(JSONstring);
 				JSONArray jArray = jsonObject.getJSONArray("data");
 				JSONObject j = jArray.getJSONObject(0);
-			
-				EditText bodyfat = (EditText)findViewById(R.id.userdata_bodyfat);
-				EditText restinghr = (EditText)findViewById(R.id.userdata_restinghr);
-				EditText weight = (EditText)findViewById(R.id.userdata_weight);
-				EditText notes = (EditText)findViewById(R.id.userdata_notes);
 				
 				bodyfat.setText(j.get("bodyfat").toString());
-				restinghr.setText(j.get("restinghr").toString());
+				restinghr.setText(j.get("restingHR").toString());
 				weight.setText(j.get("weight").toString());
 				notes.setText(j.get("notes").toString());
 			
@@ -326,7 +423,35 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 		}
+		
+		LinearLayout changes_bar = (LinearLayout) findViewById(R.id.userdata_changesbar);
+		changes_bar.setVisibility(View.INVISIBLE);
+		
+		TextWatcher watcher = new TextWatcher() {
+			 
+			@Override
+		   public void afterTextChanged(Editable s) {
+			   
+		   }
+		 
+		   public void beforeTextChanged(CharSequence s, int start, 
+		     int count, int after) {
+		   }
+		 
+		   public void onTextChanged(CharSequence s, int start, 
+		     int before, int count) {
+			   LinearLayout changes_bar = (LinearLayout) findViewById(R.id.userdata_changesbar);
+			   changes_bar.setVisibility(View.VISIBLE);
+		   }
+		  };
+		  
+		bodyfat.addTextChangedListener(watcher);
+		restinghr.addTextChangedListener(watcher);
+		weight.addTextChangedListener(watcher);
+		notes.addTextChangedListener(watcher);
+		
 	}
 	
 	public void userdata_update(View v)
@@ -340,17 +465,18 @@ public class MainActivity extends Activity {
 		
 		if(b.getText().toString() != "Cancel")
 		{
-			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-			
-			String SQL = "INSERT INTO userdata VALUES( " + 
-						 "bodyfat='" + bodyfat.getText().toString() + "'," + 
-						 "restinghr='" + restinghr.getText().toString() + "'," + 
-						 "weight='" + weight.getText().toString() + "'," + 
-						 "notes='" + notes.getText().toString() + "'," + 
-						 "datetime=" + timeStamp + "'," +
-						 "isgoal=" + false + ") " + 
-						 "WHERE username='" + con.username() + "'";
-					
+			String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+			Log.w("timeStamp", timeStamp);
+			String SQL = "INSERT INTO userdata (username, datetime, bodyfat, restingHR, weight, notes, isGoal) " + 
+						 "VALUES(" + 
+						 "'" + con.username() + "'," +
+						 "'" + timeStamp + "'," +
+						 "'" + bodyfat.getText().toString() + "'," + 
+						 "'" + restinghr.getText().toString() + "'," + 
+						 "'" + weight.getText().toString() + "'," + 
+						 "'" + notes.getText().toString() + "'," + 
+						 false + ")"; 
+
 			con.writeQuery(SQL);
 		}
 		else
@@ -370,6 +496,7 @@ public class MainActivity extends Activity {
 	}
 	
 	/***************REGISTRATION METHODS*********************/
+	// TODO make it so two users with same username don't register
     public void CreateUser(View view)
     {
 
@@ -389,30 +516,35 @@ public class MainActivity extends Activity {
         String lastName = lastNameET.getText().toString();
         String DOB = dateOfBirthETy.getText().toString()+"-"+dateOfBirthETm.getText().toString()+"-"+dateOfBirthETd.getText().toString();
         String sex;
+        
+        //get sex
         if(sexM.isChecked())
         	sex = "M";
-        else
+        else if (sexF.isChecked())
         	sex = "F";
+        else
+        {
+            showDialog("Select a sex");
+            return;
+        }
         
         String SQL = "INSERT INTO  `dyel-net_main`.`user` "
-                        +"(`username` , `firstname` , `lastname` , `dateofbirth` , `sex`)"
+                        +"(`username` , `password`, `firstname` , `lastname` , `dateofbirth` , `sex`)"
                         +"VALUES ( "
                         +"'"+username+"', "
+                        +"'"+password+"', "
                         +"'"+firstName+"', "
                         +"'"+lastName+"', "
                         +"'"+DOB+"', "
                         +"'"+sex+"');";
-        
-        String create_account_query = "CREATE USER '" + username + " '@'engr-cpanel-mysql.engr.illinois.edu' " + 
-        							  "IDENTIFIED BY '" + password + "';" +
-        							  "grant all privileges on dyel-net.* to '" + username + "'@'engr-cpanel-mysql.engr.illinois.edu' identified by '" + password + "';";
+     
         
         connection con = new connection("dyel-net_admin", "teamturtle", this);
         
+        ProgressDialog pd;
+        pd = ProgressDialog.show(this, "Loading", "Creating account...");
+        
         try {
-    		ProgressDialog.show(this, "Loading", "Creating account...");
-        	con.writeQuery(create_account_query);
-        	Thread.sleep(1000);
         	con.writeQuery(SQL);
 			Thread.sleep(2500);
 		} catch (InterruptedException e) {
@@ -420,12 +552,22 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
         
+        pd.cancel();
+        
         con.logout();
         
         setContentView(R.layout.login);
         
     }
-	
-	
+
+	/***************************************************************/
+    /***********************OTHER METHODS***************************/
+    /***************************************************************/
+	private void showDialog(String text)
+	{
+		AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle(text);
+        dialog.show();
+	}
 }
 

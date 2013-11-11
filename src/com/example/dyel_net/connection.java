@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -38,6 +39,7 @@ public class connection
 	private String result;
 	private MainActivity app;
 	private ListView list;
+	
 	
 	//constructor, represents the user logging in, tests the connection and either returns success or fails and logs out
 	public connection(String un, String pw, MainActivity _app)
@@ -96,9 +98,17 @@ public class connection
 	{
 		_connection task = new _connection();
 		task.execute("read", SQL, "NO");
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return result;
 	}
 	
+	
+	//TODO make it return boolean value if successful or not
 	//send a transaction that modifies the database and does not return anything
 	public void writeQuery(String SQL)
 	{
@@ -125,7 +135,7 @@ public class connection
 		//executes async task, relays to the appropriate method
 		@Override
 		protected Boolean doInBackground(String... params) 
-		{	
+		{	Log.w("SQL", params[1]);
 			if(params[0] == "read")
 			{
 				result = ReadQuery(params[1]);
@@ -142,6 +152,10 @@ public class connection
 		    else if(params[0] == "test")
 		    {
 		    	success = testConnection();
+		    	String SQL = "select * from user where username ='"+ username + "' AND password='"+password;
+		    	if(ReadQuery(SQL).length() < 10)
+		    		success = false;
+		 
 		    	return false;
 		    }
 		        
@@ -154,6 +168,7 @@ public class connection
 		{
 	        if(update)	//true if we want to update the listview
 	        {
+	        	
 	        	try{
 	        		JSONObject jsonObject = new JSONObject(result);
 	        		JSONArray jArray = jsonObject.getJSONArray("data");
@@ -165,6 +180,7 @@ public class connection
 	        		TextView Col5 = (TextView)app.findViewById(R.id.col5);
 	        		
 	        		TextView[] Columns = new TextView[] {Col1, Col2, Col3, Col4, Col5};
+	        		//Columns[col].setText("");
 	        		
 	        		//parse JSON string
 	            	for(int i=0; i < jArray.length(); i++) {
@@ -178,7 +194,7 @@ public class connection
 	                        String key = iter.next();
 	                        String value = (String)j.get(key);
 	                        map.put(key, value);
-	                        Log.w(key, value);
+	                        //Log.w(key, value);
 	                        Columns[col].setText(key);
 	                        col++;
 	                    }
@@ -192,9 +208,8 @@ public class connection
 	        								  new String[] {(String) Col1.getText(), (String) Col2.getText(),(String) Col3.getText() ,(String) Col4.getText(), (String) Col5.getText()}, 
 	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
 	
-	        		list.setAdapter(myAdapter);	
-	
-	        	
+	        		list.setAdapter(myAdapter);
+	        		
 	            	
 	        	} catch (JSONException e) {
 	            	Log.e("JSONException", "Error: " + e.toString());
@@ -220,14 +235,14 @@ public class connection
 	        	HttpPost httpPost = new HttpPost(host);
 	        	
 	        	nvps = new ArrayList<BasicNameValuePair>();  
-	        	nvps.add(new BasicNameValuePair("user", username ));
-	        	nvps.add(new BasicNameValuePair("pw", password ));
+	        	nvps.add(new BasicNameValuePair("user", "dyel-net_admin" ));
+	        	nvps.add(new BasicNameValuePair("pw", "teamturtle" ));
 	        	nvps.add(new BasicNameValuePair("sql", SQL));
 	        	
 	        	httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 	        	HttpResponse response = httpclient.execute(httpPost);
 	        	String htmlresponse = EntityUtils.toString(response.getEntity());
-				
+	        	
 				return htmlresponse;
 				
 			} catch (ParseException e) {
@@ -257,8 +272,8 @@ public class connection
 			HttpClient httpclient = new DefaultHttpClient(httpParameters);
 			HttpPost httpPost = new HttpPost(host);
 			nvps = new ArrayList<BasicNameValuePair>();  
-			nvps.add(new BasicNameValuePair("user", username ));
-			nvps.add(new BasicNameValuePair("pw", password ));
+			nvps.add(new BasicNameValuePair("user", "dyel-net_admin" ));
+			nvps.add(new BasicNameValuePair("pw", "teamturtle" ));
 			nvps.add(new BasicNameValuePair("sql", SQL));
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 			httpclient.execute(httpPost);
@@ -291,8 +306,8 @@ public class connection
 				HttpPost httpPost = new HttpPost(host);
 				
 				nvps = new ArrayList<BasicNameValuePair>();  
-				nvps.add(new BasicNameValuePair("user", username ));
-				nvps.add(new BasicNameValuePair("pw", password ));
+				nvps.add(new BasicNameValuePair("user", "dyel-net_admin" ));
+				nvps.add(new BasicNameValuePair("pw", "teamturtle" ));
 				
 				httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 				HttpResponse response = httpclient.execute(httpPost);
