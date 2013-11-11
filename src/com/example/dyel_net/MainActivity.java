@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
 	
 	/**************PROCESS CLASSES***************************/
 	public Workout workout;
+	public RoutineView routineView;
 	
 	
 	public void login(View v)
@@ -192,10 +193,18 @@ public class MainActivity extends Activity {
 		workout.editSet(L);
 	}
 	
-	// TODO
 	private void cli_routine_view(TextView TV)
 	{
+		String status = routineView.getStatus();
 		
+		if(status == "routines"){
+			cli_routineView_routines(TV);
+		}
+	}
+	
+	private void cli_routineView_routines(TextView TV){
+		LinearLayout L = (LinearLayout)TV.getParent();
+		routineView.viewWeeks();
 	}
 
 
@@ -279,6 +288,12 @@ public class MainActivity extends Activity {
 	{	
 		workout = new Workout(this, "1", "Back Day");
 		workout.viewSession();
+	}
+	
+	public void gotoRoutineView(View v){
+		routineView = new RoutineView(this);
+		gotoLayout(R.layout.routine_view);
+		routineView.viewRoutines();
 	}
 	
 	/****************WORKOUT SLIDER METHODS******************/
