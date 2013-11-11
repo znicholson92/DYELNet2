@@ -19,10 +19,13 @@ public class Workout
 	
 	public String dayID = null;
 	
+	private LinearLayout col_head;
+	
 	public Workout(MainActivity a)
 	{
 		app = a;
 		running = true;
+		col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
 	}
 	
 	public void cancel()
@@ -42,9 +45,9 @@ public class Workout
 					 " GROUP BY _set.exerciseID";
 		
 		ListView l = (ListView)app.findViewById(R.id.workingout_listView);
-		app.con.readQuery(SQL, l);
+		app.con.readQuery(SQL, l, col_head);
 		
-		TextView t = (TextView)app.findViewById(R.id.working_out_topbar);
+		TextView t = (TextView)app.findViewById(R.id.working_out_topbar_text);
 		t.setText(name);
 		
 		pushBack(SQL);
@@ -62,9 +65,9 @@ public class Workout
 					 " ORDER BY setnumber ASC";
 		
 		ListView l = (ListView)app.findViewById(R.id.workingout_listView);
-		app.con.readQuery(SQL, l);
+		app.con.readQuery(SQL, l, col_head);
 		
-		TextView t = (TextView)app.findViewById(R.id.working_out_topbar);
+		TextView t = (TextView)app.findViewById(R.id.working_out_topbar_text);
 		t.setText(exercise);
 		
 		pushBack(SQL);
@@ -98,7 +101,7 @@ public class Workout
 			for(int i = 0; i < pops && !previous_SQL.isEmpty(); ++i)
 				SQL = previous_SQL.pop();
 			
-			app.con.readQuery(SQL, l);
+			app.con.readQuery(SQL, l, col_head);
 			
 			return true;
 		}

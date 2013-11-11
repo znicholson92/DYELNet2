@@ -18,6 +18,7 @@
         android:orientation="vertical" >
 
         <include
+            
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             layout="@layout/header" />
@@ -27,6 +28,14 @@
             android:layout_width="fill_parent"
             android:layout_height="32dp"
             android:orientation="horizontal" >
+            
+            <TextView
+		        android:id="@+id/working_out_topbar_text"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_centerHorizontal="true"
+		        android:text="" />
+            
         </LinearLayout>
 
         <HorizontalScrollView
@@ -40,10 +49,56 @@
                 android:layout_height="fill_parent"
                 android:orientation="vertical" >
 
-                <include
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    layout="@layout/columnheader" />
+                <!-- Column Header -->
+
+                    <LinearLayout
+                        android:id="@+id/working_out_col_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#10A3A3" >
+
+                        <TextView android:id="@+id/col1"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col2"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col3"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col4"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/col5"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                    </LinearLayout>
+
 
                 <!-- List Divider -->
 
@@ -66,14 +121,6 @@
         android:layout_alignParentBottom="true"
         layout="@layout/workingout_slider" />
 
-    <TextView
-        android:id="@+id/workingout_topbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:text="" />
 
 </RelativeLayout>
 

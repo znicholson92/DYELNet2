@@ -14,10 +14,13 @@ public class RoutineView extends Activity {
 	private String status;
 	private boolean running = false;
 	
+	private LinearLayout col_head;
+	
 	public RoutineView(MainActivity a)
 	{
 		app = a;
 		running = true;
+		col_head = (LinearLayout)app.findViewById(R.id.routineview_col_header);
 	}
 	
 	public void cancel()
@@ -36,8 +39,7 @@ public class RoutineView extends Activity {
 				" WHERE username=" + app.con.username();
 		
 		ListView l = (ListView)app.findViewById(R.id.routineview_listView);
-		LinearLayout ch = (LinearLayout)app.findViewById(routineview_col_header);
-		app.con.readQuery(query, l, ch);
+		app.con.readQuery(query, l, col_head);
 		
 		pushBack(query);
 		status = "routines";
@@ -48,8 +50,7 @@ public class RoutineView extends Activity {
 				" WHERE routineID=" + routineID;
 		
 		ListView l = (ListView)app.findViewById(R.id.routineview_listView);
-		LinearLayout ch = (LinearLayout)app.findViewById(routineview_col_header);
-		app.con.readQuery(query, l, ch);
+		app.con.readQuery(query, l, col_head);
 		
 		pushBack(query);
 		status = "weeks";
@@ -61,8 +62,7 @@ public class RoutineView extends Activity {
 				" AND weekID=" + weekID;
 		
 		ListView l = (ListView)app.findViewById(R.id.routineview_listView);
-		LinearLayout ch = (LinearLayout)app.findViewById(routineview_col_header);
-		app.con.readQuery(query, l, ch);
+		app.con.readQuery(query, l, col_head);
 		
 		pushBack(query);
 		status = "days";
@@ -73,8 +73,7 @@ public class RoutineView extends Activity {
 				"WHERE dayID=" + dayID;
 		
 		ListView l = (ListView)app.findViewById(R.id.routineview_listView);
-		LinearLayout ch = (LinearLayout)app.findViewById(routineview_col_header);
-		app.con.readQuery(query, l, ch);
+		app.con.readQuery(query, l, col_head);
 		
 		pushBack(query);
 		status = "sets";
@@ -95,7 +94,7 @@ public class RoutineView extends Activity {
 			for(int i = 0; i < pops && !previous_SQL.isEmpty(); ++i)
 				SQL = previous_SQL.pop();
 			
-			app.con.readQuery(SQL, l);
+			app.con.readQuery(SQL, l, col_head);
 			
 			return true;
 		}

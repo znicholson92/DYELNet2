@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -39,7 +40,7 @@ public class connection
 	private String result;
 	private MainActivity app;
 	private ListView list;
-	
+	private LinearLayout col_header;
 	
 	//constructor, represents the user logging in, tests the connection and either returns success or fails and logs out
 	public connection(String un, String pw, MainActivity _app)
@@ -86,10 +87,11 @@ public class connection
 	}
 	
 	//send a transaction and write the results to the listview
-	public void readQuery(String SQL, ListView l)
+	public void readQuery(String SQL, ListView l, LinearLayout ch)
 	{
 		_connection task = new _connection();
 		list = l;
+		col_header = ch;
 		task.execute("read", SQL, "update");
 	}
 
@@ -170,17 +172,17 @@ public class connection
 	        {
 	        	
 	        	try{
+	        		
 	        		JSONObject jsonObject = new JSONObject(result);
 	        		JSONArray jArray = jsonObject.getJSONArray("data");
 	        		
-	        		TextView Col1 = (TextView)app.findViewById(R.id.col1);
-	        		TextView Col2 = (TextView)app.findViewById(R.id.col2);
-	        		TextView Col3 = (TextView)app.findViewById(R.id.col3);
-	        		TextView Col4 = (TextView)app.findViewById(R.id.col4);
-	        		TextView Col5 = (TextView)app.findViewById(R.id.col5);
+	        		ArrayList<TextView> Columns = new ArrayList<TextView>();
 	        		
-	        		TextView[] Columns = new TextView[] {Col1, Col2, Col3, Col4, Col5};
-	        		//Columns[col].setText("");
+	        		for(int i = 0; i < col_header.getChildCount(); i++)
+	        		{
+	        			Columns.add((TextView) col_header.getChildAt(i));
+	        		}
+	        		
 	        		
 	        		//parse JSON string
 	            	for(int i=0; i < jArray.length(); i++) {
@@ -195,7 +197,7 @@ public class connection
 	                        String value = (String)j.get(key);
 	                        map.put(key, value);
 	                        //Log.w(key, value);
-	                        Columns[col].setText(key);
+	                        Columns.get(col).setText(key);
 	                        col++;
 	                    }
 	                	tableList.add(map);
@@ -205,7 +207,7 @@ public class connection
 	        				new SimpleAdapter(app, 
 	        								  tableList, 
 	        								  R.layout.my_list_item,
-	        								  new String[] {(String) Col1.getText(), (String) Col2.getText(),(String) Col3.getText() ,(String) Col4.getText(), (String) Col5.getText()}, 
+	        								  new String[] {(String) Columns.get(0).getText(), (String) Columns.get(1).getText(),(String) Columns.get(2).getText() ,(String) Columns.get(3).getText(), (String) Columns.get(4).getText()}, 
 	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
 	
 	        		list.setAdapter(myAdapter);
