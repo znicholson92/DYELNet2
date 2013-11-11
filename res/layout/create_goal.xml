@@ -83,14 +83,16 @@
                 android:onClick=""
                 android:height="40dp" />
 
+  
             <Spinner
                 android:id="@+id/creategoal_spinner1"
                 style="@style/NormalFont"
-                android:layout_width="match_parent"
-                android:layout_height="40dp" 
-                android:text="Select Goal Category" />
-
-            <!-- <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:drawSelectorOnTop="true"
+                android:prompt="@string/creategoal_category" />
+            
+<!-- <EditText
                 android:id="@+id/creategoal_category"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -257,7 +259,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.73"
             android:gravity="center"
-            android:onClick=""
+            android:onClick="CreateGoal"
             android:text="Create/Update" />
 
         <Button
