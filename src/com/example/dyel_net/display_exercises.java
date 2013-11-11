@@ -26,7 +26,6 @@ public class display_exercises {
 		}
 		//otherwise we need to add it. 
 		muscle_groups.add(s);
-		//query_fin = query_pre + 
 		String hold = list_to_string();
 		muscle_groups_str = hold; 
 		/* Actual string which hold the list of muscles is updated */
@@ -65,10 +64,10 @@ public class display_exercises {
 		
 		for (String s : muscle_groups)
 		{
-			list_string += s + ", ";
+			list_string += "musclegroup = " + s + " OR ";
 		}
 		
-		list_string = list_string.substring(0, list_string.length()-2);
+		list_string = list_string.substring(0, list_string.length() - 4);
 		
 		return list_string;
 	}
