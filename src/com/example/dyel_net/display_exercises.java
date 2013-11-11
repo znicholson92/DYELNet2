@@ -6,7 +6,45 @@ import android.os.Bundle;
 
 public class display_exercises {
 	
-	String query = "SELECT * FROM  ";
+	String query_pre = "SELECT * FROM  ";
+	String query_fin;
+	ArrayList<String> muscle_groups; 
+	String muscle_groups_str = "";
+	
+	void string_append(string s)
+	{
+		int len = muscle_groups.length; 
+		String check_string = string + " ,";
+		
+		int i = 0;
+		while (i < len){
+			if (muscle_groups[i] == check_string)
+					return; 
+			i++; 
+		}
+		
+		//otherwise we need to add it. 
+		muscle_groups.add(check_string);
+		query_fin = query_pre + 
+		return; 
+	}
+	
+	void string_remove(string s)
+	{
+		
+		
+		return; 
+	}
+	
+	void query_combine()
+	{
+		return;
+	}
+	
+	void list_to_string()
+	{
+		
+	}
 	
 	void display_exercises_toggle_forearms(View v)
 	{
