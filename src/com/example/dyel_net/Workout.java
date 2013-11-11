@@ -1,6 +1,12 @@
 package com.example.dyel_net;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Stack;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -21,21 +27,31 @@ public class Workout
 	private String name;
 	private ListView listview;
 	private TextView topbar;
+	private String sessionID;
 	
 	public Workout(MainActivity a, String dID, String n)
 	{
 		app = a;
-		running = true;
-		col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
 		dayID = dID;
 		name = n;
+		
+		running = true;
+		col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
 		listview = (ListView)app.findViewById(R.id.workingout_listView);
 		topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
+	
+		sessionID = createRealSession();
 	}
 	
 	public void cancel()
 	{
-		running = false;
+		String SQL = "DELETE FROM _set WHERE sessionID=" + sessionID;
+		app.con.writeQuery(SQL);
+		
+		SQL = "DELETE FROM session WHERE sessionID="+ sessionID;
+		app.con.writeQuery(SQL);
+		
+		running = false;	
 	}
 	
 	public boolean isRunning()
@@ -43,13 +59,14 @@ public class Workout
 		return running;
 	}
 	
-	private void viewSession()
+	public void viewSession()
 	{
+		app.gotoLayout(R.layout.workingout);
+		
 		String SQL = "SELECT exercise.name, count(*) As 'Sets' FROM _set " + 
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID WHERE _set.dayID = " + dayID +
 					 " GROUP BY _set.exerciseID";
 		
-
 		app.con.readQuery(SQL, listview, col_head);
 
 		topbar.setText(name);
@@ -78,6 +95,37 @@ public class Workout
 		
 	}
 	
+	public String createRealSession()
+	{
+		String sID = null;
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+		
+		String SQL = "INSERT INTO session(username, datetime, notes, isGoal, isReal) " +
+					 "VALUES('" +
+					 	app.con.username() + "','" +
+					    timeStamp  + "','" +
+					 	"0"  + "','" +
+					    "1"  + "')";
+		
+		app.con.writeQuery(SQL);
+		
+		while(app.con.working()){}
+		try { Thread.sleep(500);} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		
+		SQL = "SELECT sessionID FROM session WHERE isReal=1 AND username='" + app.con.username() + "' ORDER BY datetime DESC";
+		String jString = app.con.readQuery(SQL);
+		
+		try {
+			JSONObject jsonObject = new JSONObject(jString);
+			JSONArray jArray = jsonObject.getJSONArray("data");
+			JSONObject j = jArray.getJSONObject(0);
+			sID = (String) j.get("sessionID");
+		} catch (JSONException e) {e.printStackTrace();}
+		
+		return sID;
+	}
+	
 	public void editSet(LinearLayout L)
 	{
 		
@@ -87,6 +135,8 @@ public class Workout
 	{
 		
 	}
+	
+	
 	
 	public String getSQL()
 	{
@@ -104,20 +154,16 @@ public class Workout
 	{
 		if(!previous_SQL.isEmpty())
 		{
-			String SQL = null;
-			SQL = previous_SQL.pop();
-			
+			String SQL = previous_SQL.pop();
 			app.con.readQuery(SQL, listview, col_head);
-			
 			topbar.setText(name);
-			
 			return true;
 		}
 		else
 			return false;
 	}
 	
-	public void pushBack(String SQL)
+	private void pushBack(String SQL)
 	{
 		previous_SQL.push(SQL);
 	}

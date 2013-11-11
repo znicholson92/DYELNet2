@@ -69,11 +69,7 @@ public class MainActivity extends Activity {
 
 		con = new connection(un_box.getText().toString(), pw_box.getText().toString(), this);
 		
-		while(con.working())
-		{
-			//pd = ProgressDialog.show(this, "Loading", "Logging in...");
-		}
-		
+		while(con.working()){}
 		
 		for(int i=0; i < 5; ++i)
 		{	
@@ -290,9 +286,8 @@ public class MainActivity extends Activity {
 
 	public void gotoTestWorkout(View v)
 	{	
-		workout = new Workout(this, "1");
-		gotoLayout(R.layout.workingout);
-		workout.viewSession("Back Day");
+		workout = new Workout(this, "1", "Back Day");
+		workout.viewSession();
 	}
 	
 	public void gotoRoutineView(View v){
@@ -305,13 +300,15 @@ public class MainActivity extends Activity {
 	public void startWorkout(View v)
 	{
 		String dayID = "1";
-		gotoLayout(R.layout.workingout);
-		workout = new Workout(this, dayID);
-		workout.viewSession("Back Day");
+		workout = new Workout(this, dayID, "Back Day");
+		workout.viewSession();
+	}
+	
+	public void finishWorkout(View v)
+	{
+		
 	}
 
-	
-	
 	/****************SETTINGS METHODS************************/
 	public void loadUserInfo()
 	{
