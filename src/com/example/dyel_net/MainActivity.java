@@ -274,7 +274,7 @@ public class MainActivity extends Activity {
 		/*ListView listView = (ListView) findViewById(R.id.listView1);
 		connection con1 = new connection("dyel-net_admin", "teamturtle", this);
 		
-        con1.readQuery("select * from muscle", listView);
+        con1.readQuery("select * from muscle", listView, );
         
         while(con.working())
 		{
