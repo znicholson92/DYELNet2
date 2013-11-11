@@ -51,7 +51,14 @@ public class Workout
 		SQL = "DELETE FROM session WHERE sessionID="+ sessionID;
 		app.con.writeQuery(SQL);
 		
-		running = false;	
+		running = false;
+		//app.gotoLayout(R.id.main_menu);
+	}
+	
+	public void finish()
+	{
+		running = false;
+		//app.gotoLayout(R.id.main_menu);
 	}
 	
 	public boolean isRunning()
@@ -100,12 +107,13 @@ public class Workout
 		String sID = null;
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 		
-		String SQL = "INSERT INTO session(username, datetime, notes, isGoal, isReal) " +
+		String SQL = "INSERT INTO session(username, datetime, notes, isGoal, isReal, dayID) " +
 					 "VALUES('" +
 					 	app.con.username() + "','" +
-					    timeStamp  + "','" +
-					 	"0"  + "','" +
-					    "1"  + "')";
+					    timeStamp  + "'," +
+					 	"0"  + "," +
+					    "1"  + "," + 
+					 	dayID + ")";
 		
 		app.con.writeQuery(SQL);
 		

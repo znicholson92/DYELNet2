@@ -204,7 +204,11 @@ public class MainActivity extends Activity {
 	public void gotoBack(View v)
 	{
 		//TODO add conditional for if in Workout
-		if(!previous_layouts.isEmpty())
+		if(current_layout == R.layout.workingout && workout.getStatus() == "exercise")
+		{
+			workout.goBack();
+		} 
+		else if(!previous_layouts.isEmpty())
 		{
 			current_layout = previous_layouts.pop();
 			setContentView((int)current_layout);
@@ -287,11 +291,25 @@ public class MainActivity extends Activity {
 		String dayID = "1";
 		workout = new Workout(this, dayID, "Back Day");
 		workout.viewSession();
+		v.setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
 	}
 	
 	public void finishWorkout(View v)
 	{
-		
+		workout.finish();
+		v.setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.INVISIBLE);
+	}
+	
+	public void deleteWorkout(View v)
+	{
+		workout.cancel();
+		v.setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.INVISIBLE);
 	}
 
 	/****************SETTINGS METHODS************************/

@@ -17,78 +17,108 @@
 
         <LinearLayout
             android:layout_width="126dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:height="40dip"
-                android:text="Name" />
+                android:height="47dip"
+                android:ems="10"
+                android:text="Exercise" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:ems="10"
                 android:gravity="center"
-                android:height="40dip"
-                android:text="Weight (LBS)" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:height="40dip"
-                android:text="Reps" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="118dp"
-                android:gravity="center"
-                android:height="40dip"
+                android:height="47dip"
                 android:text="Set Number" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="47dip"
+                android:text="Weight" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="47dip"
+                android:text="Reps" />
+            
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="47dip"
+                android:text="Distance" />
+            
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="47dip"
+                android:text="Time" />
+            
+            
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="185dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
+            <Spinner
+                android:id="@+id/editset_exercise"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:textSize="10sp"
+                 />
+            
             <EditText
-                android:id="@+id/userdata_restinghr"
+                android:id="@+id/editset_setnumber"
+                android:inputType="numberSigned"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:onClick="userdata_changed"
                 android:height="40dip" />
 
             <EditText
-                android:id="@+id/userdata_weight"
+                android:id="@+id/editset_weight"
+                android:inputType="numberDecimal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:onClick="userdata_changed"
                 android:height="40dip" />
 
             <EditText
-                android:id="@+id/userdata_bodyfat"
+                android:id="@+id/editset_reps"
+                android:inputType="numberSigned"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:onClick="userdata_changed"
                 android:height="40dip" />
-
+            
             <EditText
-                android:id="@+id/userdata_notes"
+                android:id="@+id/editset_distance"
+                android:inputType="numberDecimal"
                 android:layout_width="match_parent"
-                android:layout_height="173dp"
+                android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textMultiLine"
-                android:onClick="userdata_changed"
-                android:height="40dip" >
-
-                <requestFocus />
-            </EditText>
+                android:height="40dip" />
+            
+            <EditText
+                android:id="@+id/editset_time"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:height="40dip" />
+         
         </LinearLayout>
     </LinearLayout>
 
@@ -106,16 +136,16 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.73"
             android:gravity="center"
-            android:onClick="userdata_update"
+            android:onClick="set_update"
             android:text="Update" />
 
         <Button
-            android:id="@+id/cancel_userinfo_button"
+            android:id="@+id/cancel_editset_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:onClick="userdata_update"
+            android:onClick="set_update"
             android:text="Cancel" />
     </LinearLayout>
 
