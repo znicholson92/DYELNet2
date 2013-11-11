@@ -1,165 +1,86 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
+    android:id="@+id/workingout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+     >
 
-    xmlns:tools="http://schemas.android.com/tools"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
+<RelativeLayout
+    android:id="@+id/workingout_routine"
+    android:layout_width="fill_parent"
+    android:layout_height="439dp" >
 
-	<!--  Header -->
     <LinearLayout
-        android:id="@+id/footer"
+        android:id="@+id/working_out_body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation = "horizontal"
-        android:background="#1483D9">
+        android:layout_alignBottom="@+id/include1"
+        android:orientation="vertical" >
 
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
 
-        <TextView android:id="@+id/status_bar"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/working_out_topbar"
             android:layout_width="fill_parent"
-            android:layout_marginRight="4dip"
-        	android:layout_marginLeft="4dip"
-            android:text="hello"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-        />
-        <TextView android:id="@+id/username"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_marginRight="4dip"
-        	android:layout_marginLeft="4dip"
-            android:text=""
-            android:gravity="center"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-        />
-    </LinearLayout>
-    
-    
-    <HorizontalScrollView
+            android:layout_height="32dp"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+        <HorizontalScrollView
             android:id="@+id/horizontalScrollView1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" >
+            android:layout_width="match_parent"
+            android:layout_height="334dp" >
 
-	    <LinearLayout
-	        android:id="@+id/linear_scroll"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-	        android:orientation="vertical" >
-	
-		    <!-- Column Header -->
+            <LinearLayout
+                android:id="@+id/linear_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
 
-		    <LinearLayout
-		        android:id="@+id/col_header"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:background="#10A3A3" >
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    layout="@layout/columnheader" />
 
-		        <TextView android:id="@+id/col1"
-		            android:layout_height="fill_parent"
-		            android:layout_width="wrap_content"
-		            android:text="col1"
-		            android:gravity="center"
-		            android:width="65dip"
-		            android:height="20dip"
-		        />
-		        <TextView android:id="@+id/col2"
-		            android:layout_height="fill_parent"
-		            android:layout_width="wrap_content"
-		            android:text="col2"
-		            android:gravity="center"
-		            android:width="65dip"
-		            android:height="20dip"
-		        />
-		        <TextView android:id="@+id/col3"
-		            android:layout_height="fill_parent"
-		            android:layout_width="wrap_content"
-		            android:text="col_3"
-		            android:gravity="center"
-		            android:width="65dip"
-		            android:height="20dip"
-		        />
-		        <TextView android:id="@+id/col4"
-		            android:layout_height="fill_parent"
-		            android:layout_width="wrap_content"
-		            android:text="col_4"
-		            android:gravity="center"
-		            android:width="65dip"
-		            android:height="20dip"
-		        />
-		        <TextView android:id="@+id/col5"
-		            android:layout_height="fill_parent"
-		            android:layout_width="wrap_content"
-		            android:text="col5"
-		            android:gravity="center"
-		            android:width="65dip"
-		            android:height="20dip"
-		        />
-		    </LinearLayout>
-		 
-		    <!-- List Divider -->
-		    <View android:layout_width="fill_parent"
-		        android:layout_height="1dip"
-		        android:background="?android:attr/listDivider" />
-		
-		    <ListView
-		        android:id="@+id/routineView"
-		        android:layout_width="wrap_content"
-		        android:layout_height="392dp"
-		        android:layout_above="@+id/button_connect"
-		        android:layout_alignRight="@+id/footer"
-		        android:layout_below="@+id/footer"
-		        android:orientation="horizontal" >
-		
-		    </ListView>
-	    </LinearLayout>
-    </HorizontalScrollView>
+                <!-- List Divider -->
 
-    <!-- Footer -->
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:background="?android:attr/listDivider" />
 
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#1483D9"
-        android:paddingBottom="2dip"
-        android:paddingLeft="2dip"
-        android:paddingRight="2dip"
-        android:paddingTop="2dip" >
-
-    	<Button
-    	    android:id="@+id/button_connect"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_alignParentBottom="true"
-    	    android:layout_centerHorizontal="true"
-    	    android:onClick="connectToDatabase"
-    	    android:orientation="horizontal"
-    	    android:background="#DAE3EB"
-    	    android:layout_marginRight="4dip"
-        	android:layout_marginLeft="8dip"
-        	android:layout_weight="1"
-    	    android:text="Connect" />
-
-    	<Button
-	        android:id="@+id/button_login"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:orientation="horizontal"
-        	android:onClick="gotoMenu"
-        	android:background="#DAE3EB"
-        	android:layout_marginRight="4dip"
-        	android:layout_marginLeft="8dip"
-        	android:layout_weight="1"
-        	android:text="Menu" />
+                <ListView
+                    android:id="@+id/workingout_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="392dp"
+                    android:orientation="horizontal" >
+                </ListView>
+            </LinearLayout>
+        </HorizontalScrollView>
     </LinearLayout>
+
+    <include
+        android:layout_alignParentBottom="true"
+        layout="@layout/workingout_slider" />
+
+    <TextView
+        android:id="@+id/workingout_topbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:text="" />
+
+</RelativeLayout>
+
+<include
+    android:layout_height="24dp"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@+id/horizontalScrollView1"
+    layout="@layout/footer" />
 
 </LinearLayout>
