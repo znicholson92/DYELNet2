@@ -204,8 +204,7 @@ public class MainActivity extends Activity {
 	
 	private void cli_routineView_routines(TextView TV){
 		LinearLayout L = (LinearLayout)TV.getParent();
-		TextView exerciseTV = (TextView)L.getChildAt(1);
-		routineView.viewWeeks(exerciseTV.getText().toString());
+		routineView.viewWeeks();
 	}
 
 
