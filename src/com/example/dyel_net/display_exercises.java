@@ -8,6 +8,20 @@ public class display_exercises {
 	
 	String query = "SELECT * FROM  ";
 	
+	
+	void string_append(string s)
+	{
+		
+		return; 
+	}
+	
+	void string_remove(string s)
+	{
+		
+		
+		return; 
+	}
+	
 	void display_exercises_toggle_forearms(View v)
 	{
 		CheckBox temp = (CheckBox)v;
