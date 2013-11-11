@@ -23,12 +23,15 @@ public class RoutineView extends Activity {
 	private String routineID;
 	private String weekID;
 	private String dayID;
+	private String setID;
+	private ListView listView;
 	
 	public RoutineView(MainActivity a)
 	{
 		app = a;
 		running = true;
 		col_head = (LinearLayout)app.findViewById(R.id.routineview_col_header);
+		listView = (ListView)app.findViewById(R.id.routineview_listView);
 	}
 	
 	public void cancel()
@@ -42,18 +45,19 @@ public class RoutineView extends Activity {
 	}
 	
 	public void viewRoutines(){
-		String query = "SELECT routineID, type, name " +
+		String query = "SELECT type, name " +
 				" FROM routine" +
 				" WHERE username=" + app.con.username();
 		
-		ListView l = (ListView)app.findViewById(R.id.routineview_listView);
-		app.con.readQuery(query, l, col_head);
+		app.con.readQuery(query, listView, col_head);
+		
 		try {
 			TimeUnit.SECONDS.sleep(2);
-			String JSONstring = app.con.readQuery("SELECT * FROM user WHERE username='" + app.con.username() + "'");
+			String JSONstring = app.con.readQuery("SELECT routineID FROM routine WHERE username=" + app.con.username() + " ORDER BY routineID DESC");
 			JSONObject jsonObject = new JSONObject(JSONstring);
 			JSONArray jArray = jsonObject.getJSONArray("data");
 			JSONObject j = jArray.getJSONObject(0);
+			routineID = j.getString("routineID");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
@@ -67,9 +71,20 @@ public class RoutineView extends Activity {
 		String query = "SELECT week FROM schedule_week" +
 				" WHERE routineID=" + routineID;
 		
-		ListView l = (ListView)app.findViewById(R.id.routineview_listView);
-		app.con.readQuery(query, l, col_head);
+		app.con.readQuery(query, listView, col_head);
 		
+		try {
+			TimeUnit.SECONDS.sleep(2);
+			String JSONstring = app.con.readQuery("SELECT weekID FROM schedule_week WHERE routineID=" + routineID + " ORDER BY weekID DESC");
+			JSONObject jsonObject = new JSONObject(JSONstring);
+			JSONArray jArray = jsonObject.getJSONArray("data");
+			JSONObject j = jArray.getJSONObject(0);
+			weekID = j.getString("weekID");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		pushBack(query);
 		status = "weeks";
 	}
@@ -79,9 +94,20 @@ public class RoutineView extends Activity {
 				" WHERE routineID=" + routineID +
 				" AND weekID=" + weekID;
 		
-		ListView l = (ListView)app.findViewById(R.id.routineview_listView);
-		app.con.readQuery(query, l, col_head);
+		app.con.readQuery(query, listView, col_head);
 		
+		try {
+			TimeUnit.SECONDS.sleep(2);
+			String JSONstring = app.con.readQuery("SELECT dayID FROM schedule_day WHERE routineID=" + routineID + " AND weekID=" + weekID + " ORDER BY dayID DESC");
+			JSONObject jsonObject = new JSONObject(JSONstring);
+			JSONArray jArray = jsonObject.getJSONArray("data");
+			JSONObject j = jArray.getJSONObject(0);
+			dayID = j.getString("dayID");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		pushBack(query);
 		status = "days";
 	}
@@ -90,9 +116,20 @@ public class RoutineView extends Activity {
 		String query = "SELECT * FROM _set " +
 				"WHERE dayID=" + dayID;
 		
-		ListView l = (ListView)app.findViewById(R.id.routineview_listView);
-		app.con.readQuery(query, l, col_head);
+		app.con.readQuery(query, listView, col_head);
 		
+		try {
+			TimeUnit.SECONDS.sleep(2);
+			String JSONstring = app.con.readQuery("SELECT setID FROM _set WHERE dayID=" + dayID + " ORDER BY setID DESC");
+			JSONObject jsonObject = new JSONObject(JSONstring);
+			JSONArray jArray = jsonObject.getJSONArray("data");
+			JSONObject j = jArray.getJSONObject(0);
+			setID = j.getString("setID");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		pushBack(query);
 		status = "sets";
 	}
