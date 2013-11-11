@@ -1,38 +1,56 @@
-/*package com.example.dyel_net;
+package com.example.dyel_net;
+
+import java.util.ArrayList;
 
 import android.view.View;
 import android.widget.CheckBox;
-import android.os.Bundle;
 
 public class display_exercises {
 	
 	String query_pre = "SELECT * FROM  ";
 	String query_fin;
-	ArrayList<String> muscle_groups; 
+	ArrayList<String> muscle_groups = new ArrayList<String>();
 	String muscle_groups_str = "";
 	
-	void string_append(string s)
+	void string_append(String s)
 	{
-		int len = muscle_groups.length; 
-		String check_string = string + " ,";
-		
+		int len = muscle_groups.size(); 
+	
 		int i = 0;
-		while (i < len){
-			if (muscle_groups[i] == check_string)
+		while (i < len)
+		{
+			String item;
+			if ((item = muscle_groups.get(i)) == s)
 					return; 
 			i++; 
 		}
-		
 		//otherwise we need to add it. 
-		muscle_groups.add(check_string);
-		query_fin = query_pre + 
+		muscle_groups.add(s);
+		//query_fin = query_pre + 
+		String hold = list_to_string();
+		muscle_groups_str = hold; 
+		/* Actual string which hold the list of muscles is updated */
 		return; 
 	}
 	
-	void string_remove(string s)
+	void string_remove(String s)
 	{
+		int len = muscle_groups.size();
+		int iter = 0;
 		
+		while (iter < len)
+		{
+			String item;
+			if ((item = muscle_groups.get(iter)) == s)
+			{
+				muscle_groups.remove(iter);
+				break;
+			}
+			iter++;
+		}
 		
+		String hold = list_to_string();
+		muscle_groups_str = hold;		
 		return; 
 	}
 	
@@ -41,9 +59,18 @@ public class display_exercises {
 		return;
 	}
 	
-	void list_to_string()
+	String list_to_string()
 	{
+		String list_string = "";
 		
+		for (String s : muscle_groups)
+		{
+			list_string += s + ", ";
+		}
+		
+		list_string = list_string.substring(0, list_string.length()-2);
+		
+		return list_string;
 	}
 	
 	void display_exercises_toggle_forearms(View v)
@@ -60,7 +87,7 @@ public class display_exercises {
 		}
 	}
 	
-	void display_exercises_toggle_arms()
+	void display_exercises_toggle_arms(View v)
 	{
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
@@ -74,7 +101,7 @@ public class display_exercises {
 		}
 	}
 	
-	void display_exercises_toggle_chest()
+	void display_exercises_toggle_chest(View v)
 	{
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
@@ -88,7 +115,7 @@ public class display_exercises {
 		}
 	}
 	
-	void display_exercises_toggle_back()
+	void display_exercises_toggle_back(View v)
 	{
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
@@ -102,7 +129,7 @@ public class display_exercises {
 		}
 	}
 	
-	void display_exercises_toggle_legs()
+	void display_exercises_toggle_legs(View v)
 	{
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
@@ -116,7 +143,7 @@ public class display_exercises {
 		}
 	}
 	
-	void display_exercises_toggle_shoulders()
+	void display_exercises_toggle_shoulders(View v)
 	{
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
@@ -131,4 +158,4 @@ public class display_exercises {
 	}
 
 }
-*/
+

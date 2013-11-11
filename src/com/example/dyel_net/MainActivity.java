@@ -266,7 +266,7 @@ public class MainActivity extends Activity {
 		connection con1 = new connection("dyel-net_admin", "teamturtle", this);
 		
         con1.readQuery("select * from muscle", listView, );
-        
+        con1.readQuery("select * from muscle", listView, );
         while(con.working())
 		{
 			ProgressDialog.show(this, "Loading", "Loading data...");
