@@ -58,6 +58,8 @@ public class MainActivity extends Activity {
 	
 	public void login(View v)
 	{
+		TextView invalid = (TextView)findViewById(R.id.invalidlogin);
+		
 		ProgressDialog pd = null ;
 		pd = ProgressDialog.show(this, "Loading", "Logging in...");
 		
@@ -81,6 +83,7 @@ public class MainActivity extends Activity {
 				username_bar.setText(un_box.getText().toString());
 				un_box.setText("");
 				pw_box.setText("");
+				invalid.setVisibility(View.INVISIBLE);
 				if (pd != null)
 					pd.cancel();
 				return;
@@ -96,7 +99,8 @@ public class MainActivity extends Activity {
 			}
 		}
 		
-		showDialog("Invalid Login");
+	    
+		invalid.setVisibility(View.VISIBLE);
 		un_box.setText("");
 		pw_box.setText("");
 		if (pd != null)
@@ -258,15 +262,15 @@ public class MainActivity extends Activity {
 	/****************TESTING METHODS*************************/
 	public void connectToDatabase(View v)
 	{
-		ListView listView = (ListView) findViewById(R.id.listView1);
+		/*ListView listView = (ListView) findViewById(R.id.listView1);
 		connection con1 = new connection("dyel-net_admin", "teamturtle", this);
 		
-        con1.readQuery("select * from muscle", listView);
+        con1.readQuery("select * from muscle", listView, );
         
         while(con.working())
 		{
 			ProgressDialog.show(this, "Loading", "Loading data...");
-		}
+		}*/
         
 	}
 
@@ -277,13 +281,22 @@ public class MainActivity extends Activity {
 
 	public void gotoTestWorkout(View v)
 	{	
-		workout = new Workout(this);
+		workout = new Workout(this, "1");
 		gotoLayout(R.layout.workingout);
-		workout.dayID = "1";
 		workout.viewSession("Back Day");
 	}
 	
+	/****************WORKOUT SLIDER METHODS******************/
+	public void startWorkout(View v)
+	{
+		String dayID = "1";
+		gotoLayout(R.layout.workingout);
+		workout = new Workout(this, dayID);
+		workout.viewSession("Back Day");
+	}
 
+	
+	
 	/****************SETTINGS METHODS************************/
 	public void loadUserInfo()
 	{
