@@ -92,6 +92,7 @@ public class connection
 		_connection task = new _connection();
 		list = l;
 		col_header = ch;
+		Log.w("CONNECTION", "READING QUERY");
 		task.execute("read", SQL, "update");
 	}
 
@@ -170,7 +171,7 @@ public class connection
 		{
 	        if(update)	//true if we want to update the listview
 	        {
-	        	
+	        	Log.w("CONNECTION", "UPDATE");
 	        	try{
 	        		
 	        		JSONObject jsonObject = new JSONObject(result);
@@ -207,7 +208,7 @@ public class connection
 	        				new SimpleAdapter(app, 
 	        								  tableList, 
 	        								  R.layout.my_list_item,
-	        								  new String[] {(String) Columns.get(0).getText(), (String) Columns.get(1).getText(),(String) Columns.get(2).getText() ,(String) Columns.get(3).getText(), (String) Columns.get(4).getText()}, 
+	        								  new String[] {Columns.get(0).getText().toString(), Columns.get(1).getText().toString(), Columns.get(2).getText().toString() , Columns.get(3).getText().toString(), Columns.get(4).getText().toString()}, 
 	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
 	
 	        		list.setAdapter(myAdapter);

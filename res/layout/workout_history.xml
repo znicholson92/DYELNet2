@@ -1,20 +1,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/workingout"
+    android:id="@+id/workout_history"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
      >
-
 <RelativeLayout
-    android:id="@+id/workingout_routine"
+    android:id="@+id/workingout_history"
     android:layout_width="fill_parent"
     android:layout_height="439dp" >
 
     <LinearLayout
-        android:id="@+id/working_out_body"
+        android:id="@+id/workout_history_body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/include1"
         android:orientation="vertical" >
 
         <include
@@ -24,28 +22,29 @@
             layout="@layout/header" />
 
         <LinearLayout
-            android:id="@+id/working_out_topbar"
+            android:id="@+id/workout_history_topbar"
             android:layout_width="fill_parent"
             android:layout_height="32dp"
             android:orientation="horizontal" >
             
             <TextView
-		        android:id="@+id/working_out_topbar_text"
+		        android:id="@+id/workout_history_topbar_text"
 		        android:layout_width="fill_parent"
 		        android:layout_height="fill_parent"
 		        android:layout_centerHorizontal="true"
-		        android:gravity="center"
-		        android:text="topbar" />
+		        android:text="topbar"
+            	android:gravity="center"
+		         />
             
         </LinearLayout>
 
         <HorizontalScrollView
-            android:id="@+id/horizontalScrollView1"
+            android:id="@+id/horizontalScrollView2"
             android:layout_width="match_parent"
             android:layout_height="334dp" >
 
             <LinearLayout
-                android:id="@+id/linear_scroll"
+                android:id="@+id/linear_scroll3"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical" >
@@ -53,12 +52,12 @@
                 <!-- Column Header -->
 
                     <LinearLayout
-                        android:id="@+id/working_out_col_header"
+                        android:id="@+id/workout_history_col_header"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#10A3A3" >
 
-                        <TextView android:id="@+id/wo_col1"
+                        <TextView android:id="@+id/col1"
                             android:layout_height="fill_parent"
                             android:layout_width="wrap_content"
                             android:text=""
@@ -66,7 +65,7 @@
                             android:width="65dip"
                             android:height="20dip"
                         />
-                        <TextView android:id="@+id/wo_col2"
+                        <TextView android:id="@+id/col2"
                             android:layout_height="fill_parent"
                             android:layout_width="wrap_content"
                             android:text=""
@@ -74,7 +73,7 @@
                             android:width="65dip"
                             android:height="20dip"
                         />
-                        <TextView android:id="@+id/wo_col3"
+                        <TextView android:id="@+id/col3"
                             android:layout_height="fill_parent"
                             android:layout_width="wrap_content"
                             android:text=""
@@ -82,7 +81,7 @@
                             android:width="65dip"
                             android:height="20dip"
                         />
-                        <TextView android:id="@+id/wo_col4"
+                        <TextView android:id="@+id/col4"
                             android:layout_height="fill_parent"
                             android:layout_width="wrap_content"
                             android:text=""
@@ -90,7 +89,7 @@
                             android:width="65dip"
                             android:height="20dip"
                         />
-                        <TextView android:id="@+id/wo_col5"
+                        <TextView android:id="@+id/col5"
                             android:layout_height="fill_parent"
                             android:layout_width="wrap_content"
                             android:text=""
@@ -109,7 +108,7 @@
                     android:background="?android:attr/listDivider" />
 
                 <ListView
-                    android:id="@+id/workingout_listView"
+                    android:id="@+id/workout_history_listView"
                     android:layout_width="match_parent"
                     android:layout_height="392dp"
                     android:orientation="horizontal" >
@@ -118,9 +117,7 @@
         </HorizontalScrollView>
     </LinearLayout>
 
-    <include
-        android:layout_alignParentBottom="true"
-        layout="@layout/workingout_slider" />
+
 
 
 </RelativeLayout>
@@ -128,7 +125,7 @@
 <include
     android:layout_height="24dp"
     android:layout_alignParentLeft="true"
-    android:layout_below="@+id/horizontalScrollView1"
+    android:layout_below="@+id/horizontalScrollView3"
     layout="@layout/footer" />
 
 </LinearLayout>

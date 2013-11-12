@@ -32,7 +32,7 @@
                     android:layout_weight="1"
                     android:minHeight="80dp"
                     android:onClick = "gotoTestApp"
-                    android:text="Test App" />
+                    android:text="Browse" />
 
                 <Button
                     android:id="@+id/menu_button_2"
@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:minHeight="80dp"
-                    android:text="Button" />
+                    android:text="Goals" />
 
                 <Button
                     android:id="@+id/menu_button_3"
@@ -67,7 +67,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:minHeight="80dp"
-                        android:text="Button" />
+                        android:onClick="gotoWorkout"
+                        android:text="Workout" />
 
                     <Button
                         android:id="@+id/menu_button_5"

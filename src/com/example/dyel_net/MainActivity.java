@@ -86,12 +86,8 @@ public class MainActivity extends Activity {
 			}
 			else
 			{	
-	            try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+	            try {Thread.sleep(500);} 
+	            catch (InterruptedException e) {e.printStackTrace();}
 			}
 		}
 		
@@ -189,7 +185,8 @@ public class MainActivity extends Activity {
 	private void cli_workingout_exercise(TextView TV)
 	{
 		LinearLayout L = (LinearLayout)TV.getParent();
-		workout.editSet(L);
+		TextView setTV = (TextView)L.getChildAt(0);
+		workout.addRealSet(setTV.getText().toString());
 	}
 	
 	// TODO
@@ -217,7 +214,11 @@ public class MainActivity extends Activity {
 		if(current_layout == R.layout.workingout && workout.getStatus() == "exercise")
 		{
 			workout.goBack();
-		} 
+		}
+		else if(current_layout == R.layout.workout_history && workout.getStatus() == "history")
+		{
+			HistoryViewer.goBack(this);
+		}
 		else if(!previous_layouts.isEmpty())
 		{
 			current_layout = previous_layouts.pop();
@@ -275,6 +276,16 @@ public class MainActivity extends Activity {
 		routineView.viewRoutines();
 	}
 
+	public void gotoWorkout(View v)
+	{
+		if(Workout.isRunning(workout)){
+			workout.viewSession();
+		} else {
+			
+		}
+
+	}
+	
 	
 	/****************TESTING METHODS*************************/
 	public void connectToDatabase(View v)
@@ -302,13 +313,31 @@ public class MainActivity extends Activity {
 		workout.viewSession();
 	}
 	
+	
+	/****************WORKING OUT METHHODS********************/
+	public void set_update(View v)
+	{
+		TextView tv = (TextView)v;
+		
+		if(tv.getText().toString() == "Update" )
+			workout.insertRealSet();
+		
+		gotoLayout(R.layout.workingout);
+		
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+	}
+	
+	
+	
 	/****************WORKOUT SLIDER METHODS******************/
 	public void startWorkout(View v)
 	{
 		String dayID = "1";
 		workout = new Workout(this, dayID, "Back Day");
 		workout.viewSession();
-		v.setVisibility(View.INVISIBLE);
+		v.setVisibility(View.GONE);
 		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
 		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
 	}
@@ -316,19 +345,35 @@ public class MainActivity extends Activity {
 	public void finishWorkout(View v)
 	{
 		workout.finish();
-		v.setVisibility(View.INVISIBLE);
+		v.setVisibility(View.GONE);
 		findViewById(R.id.workingout_startworkout_button).setVisibility(View.VISIBLE);
-		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.GONE);
+		gotoLayout(R.layout.routine_view);
 	}
 	
 	public void deleteWorkout(View v)
 	{
 		workout.cancel();
-		v.setVisibility(View.INVISIBLE);
+		v.setVisibility(View.GONE);
 		findViewById(R.id.workingout_startworkout_button).setVisibility(View.VISIBLE);
-		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.GONE);
+		gotoLayout(R.layout.routine_view);
 	}
 
+	public void workout_addNewSet(View v)
+	{
+		gotoLayout(R.layout.add_set);
+	}
+	
+	public void workout_viewHistory(View v)
+	{
+		if(Workout.isRunning(workout)){
+			workout.viewHistory();
+		} else {
+			
+		}
+	}
+	
 	/****************SETTINGS METHODS************************/
 	public void loadUserInfo()
 	{
@@ -560,17 +605,18 @@ public class MainActivity extends Activity {
         String firstName = firstNameET.getText().toString();
         String lastName = lastNameET.getText().toString();
         String DOB = dateOfBirthETy.getText().toString()+"-"+dateOfBirthETm.getText().toString()+"-"+dateOfBirthETd.getText().toString();
-        String sex;
+        String sex = null;
         
         //get sex
         if(sexM.isChecked())
         	sex = "M";
         else if (sexF.isChecked())
         	sex = "F";
-        else
+
+        if(username == "" || password == "" || firstName == "" || lastName == "" || DOB == "" || sex == null)
         {
-            showDialog("Select a sex");
-            return;
+        	showDialog("Missing Fields");
+        	return;
         }
         
         String SQL = "INSERT INTO  `dyel-net_main`.`user` "

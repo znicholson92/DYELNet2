@@ -42,7 +42,7 @@
         android:id="@+id/register_body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.76"
+        android:layout_weight="0.43"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:height="40dip"
+                android:height="47dip"
                 android:text="@string/user_name" />
 
             <TextView
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:height="40dip"
+                android:height="47dip"
                 android:text="Password" />
 
             <TextView
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:height="40dip"
+                android:height="47dip"
                 android:text="@string/first_name" />
 
             <TextView
@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:height="40dip"
+                android:height="47dip"
                 android:text="@string/last_name" />
 
             <TextView
@@ -93,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="54dp"
                 android:gravity="center_vertical"
-                android:height="40dip"
+                android:height="47dip"
                 android:text="Date of Birth (MM-DD-YYYY)" />
 
             <TextView
@@ -102,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:height="40dip"
+                android:height="47dip"
                 android:text="Sex" />
         </LinearLayout>
 
@@ -217,6 +217,7 @@
         android:id="@+id/register_footer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.16"
         android:background="#1483D9"
         android:orientation="horizontal"
         android:paddingBottom="2dip"
@@ -227,12 +228,12 @@
         <Button
             android:id="@+id/button_connect"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="8dip"
             android:layout_marginRight="4dip"
-            android:layout_weight="3"
+            android:layout_weight="2.82"
             android:background="#DAE3EB"
             android:onClick="CreateUser"
             android:orientation="horizontal"
