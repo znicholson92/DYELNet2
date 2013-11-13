@@ -2,6 +2,7 @@ package com.example.dyel_net;
 
 import java.util.Stack;
 
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -71,7 +72,12 @@ public class HistoryViewer {
 			String SQL = previous_SQL.pop();
 			app.con.readQuery(SQL, l, ch);
 		} else {
-			app.workout.goBack();
+			if(!Workout.isRunning(app.workout)){
+				app.workout.goBack();
+			} else {
+				
+			}
+			
 		}
 		
 	}

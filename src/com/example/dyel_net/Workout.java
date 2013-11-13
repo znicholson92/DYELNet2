@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -189,7 +190,7 @@ public class Workout
 		{
 			String ret = null;
 			
-			String SQL = "SELECT exerciseID FROM exercise WHERE name=" + topbar.getText().toString();
+			String SQL = "SELECT exerciseID FROM exercise WHERE name='" + topbar.getText().toString() + "'";
 			
 			String jString = app.con.readQuery(SQL);
 			
@@ -254,7 +255,7 @@ public class Workout
 					TV2.setText("Weight");
 					ET1.setHint(j.get("reps").toString());
 					ET2.setHint(j.get("weight").toString());
-				}else{
+				} else {
 					TV1.setText("Distance");
 					TV2.setText("Time");
 					ET1.setHint(j.get("distance").toString());
@@ -333,6 +334,7 @@ public class Workout
 	{
 		if(!previous_SQL.isEmpty())
 		{
+			Log.w("WORKOUT", "GO BACK");
 			String SQL = previous_SQL.pop();
 			app.con.readQuery(SQL, listview, col_head);
 			topbar.setText(previous_topbar.pop());

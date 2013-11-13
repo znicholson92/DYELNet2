@@ -290,15 +290,6 @@ public class MainActivity extends Activity {
 	/****************TESTING METHODS*************************/
 	public void connectToDatabase(View v)
 	{
-		/*ListView listView = (ListView) findViewById(R.id.listView1);
-		connection con1 = new connection("dyel-net_admin", "teamturtle", this);
-		
-        con1.readQuery("select * from muscle", listView, );
-        
-        while(con.working())
-		{
-			ProgressDialog.show(this, "Loading", "Loading data...");
-		}*/
         
 	}
 
@@ -309,8 +300,9 @@ public class MainActivity extends Activity {
 
 	public void gotoTestWorkout(View v)
 	{	
-		workout = new Workout(this, "1", "Back Day");
-		workout.viewSession();
+		gotoLayout(R.layout.workingout);
+		//workout = new Workout(this, "1", "Back Day");
+		//workout.viewSession();
 	}
 	
 	
