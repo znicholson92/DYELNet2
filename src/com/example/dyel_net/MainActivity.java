@@ -286,6 +286,10 @@ public class MainActivity extends Activity {
 		}
 
 	}
+	public void gotoGoal(View v)
+	{
+		gotoLayout(R.layout.create_goal);
+	}
 	
 	
 	/****************TESTING METHODS*************************/
