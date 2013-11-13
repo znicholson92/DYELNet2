@@ -185,8 +185,9 @@ public class MainActivity extends Activity {
 	private void cli_workingout_exercise(TextView TV)
 	{
 		LinearLayout L = (LinearLayout)TV.getParent();
-		TextView setTV = (TextView)L.getChildAt(0);
-		workout.addRealSet(setTV.getText().toString());
+		ListView LV = (ListView)L.getParent();
+		int sn = LV.indexOfChild((View)L) + 1;
+		workout.addRealSet(new Integer(sn).toString());
 	}
 	
 	// TODO
@@ -209,7 +210,7 @@ public class MainActivity extends Activity {
 		
 	/***************NAVIGATION FUNCTIONALITY*****************/
 	public void gotoBack(View v)
-	{
+	{	Log.w("BACK", "gotoBACK");
 		//TODO add conditional for if in Workout
 		if(current_layout == R.layout.workingout && workout.getStatus() == "exercise")
 		{
@@ -309,16 +310,19 @@ public class MainActivity extends Activity {
 	/****************WORKING OUT METHHODS********************/
 	public void set_update(View v)
 	{
-		TextView tv = (TextView)v;
-		
-		if(tv.getText().toString() == "Update" )
+		Button tv = (Button)v;
+		Log.w("BUTTON TEXT", tv.getText().toString());
+		if(tv.getText().toString().equals("Update") ){Log.d("SET_UPDATE", "POINT B");
 			workout.insertRealSet();
+		}
 		
-		gotoLayout(R.layout.workingout);
+		setContentView(R.layout.workingout);
 		
 		findViewById(R.id.workingout_startworkout_button).setVisibility(View.INVISIBLE);
 		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
 		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		
+		workout.goBack();
 	}
 	
 	
@@ -329,7 +333,7 @@ public class MainActivity extends Activity {
 		String dayID = "1";
 		workout = new Workout(this, dayID, "Back Day");
 		workout.viewSession();
-		v.setVisibility(View.GONE);
+		v.setVisibility(View.INVISIBLE);
 		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
 		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
 	}

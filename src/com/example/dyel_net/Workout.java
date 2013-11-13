@@ -88,7 +88,8 @@ public class Workout
 		topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
 		
 		String SQL = "SELECT exercise.name, count(*) As 'Sets' FROM _set " + 
-					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID WHERE _set.dayID = " + dayID +
+					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " + 
+					 " WHERE _set.dayID = " + dayID + " AND isReal=0 AND isGoal=0 " + 
 					 " GROUP BY _set.exerciseID";
 		
 		app.con.readQuery(SQL, listview, col_head);
@@ -128,8 +129,8 @@ public class Workout
 		
 		String SQL = "INSERT INTO session(username, datetime, isGoal, isReal, dayID) " +
 					 "VALUES('" +
-					 	app.con.username() + "'," +
-					    timeStamp  + "," +
+					 	app.con.username() + "','" +
+					    timeStamp  + "'," +
 					 	"0"  + "," +
 					    "1"  + "," + 
 					 	dayID + ")";
@@ -209,7 +210,7 @@ public class Workout
 			String ret = null;
 			
 			String SQL = "SELECT setID FROM _set WHERE isReal=0 AND isGoal=0 " + 
-						 "sessionID=" + sessionID + " AND dayID=" + dayID + " AND setnumber=" + setnumber + " AND exerciseID=" + exerciseID;
+						 " AND dayID=" + dayID + " AND setnumber=" + setnumber + " AND exerciseID=" + exerciseID;
 			
 			String jString = app.con.readQuery(SQL);
 			
@@ -248,18 +249,17 @@ public class Workout
 				type = j.get("type").toString();
 						
 				exercise.setText(j.get("name").toString());
-				setnumTV.setText(setnumber);
 				
-				if(type == "0"){
-					TV1.setText("Reps");
-					TV2.setText("Weight");
-					ET1.setHint(j.get("reps").toString());
-					ET2.setHint(j.get("weight").toString());
-				} else {
+				if(type.equals("1")){
 					TV1.setText("Distance");
 					TV2.setText("Time");
 					ET1.setHint(j.get("distance").toString());
 					ET2.setHint(j.get("time").toString());
+				} else {
+					TV1.setText("Reps");
+					TV2.setText("Weight");
+					ET1.setHint(j.get("reps").toString());
+					ET2.setHint(j.get("weight").toString());
 				}
 				
 			} catch (JSONException e) {e.printStackTrace();}
@@ -332,12 +332,25 @@ public class Workout
 	//sets query to listview as the previous one
 	public boolean goBack()
 	{
+		Log.w("WORKOUT", "GO BACK PRE");
 		if(!previous_SQL.isEmpty())
 		{
+			col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
+			listview = (ListView)app.findViewById(R.id.workingout_listView);
+			topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
+			
 			Log.w("WORKOUT", "GO BACK");
 			String SQL = previous_SQL.pop();
 			app.con.readQuery(SQL, listview, col_head);
+			Log.w("PREVIOUS TOP BAR", previous_topbar.peek());
 			topbar.setText(previous_topbar.pop());
+			
+			if(previous_SQL.isEmpty()){
+				status = "session";
+			} else {
+				status = "exercise";
+			}
+			
 			return true;
 		}
 		else

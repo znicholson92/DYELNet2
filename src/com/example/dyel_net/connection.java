@@ -138,27 +138,29 @@ public class connection
 		//executes async task, relays to the appropriate method
 		@Override
 		protected Boolean doInBackground(String... params) 
-		{	Log.w("SQL", params[1]);
+		{	
+			Log.w("SQL", params[1]);
 			if(params[0] == "read")
 			{
 				result = ReadQuery(params[1]);
-				if(params[2] == "update")
+				if(params[2] == "update"){
 					return true;
-	        	else
+				} else {
 	        		return false;
+				}
 		    }
 			else if(params[0] == "write")
 			{
 				WriteQuery(params[1]);
-					return false;
+				return false;
 		    }
 		    else if(params[0] == "test")
 		    {
 		    	success = testConnection();
 		    	String SQL = "select * from user where username ='"+ username + "' AND password='"+password;
-		    	if(ReadQuery(SQL).length() < 10)
+		    	if(ReadQuery(SQL).length() < 10){
 		    		success = false;
-		 
+		    	}
 		    	return false;
 		    }
 		        

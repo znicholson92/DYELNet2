@@ -17,18 +17,18 @@ public class HistoryViewer {
 	public static void viewHistory(String exercise, String dayID, MainActivity app)
 	{
 		app.gotoLayout(R.layout.workout_history);
-		LinearLayout history_col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
-		ListView history_listview = (ListView)app.findViewById(R.id.workingout_listView);
-		TextView history_topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
+		LinearLayout history_col_head = (LinearLayout)app.findViewById(R.id.workout_history_col_header);
+		ListView history_listview = (ListView)app.findViewById(R.id.workout_history_listView);
+		TextView history_topbar = (TextView)app.findViewById(R.id.workout_history_topbar_text);
 		
-		String SQL = "SELECT routine.name As 'Routine', session.datetime As 'Date and Time' FROM _set " +
-				 	 "INNER JOIN exercise ON _set.exerciseID = exercise.exerciseID " +
-				 	 "INNER JOIN session ON session.sessionID = _set.sessionID " + 
-				 	 "INNER JOIN routine ON routine.routineID = schedule_day.routineID " +
-					 "INNER JOIN schedule_day ON schedule_day.dayID = _set.dayID " +
-		 	 		 "WHERE exercise.name = '" + exercise + 
-				 	 "' AND _set.isReal=1 " + 
-				 	 "  AND session.username='" + app.con.username() + "'";
+		String SQL = "SELECT routine.name As 'Routine', session.datetime As 'Date and Time' " + 
+					 "FROM _set, exercise, session, routine, schedule_day " +
+					 "WHERE _set.exerciseID = exercise.exerciseID " +
+					 "AND session.sessionID = _set.sessionID " +
+					 "AND routine.routineID = schedule_day.routineID " +
+					 "AND schedule_day.dayID = _set.dayID " +
+					 "AND exercise.name = '" + exercise + 
+					 "' AND _set.isReal=1  AND session.username='" + app.con.username() + "'";
 		
 		if(dayID != null)
 			SQL += " AND _set.dayID=" + dayID;
@@ -49,10 +49,10 @@ public class HistoryViewer {
 		ListView history_listview = (ListView)app.findViewById(R.id.workingout_listView);
 		TextView history_topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
 		
-		String SQL = "SELECT _set.setnumber as 'Set', _set.reps As Reps, _set.weight As Weight FROM _set " +
-				 	 "INNER JOIN exercise ON _set.exerciseID = exercise.exerciseID " +
-				 	 "INNER JOIN session ON session.sessionID = _set.sessionID " + 
-		 	 		 "WHERE exercise.name = '" + exercise + 
+		String SQL = "  SELECT _set.setnumber as 'Set', _set.reps As Reps, _set.weight As Weight FROM _set, exercise, session " +
+				 	 "  WHERE _set.exerciseID = exercise.exerciseID " +
+				 	 "  AND session.sessionID = _set.sessionID " + 
+		 	 		 "  AND exercise.name = '" + exercise + 
 				 	 "' AND _set.isReal=1 " + 
 		 	 		 "' AND session.dayID=" + dayID +
 		 	 		 "  AND session.datetime=" + datetime +
