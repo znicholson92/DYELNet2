@@ -243,6 +243,11 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.login);
 	}
 	
+	public void gotoGoal(View v)
+	{
+		gotoLayout(R.layout.create_goal);
+	}
+	
 	public void gotoUserData(View v)
 	{
 		gotoLayout(R.layout.userdata);
