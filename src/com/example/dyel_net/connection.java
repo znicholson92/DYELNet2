@@ -101,12 +101,11 @@ public class connection
 	{
 		_connection task = new _connection();
 		task.execute("read", SQL, "NO");
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		try {Thread.sleep(100);} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		while(working){}
+		
 		return result;
 	}
 	
@@ -117,6 +116,7 @@ public class connection
 	{
 		_connection task = new _connection();
 		task.execute("write", SQL);
+		while(working){}
 	}
 	
 	//logs out the current user
@@ -138,7 +138,8 @@ public class connection
 		//executes async task, relays to the appropriate method
 		@Override
 		protected Boolean doInBackground(String... params) 
-		{	
+		{	Log.w("CONNECTION", "WORKING = TRUE");
+			working = true;
 			Log.w("SQL", params[1]);
 			if(params[0] == "read")
 			{
@@ -220,6 +221,8 @@ public class connection
 	            	Log.e("JSONException", "Error: " + e.toString());
 	        		}
 	        	}
+	        	Log.w("CONNECTION", "WORKING = FALSE");
+	        	working = false;
 	        	this.cancel(false);
     	}
 	

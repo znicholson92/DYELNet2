@@ -3,6 +3,7 @@ package com.example.dyel_net;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Stack;
+import java.util.concurrent.locks.Lock;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -137,9 +138,9 @@ public class Workout
 		
 		app.con.writeQuery(SQL);
 		
-		while(app.con.working()){}
-		try { Thread.sleep(500);} 
-		catch (InterruptedException e) {e.printStackTrace();}
+		//while(app.con.working()){}
+		//try { Thread.sleep(500);} 
+		//catch (InterruptedException e) {e.printStackTrace();}
 		
 		SQL = "SELECT sessionID FROM session WHERE isReal=1 AND username='" + app.con.username() + "' ORDER BY datetime DESC";
 		String jString = app.con.readQuery(SQL);

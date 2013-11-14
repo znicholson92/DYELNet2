@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.app.*;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -631,18 +632,13 @@ public class MainActivity extends Activity {
         ProgressDialog pd;
         pd = ProgressDialog.show(this, "Loading", "Creating account...");
         
-        try {
-        	con.writeQuery(SQL);
-			Thread.sleep(2500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        con.writeQuery(SQL);
+		//Thread.sleep(2500);
         
         pd.cancel();
         
         con.logout();
-        
+  
         setContentView(R.layout.login);
         
     }
