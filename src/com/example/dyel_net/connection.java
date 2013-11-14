@@ -144,15 +144,17 @@ public class connection
 			if(params[0] == "read")
 			{
 				result = ReadQuery(params[1]);
-				if(params[2] == "update"){
+				if(params[2] == "update"){Log.w("CONNECTION", "UPDATE=TRUE");
 					return true;
-				} else {
+				} else {Log.w("CONNECTION", "UPDATE=FALSE");
+					working = false;
 	        		return false;
 				}
 		    }
 			else if(params[0] == "write")
 			{
 				WriteQuery(params[1]);
+				working = false;
 				return false;
 		    }
 		    else if(params[0] == "test")
@@ -162,6 +164,7 @@ public class connection
 		    	if(ReadQuery(SQL).length() < 10){
 		    		success = false;
 		    	}
+		    	working = false;
 		    	return false;
 		    }
 		        
@@ -171,7 +174,7 @@ public class connection
 		//handles the post execution. If "update" is true, write the data to the bound ListView
 		@Override
 		protected void onPostExecute(Boolean update) 
-		{
+		{ Log.w("CONNECTION", "POST EXECUTE");
 	        if(update)	//true if we want to update the listview
 	        {
 	        	Log.w("CONNECTION", "UPDATE");
@@ -220,10 +223,10 @@ public class connection
 	        	} catch (JSONException e) {
 	            	Log.e("JSONException", "Error: " + e.toString());
 	        		}
-	        	}
-	        	Log.w("CONNECTION", "WORKING = FALSE");
-	        	working = false;
-	        	this.cancel(false);
+	        }
+	        Log.w("CONNECTION", "WORKING = FALSE");
+	        working = false;
+	        this.cancel(false);
     	}
 	
 		//sends a transaction to MySQL, returns the result as a JSON string
