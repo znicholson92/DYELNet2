@@ -14,8 +14,16 @@ public class HistoryViewer {
 	private static Stack<String> previous_SQL = new Stack<String>();
 	private static Stack<String> previous_topbar = new Stack<String>();
 	
+	public static int status = 0;
+	public static String currentDayID = null;
+	public static String currentExercise = null;
+	
 	public static void viewHistory(String exercise, String dayID, MainActivity app)
 	{
+		status = 1;
+		currentDayID = dayID;
+		currentExercise = exercise;
+		
 		app.gotoLayout(R.layout.workout_history);
 		LinearLayout history_col_head = (LinearLayout)app.findViewById(R.id.workout_history_col_header);
 		ListView history_listview = (ListView)app.findViewById(R.id.workout_history_listView);
@@ -44,7 +52,8 @@ public class HistoryViewer {
 	
 	public static void viewHistory_session(String datetime, String exercise, String dayID, MainActivity app)
 	{
-
+		status = 2;
+		
 		LinearLayout history_col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
 		ListView history_listview = (ListView)app.findViewById(R.id.workingout_listView);
 		TextView history_topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
@@ -54,9 +63,9 @@ public class HistoryViewer {
 				 	 "  AND session.sessionID = _set.sessionID " + 
 		 	 		 "  AND exercise.name = '" + exercise + 
 				 	 "' AND _set.isReal=1 " + 
-		 	 		 "' AND session.dayID=" + dayID +
-		 	 		 "  AND session.datetime=" + datetime +
-				 	 "  AND session.username='" + app.con.username() + "'";
+		 	 		 "  AND session.dayID=" + dayID +
+		 	 		 "  AND session.datetime='" + datetime +
+				 	 "' AND session.username='" + app.con.username() + "'";
 
 		
 		app.con.readQuery(SQL, history_listview, history_col_head);

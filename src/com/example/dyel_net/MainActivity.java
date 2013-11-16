@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import android.R.layout;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -75,14 +76,15 @@ public class MainActivity extends Activity {
 		{	
 			if(con.loggedin())
 			{
-				setContentView(R.layout.main_menu);
-				TextView username_bar = (TextView) findViewById(R.id.username);
-				username_bar.setText(un_box.getText().toString());
 				un_box.setText("");
 				pw_box.setText("");
 				invalid.setVisibility(View.INVISIBLE);
 				if (pd != null)
 					pd.cancel();
+				
+				setContentView(R.layout.main_menu);
+				TextView username_bar = (TextView) findViewById(R.id.username);
+				username_bar.setText(un_box.getText().toString());
 				return;
 			}
 			else
@@ -114,12 +116,9 @@ public class MainActivity extends Activity {
 	{
 		LinearLayout L = (LinearLayout)v.getParent();
 		L.setBackgroundColor(0xFF5D65F5);	//highlight row
-		
-		if(checkDoubleClick(v))
-		{
-			doubleClickedListItem(v);
-			L.setBackgroundColor(0x005D65F5);	//unhighlight row
-		}
+
+		doubleClickedListItem(v);
+
 	}
 	
 	// TODO
@@ -136,7 +135,10 @@ public class MainActivity extends Activity {
 			case R.layout.routine_view:
 				cli_routine_view(tv);
             	break;
-  
+          
+			case R.layout.workout_history:
+				cli_history(tv);
+				break;
 		}
 	}
 	
@@ -161,6 +163,17 @@ public class MainActivity extends Activity {
 	
 	/****************CLICKED LIST ITEM************************/
 	
+	private void cli_history(TextView TV)
+	{
+		if(HistoryViewer.status == 1)
+		{
+			LinearLayout L = (LinearLayout)TV.getParent();
+			TextView datetimeTV = (TextView)L.getChildAt(1);
+			String datetime = datetimeTV.getText().toString();
+			HistoryViewer.viewHistory_session(datetime, HistoryViewer.currentExercise, HistoryViewer.currentDayID, this);
+		}	
+	}
+	
 	private void cli_workingout(TextView TV)
 	{
 		String status = workout.getStatus();
@@ -176,6 +189,7 @@ public class MainActivity extends Activity {
 	}
 	
 	
+	@SuppressLint("UseValueOf")
 	private void cli_workingout_session(TextView TV)
 	{	
 		LinearLayout L = (LinearLayout)TV.getParent();
@@ -183,6 +197,7 @@ public class MainActivity extends Activity {
 		workout.viewExercise(exerciseTV.getText().toString());
 	}
 	
+	@SuppressLint("UseValueOf")
 	private void cli_workingout_exercise(TextView TV)
 	{
 		LinearLayout L = (LinearLayout)TV.getParent();

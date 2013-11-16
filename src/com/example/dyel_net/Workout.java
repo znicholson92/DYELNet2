@@ -276,17 +276,24 @@ public class Workout
 			
 			if(exerciseID != null)
 			{
-				if(type == "0"){
-					reps = ET1.getText().toString();
-					weight = ET2.getText().toString();
-					time = "NULL";
-					distance = "NULL";
-				} else {
+				if(type.equals("1")){
 					distance = ET1.getText().toString();
 					time = ET2.getText().toString();
 					weight = "NULL";
 					reps = "NULL";
+				} else {
+					reps = ET1.getText().toString();
+					weight = ET2.getText().toString();
+					time = "NULL";
+					distance = "NULL";
 				}
+				
+				String note;
+				if(notes.getText().toString().length() < 1)
+					note = "NULL";
+				else
+					note = notes.getText().toString();
+				
 				String SQL = "INSERT INTO _set(sessionID, dayID, exerciseID, reps, weight, setnumber, distance, " +
 							 				  "time, notes, isReal, isGoal) " +
 							 "VALUES(" + sessionID + "," +
@@ -297,7 +304,7 @@ public class Workout
 							 		   	 setnumber + "," + 
 							 		     distance + "," +
 							 		   	 time + "," +
-							 		     notes.getText().toString() + "," +
+							 		     note + "," +
 							 		   	 "1,0)";
 							 				  	
 				app.con.writeQuery(SQL);
