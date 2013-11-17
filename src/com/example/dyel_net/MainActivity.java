@@ -200,10 +200,23 @@ public class MainActivity extends Activity {
 		if(status == "routines"){
 			cli_routineView_routines(TV);
 		}
+		else if(status == "weeks"){
+			cli_routineView_days(TV);
+		}
+		else if (status == "days"){
+			cli_routineView_sets(TV);
+		}
 	}
 	
+	private void cli_routineView_sets(TextView tV) {
+		routineView.viewSets();
+	}
+
+	private void cli_routineView_days(TextView tV) {
+		routineView.viewDays();
+	}
+
 	private void cli_routineView_routines(TextView TV){
-		LinearLayout L = (LinearLayout)TV.getParent();
 		routineView.viewWeeks();
 	}
 
