@@ -18,6 +18,7 @@ import android.view.View;
 import android.app.*;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -57,6 +58,7 @@ public class MainActivity extends Activity {
 	/**************PROCESS CLASSES***************************/
 	public Workout workout;
 	public RoutineView routineView;
+	public display_exercises exerciseViewer;
 	
 	public void login(View v)
 	{
@@ -346,6 +348,18 @@ public class MainActivity extends Activity {
 		workout.goBack();
 	}
 	
+	public void browse_exercises(View v)
+	{
+		gotoLayout(R.layout.display_exercises);
+		exerciseViewer = new display_exercises(this);
+		exerciseViewer.load();
+	}
+	
+	public void exerciseViewerChanged(View v)
+	{
+		CheckBox cb = (CheckBox)v;
+		if(v.is)
+	}
 	
 	
 	/****************WORKOUT SLIDER METHODS******************/

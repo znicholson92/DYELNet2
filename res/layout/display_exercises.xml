@@ -70,7 +70,7 @@
                     <!-- Column Header -->
 
                     <LinearLayout
-                        android:id="@+id/col_header"
+                        android:id="@+id/display_exercise_col_header"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#10A3A3" >
@@ -78,7 +78,6 @@
                         <TextView android:id="@+id/col1"
                             android:layout_height="fill_parent"
                             android:layout_width="wrap_content"
-                            android:text="col1"
                             android:gravity="center"
                             android:width="65dip"
                             android:height="20dip"
@@ -86,7 +85,6 @@
                         <TextView android:id="@+id/col2"
                             android:layout_height="fill_parent"
                             android:layout_width="wrap_content"
-                            android:text="col2"
                             android:gravity="center"
                             android:width="65dip"
                             android:height="20dip"
@@ -94,7 +92,6 @@
                         <TextView android:id="@+id/col3"
                             android:layout_height="fill_parent"
                             android:layout_width="wrap_content"
-                            android:text="col_3"
                             android:gravity="center"
                             android:width="65dip"
                             android:height="20dip"
@@ -102,7 +99,6 @@
                         <TextView android:id="@+id/col4"
                             android:layout_height="fill_parent"
                             android:layout_width="wrap_content"
-                            android:text="col_4"
                             android:gravity="center"
                             android:width="65dip"
                             android:height="20dip"
@@ -110,7 +106,6 @@
                         <TextView android:id="@+id/col5"
                             android:layout_height="fill_parent"
                             android:layout_width="wrap_content"
-                            android:text="col5"
                             android:gravity="center"
                             android:width="65dip"
                             android:height="20dip"
@@ -123,7 +118,7 @@
                         android:background="?android:attr/listDivider" />
                 
                     <ListView
-                        android:id="@+id/listView1"
+                        android:id="@+id/display_exercises_listview"
                         android:layout_width="wrap_content"
                         android:layout_height="392dp"
                         android:orientation="horizontal" >
