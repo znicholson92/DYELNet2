@@ -92,6 +92,7 @@ public class connection
 		_connection task = new _connection();
 		list = l;
 		col_header = ch;
+		Log.w("CONNECTION", "READING QUERY");
 		task.execute("read", SQL, "update");
 	}
 
@@ -100,12 +101,11 @@ public class connection
 	{
 		_connection task = new _connection();
 		task.execute("read", SQL, "NO");
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		try {Thread.sleep(100);} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		while(working){}
+		
 		return result;
 	}
 	
@@ -116,6 +116,7 @@ public class connection
 	{
 		_connection task = new _connection();
 		task.execute("write", SQL);
+		while(working){}
 	}
 	
 	//logs out the current user
@@ -137,27 +138,33 @@ public class connection
 		//executes async task, relays to the appropriate method
 		@Override
 		protected Boolean doInBackground(String... params) 
-		{	Log.w("SQL", params[1]);
+		{	Log.w("CONNECTION", "WORKING = TRUE");
+			working = true;
+			Log.w("SQL", params[1]);
 			if(params[0] == "read")
 			{
 				result = ReadQuery(params[1]);
-				if(params[2] == "update")
+				if(params[2] == "update"){Log.w("CONNECTION", "UPDATE=TRUE");
 					return true;
-	        	else
+				} else {Log.w("CONNECTION", "UPDATE=FALSE");
+					working = false;
 	        		return false;
+				}
 		    }
 			else if(params[0] == "write")
 			{
 				WriteQuery(params[1]);
-					return false;
+				working = false;
+				return false;
 		    }
 		    else if(params[0] == "test")
 		    {
 		    	success = testConnection();
 		    	String SQL = "select * from user where username ='"+ username + "' AND password='"+password;
-		    	if(ReadQuery(SQL).length() < 10)
+		    	if(ReadQuery(SQL).length() < 10){
 		    		success = false;
-		 
+		    	}
+		    	working = false;
 		    	return false;
 		    }
 		        
@@ -167,10 +174,10 @@ public class connection
 		//handles the post execution. If "update" is true, write the data to the bound ListView
 		@Override
 		protected void onPostExecute(Boolean update) 
-		{
+		{ Log.w("CONNECTION", "POST EXECUTE");
 	        if(update)	//true if we want to update the listview
 	        {
-	        	
+	        	Log.w("CONNECTION", "UPDATE");
 	        	try{
 	        		
 	        		JSONObject jsonObject = new JSONObject(result);
@@ -207,7 +214,7 @@ public class connection
 	        				new SimpleAdapter(app, 
 	        								  tableList, 
 	        								  R.layout.my_list_item,
-	        								  new String[] {(String) Columns.get(0).getText(), (String) Columns.get(1).getText(),(String) Columns.get(2).getText() ,(String) Columns.get(3).getText(), (String) Columns.get(4).getText()}, 
+	        								  new String[] {Columns.get(0).getText().toString(), Columns.get(1).getText().toString(), Columns.get(2).getText().toString() , Columns.get(3).getText().toString(), Columns.get(4).getText().toString()}, 
 	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
 	
 	        		list.setAdapter(myAdapter);
@@ -216,8 +223,10 @@ public class connection
 	        	} catch (JSONException e) {
 	            	Log.e("JSONException", "Error: " + e.toString());
 	        		}
-	        	}
-	        	this.cancel(false);
+	        }
+	        Log.w("CONNECTION", "WORKING = FALSE");
+	        working = false;
+	        this.cancel(false);
     	}
 	
 		//sends a transaction to MySQL, returns the result as a JSON string

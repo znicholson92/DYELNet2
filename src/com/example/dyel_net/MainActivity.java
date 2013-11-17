@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import android.R.layout;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,7 +16,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.app.*;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -55,7 +58,7 @@ public class MainActivity extends Activity {
 	/**************PROCESS CLASSES***************************/
 	public Workout workout;
 	public RoutineView routineView;
-	
+	public display_exercises exerciseViewer;
 	
 	public void login(View v)
 	{
@@ -75,24 +78,21 @@ public class MainActivity extends Activity {
 		{	
 			if(con.loggedin())
 			{
-				setContentView(R.layout.main_menu);
-				TextView username_bar = (TextView) findViewById(R.id.username);
-				username_bar.setText(un_box.getText().toString());
 				un_box.setText("");
 				pw_box.setText("");
 				invalid.setVisibility(View.INVISIBLE);
 				if (pd != null)
 					pd.cancel();
+				
+				setContentView(R.layout.main_menu);
+				TextView username_bar = (TextView) findViewById(R.id.username);
+				username_bar.setText(un_box.getText().toString());
 				return;
 			}
 			else
 			{	
-	            try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+	            try {Thread.sleep(500);} 
+	            catch (InterruptedException e) {e.printStackTrace();}
 			}
 		}
 		
@@ -118,12 +118,9 @@ public class MainActivity extends Activity {
 	{
 		LinearLayout L = (LinearLayout)v.getParent();
 		L.setBackgroundColor(0xFF5D65F5);	//highlight row
-		
-		if(checkDoubleClick(v))
-		{
-			doubleClickedListItem(v);
-			L.setBackgroundColor(0x005D65F5);	//unhighlight row
-		}
+
+		doubleClickedListItem(v);
+
 	}
 	
 	// TODO
@@ -140,7 +137,10 @@ public class MainActivity extends Activity {
 			case R.layout.routine_view:
 				cli_routine_view(tv);
             	break;
-  
+          
+			case R.layout.workout_history:
+				cli_history(tv);
+				break;
 		}
 	}
 	
@@ -165,6 +165,17 @@ public class MainActivity extends Activity {
 	
 	/****************CLICKED LIST ITEM************************/
 	
+	private void cli_history(TextView TV)
+	{
+		if(HistoryViewer.status == 1)
+		{
+			LinearLayout L = (LinearLayout)TV.getParent();
+			TextView datetimeTV = (TextView)L.getChildAt(1);
+			String datetime = datetimeTV.getText().toString();
+			HistoryViewer.viewHistory_session(datetime, HistoryViewer.currentExercise, HistoryViewer.currentDayID, this);
+		}	
+	}
+	
 	private void cli_workingout(TextView TV)
 	{
 		String status = workout.getStatus();
@@ -180,6 +191,7 @@ public class MainActivity extends Activity {
 	}
 	
 	
+	@SuppressLint("UseValueOf")
 	private void cli_workingout_session(TextView TV)
 	{	
 		LinearLayout L = (LinearLayout)TV.getParent();
@@ -187,17 +199,22 @@ public class MainActivity extends Activity {
 		workout.viewExercise(exerciseTV.getText().toString());
 	}
 	
+	@SuppressLint("UseValueOf")
 	private void cli_workingout_exercise(TextView TV)
 	{
 		LinearLayout L = (LinearLayout)TV.getParent();
-		workout.editSet(L);
+		ListView LV = (ListView)L.getParent();
+		int sn = LV.indexOfChild((View)L) + 1;
+		workout.addRealSet(new Integer(sn).toString());
 	}
 	
+	// TODO
 	private void cli_routine_view(TextView TV)
 	{
 		String status = routineView.getStatus();
-		
-		if(status == "routines"){
+ 		
+		if(status == "routines")
+		{
 			cli_routineView_routines(TV);
 		}
 		else if(status == "weeks"){
@@ -217,6 +234,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void cli_routineView_routines(TextView TV){
+		LinearLayout L = (LinearLayout)TV.getParent();
 		routineView.viewWeeks();
 	}
 
@@ -224,9 +242,17 @@ public class MainActivity extends Activity {
 		
 	/***************NAVIGATION FUNCTIONALITY*****************/
 	public void gotoBack(View v)
-	{
+	{	Log.w("BACK", "gotoBACK");
 		//TODO add conditional for if in Workout
-		if(!previous_layouts.isEmpty())
+		if(current_layout == R.layout.workingout && workout.getStatus() == "exercise")
+		{
+			workout.goBack();
+		}
+		else if(current_layout == R.layout.workout_history && workout.getStatus() == "history")
+		{
+			HistoryViewer.goBack(this);
+		}
+		else if(!previous_layouts.isEmpty())
 		{
 			current_layout = previous_layouts.pop();
 			setContentView((int)current_layout);
@@ -246,6 +272,11 @@ public class MainActivity extends Activity {
 	{
 		current_layout = R.layout.login;
 		setContentView(R.layout.login);
+	}
+	
+	public void gotoGoal(View v)
+	{
+		gotoLayout(R.layout.create_goal);
 	}
 	
 	public void gotoUserData(View v)
@@ -277,18 +308,26 @@ public class MainActivity extends Activity {
 		gotoLayout(R.layout.workingout);
 	}
 	
+	public void gotoRoutineView(View v){
+		routineView = new RoutineView(this);
+		gotoLayout(R.layout.routine_view);
+		routineView.viewRoutines();
+	}
+
+	public void gotoWorkout(View v)
+	{
+		if(Workout.isRunning(workout)){
+			workout.viewSession();
+		} else {
+			
+		}
+
+	}
+	
+	
 	/****************TESTING METHODS*************************/
 	public void connectToDatabase(View v)
 	{
-		/*ListView listView = (ListView) findViewById(R.id.listView1);
-		connection con1 = new connection("dyel-net_admin", "teamturtle", this);
-		
-        con1.readQuery("select * from muscle", listView, );
-        con1.readQuery("select * from muscle", listView, );
-        while(con.working())
-		{
-			ProgressDialog.show(this, "Loading", "Loading data...");
-		}*/
         
 	}
 
@@ -299,15 +338,43 @@ public class MainActivity extends Activity {
 
 	public void gotoTestWorkout(View v)
 	{	
-		workout = new Workout(this, "1", "Back Day");
-		workout.viewSession();
+		gotoLayout(R.layout.workingout);
+		//workout = new Workout(this, "1", "Back Day");
+		//workout.viewSession();
 	}
 	
-	public void gotoRoutineView(View v){
-		routineView = new RoutineView(this);
-		gotoLayout(R.layout.routine_view);
-		routineView.viewRoutines();
+	
+	/****************WORKING OUT METHHODS********************/
+	public void set_update(View v)
+	{
+		Button tv = (Button)v;
+		Log.w("BUTTON TEXT", tv.getText().toString());
+		if(tv.getText().toString().equals("Update") ){Log.d("SET_UPDATE", "POINT B");
+			workout.insertRealSet();
+		}
+		
+		setContentView(R.layout.workingout);
+		
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		
+		workout.goBack();
 	}
+	
+	public void browse_exercises(View v)
+	{
+		gotoLayout(R.layout.display_exercises);
+		exerciseViewer = new display_exercises(this);
+		exerciseViewer.load();
+	}
+	
+	public void exerciseViewerChanged(View v)
+	{
+		CheckBox cb = (CheckBox)v;
+		if(v.is)
+	}
+	
 	
 	/****************WORKOUT SLIDER METHODS******************/
 	public void startWorkout(View v)
@@ -315,13 +382,43 @@ public class MainActivity extends Activity {
 		String dayID = "1";
 		workout = new Workout(this, dayID, "Back Day");
 		workout.viewSession();
+		v.setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
 	}
 	
 	public void finishWorkout(View v)
 	{
-		
+		workout.finish();
+		v.setVisibility(View.GONE);
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.GONE);
+		gotoLayout(R.layout.routine_view);
+	}
+	
+	public void deleteWorkout(View v)
+	{
+		workout.cancel();
+		v.setVisibility(View.GONE);
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.GONE);
+		gotoLayout(R.layout.routine_view);
 	}
 
+	public void workout_addNewSet(View v)
+	{
+		gotoLayout(R.layout.add_set);
+	}
+	
+	public void workout_viewHistory(View v)
+	{
+		if(Workout.isRunning(workout)){
+			workout.viewHistory();
+		} else {
+			
+		}
+	}
+	
 	/****************SETTINGS METHODS************************/
 	public void loadUserInfo()
 	{
@@ -553,17 +650,18 @@ public class MainActivity extends Activity {
         String firstName = firstNameET.getText().toString();
         String lastName = lastNameET.getText().toString();
         String DOB = dateOfBirthETy.getText().toString()+"-"+dateOfBirthETm.getText().toString()+"-"+dateOfBirthETd.getText().toString();
-        String sex;
+        String sex = null;
         
         //get sex
         if(sexM.isChecked())
         	sex = "M";
         else if (sexF.isChecked())
         	sex = "F";
-        else
+
+        if(username == "" || password == "" || firstName == "" || lastName == "" || DOB == "" || sex == null)
         {
-            showDialog("Select a sex");
-            return;
+        	showDialog("Missing Fields");
+        	return;
         }
         
         String SQL = "INSERT INTO  `dyel-net_main`.`user` "
@@ -582,18 +680,13 @@ public class MainActivity extends Activity {
         ProgressDialog pd;
         pd = ProgressDialog.show(this, "Loading", "Creating account...");
         
-        try {
-        	con.writeQuery(SQL);
-			Thread.sleep(2500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        con.writeQuery(SQL);
+		//Thread.sleep(2500);
         
         pd.cancel();
         
         con.logout();
-        
+  
         setContentView(R.layout.login);
         
     }
