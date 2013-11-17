@@ -212,16 +212,22 @@ public class MainActivity extends Activity {
 		{
 			cli_routineView_routines(TV);
 		}
-		else if (status == "week")
-		{
-			
+		else if(status == "weeks"){
+			cli_routineView_days(TV);
 		}
-		else if (status == "day")
-		{
-			
+		else if (status == "days"){
+			cli_routineView_sets(TV);
 		}
 	}
-		
+	
+	private void cli_routineView_sets(TextView tV) {
+		routineView.viewSets();
+	}
+
+	private void cli_routineView_days(TextView tV) {
+		routineView.viewDays();
+	}
+
 	private void cli_routineView_routines(TextView TV){
 		LinearLayout L = (LinearLayout)TV.getParent();
 		routineView.viewWeeks();
@@ -340,6 +346,23 @@ public class MainActivity extends Activity {
 		Log.w("BUTTON TEXT", tv.getText().toString());
 		if(tv.getText().toString().equals("Update") ){Log.d("SET_UPDATE", "POINT B");
 			workout.insertRealSet();
+		}
+		
+		setContentView(R.layout.workingout);
+		
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		
+		workout.goBack();
+	}
+	
+	public void set_add(View v)
+	{
+		Button tv = (Button)v;
+		Log.w("BUTTON TEXT", tv.getText().toString());
+		if(tv.getText().toString().equals("Add") ){
+			workout.addSet();
 		}
 		
 		setContentView(R.layout.workingout);
