@@ -4,13 +4,22 @@ import java.util.ArrayList;
 
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class display_exercises {
 	
-	String query_pre = "SELECT * FROM  ";
-	String query_fin;
+	String query_final;
 	ArrayList<String> muscle_groups = new ArrayList<String>();
 	String muscle_groups_str = "";
+	MainActivity app;
+	ListView lv = (ListView) app.findViewById(R.id.display_exercise_col_header);
+	LinearLayout layout = (LinearLayout) app.findViewById(R.id.display_exercise_col_header);
+	
+	public display_exercises(MainActivity a)
+	{
+		app = a;	
+	}
 	
 	void string_append(String s)
 	{
@@ -24,6 +33,8 @@ public class display_exercises {
 					return; 
 			i++; 
 		}
+		
+		
 		//otherwise we need to add it. 
 		muscle_groups.add(s);
 		String hold = list_to_string();
@@ -55,6 +66,9 @@ public class display_exercises {
 	
 	void query_combine()
 	{
+		query_final = "SELECT exercise.name, muscle.name from exercise inner " +
+					  "join muscle ON exercise.muscleID = muscle.muscleID WHERE "
+					  + muscle_groups_str;
 		return;
 	}
 	
@@ -64,7 +78,7 @@ public class display_exercises {
 		
 		for (String s : muscle_groups)
 		{
-			list_string += "musclegroup = " + s + " OR ";
+			list_string += "musclegroup = '" + s + "' OR ";
 		}
 		
 		list_string = list_string.substring(0, list_string.length() - 4);
@@ -77,12 +91,18 @@ public class display_exercises {
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			//string_append("forearms");
+			string_append("forearms");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 		
 		if (temp.isChecked() == false)
 		{
-			//string_remove("forearms");
+			string_remove("forearms");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 	}
 	
@@ -91,12 +111,18 @@ public class display_exercises {
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			//string_append("arms");
+			string_append("arms");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 		
 		if (temp.isChecked() == false)
 		{
-			//string_remove("arms");
+			string_remove("arms");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 	}
 	
@@ -105,12 +131,18 @@ public class display_exercises {
 		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			//string_append("chest");
+			string_append("chest");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 		
 		if (temp.isChecked() == false)
 		{
-			//string_remove("chest");
+			string_remove("chest");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 	}
 	
@@ -120,11 +152,17 @@ public class display_exercises {
 		if (temp.isChecked() == true)
 		{
 			string_append("back");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 		
 		if (temp.isChecked() == false)
 		{
 			string_remove("back");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 	}
 	
@@ -134,11 +172,17 @@ public class display_exercises {
 		if (temp.isChecked() == true)
 		{
 			string_append("legs");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 		
 		if (temp.isChecked() == false)
 		{
 			string_remove("legs");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 	}
 	
@@ -148,11 +192,17 @@ public class display_exercises {
 		if (temp.isChecked() == true)
 		{
 			string_append("shoulders");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 		
 		if (temp.isChecked() == false)
 		{
 			string_remove("shoulders");
+			query_combine();
+			app.con.readQuery(query_final, lv, layout);
+
 		}
 	}
 
