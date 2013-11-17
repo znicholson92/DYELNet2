@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:minHeight="80dp"
-                    android:onClick = "gotoTestApp"
+                    android:onClick = "gotoRoutineView"
                     android:text="Browse" />
 
                 <Button

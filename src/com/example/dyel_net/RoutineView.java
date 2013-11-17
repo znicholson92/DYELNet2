@@ -16,6 +16,7 @@ public class RoutineView extends Activity {
 	
 	private MainActivity app;
 	private Stack<String> previous_SQL = new Stack<String>();
+	private Stack<String> previous_topbar = new Stack<String>();
 	private String status;
 	private boolean running = false;
 	
@@ -25,6 +26,8 @@ public class RoutineView extends Activity {
 	private String dayID;
 	private String setID;
 	private ListView listView;
+	
+	private TextView topbar;
 	
 	public RoutineView(MainActivity a)
 	{
@@ -146,10 +149,16 @@ public class RoutineView extends Activity {
 		if(pops > 0 && !previous_SQL.isEmpty())
 		{
 			String SQL = null;
-			for(int i = 0; i < pops && !previous_SQL.isEmpty(); ++i)
+			String tbar_text = null;
+			for(int i = 0; i < pops && !previous_SQL.isEmpty(); ++i){
 				SQL = previous_SQL.pop();
+				tbar_text = previous_topbar.pop();
+			}
 			
 			app.con.readQuery(SQL, l, col_head);
+
+			if(tbar_text != null)
+				topbar.setText(tbar_text);
 			
 			return true;
 		}
@@ -160,5 +169,6 @@ public class RoutineView extends Activity {
 	public void pushBack(String SQL)
 	{
 		previous_SQL.push(SQL);
+		previous_topbar.push(topbar.getText().toString());
 	}
 }

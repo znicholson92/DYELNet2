@@ -114,18 +114,13 @@ public class MainActivity extends Activity {
 	}
 	
 	/***************MAIN GOTO RELAY**************************/
-	public void clickedListItem(View v)
+
+	
+	private void clickedListItem(View v)
 	{
 		LinearLayout L = (LinearLayout)v.getParent();
 		L.setBackgroundColor(0xFF5D65F5);	//highlight row
-
-		doubleClickedListItem(v);
-
-	}
-	
-	// TODO
-	private void doubleClickedListItem(View v)
-	{
+		
 		TextView tv = (TextView)v;	
 		
 		switch(current_layout)
@@ -362,17 +357,33 @@ public class MainActivity extends Activity {
 		workout.goBack();
 	}
 	
+	public void set_add(View v)
+	{
+		Button tv = (Button)v;
+		Log.w("BUTTON TEXT", tv.getText().toString());
+		if(tv.getText().toString().equals("Add") ){
+			workout.addSet();
+		}
+		
+		setContentView(R.layout.workingout);
+		
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		
+		workout.goBack();
+	}
+	
 	public void browse_exercises(View v)
 	{
 		gotoLayout(R.layout.display_exercises);
-		exerciseViewer = new display_exercises(this);
-		exerciseViewer.load();
+		//exerciseViewer = new display_exercises(this);
+		//exerciseViewer.load();
 	}
 	
 	public void exerciseViewerChanged(View v)
 	{
-		CheckBox cb = (CheckBox)v;
-		if(v.is)
+		//exerciseViewer.load();
 	}
 	
 	
