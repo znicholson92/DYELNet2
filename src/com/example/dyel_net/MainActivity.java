@@ -218,10 +218,15 @@ public class MainActivity extends Activity {
 		else if (status == "days"){
 			cli_routineView_sets(TV);
 		}
+		else if (status == "sets")
+			cli_routineView_exercises(TV);
 	}
 	
 	private void cli_routineView_sets(TextView tV) {
-		routineView.viewSets();
+		LinearLayout ll = (LinearLayout)tV.getParent();
+		TextView tV1 = (TextView)ll.getChildAt(0);
+		TextView tV2 = (TextView)ll.getChildAt(2);
+		routineView.viewSets(tV1.getText().toString(), tV2.getText().toString());
 	}
 
 	private void cli_routineView_days(TextView tV) {
@@ -230,10 +235,15 @@ public class MainActivity extends Activity {
 
 	private void cli_routineView_routines(TextView TV){
 		LinearLayout L = (LinearLayout)TV.getParent();
-		routineView.viewWeeks();
+		String name = TV.getText().toString();
+		routineView.viewWeeks(name);
 	}
 
-
+	private void cli_routineView_exercises(TextView TV){
+		LinearLayout ll = (LinearLayout)TV.getParent();
+		TV = (TextView)ll.getChildAt(1);
+		routineView.viewExercise(TV.getText().toString());
+	}
 		
 	/***************NAVIGATION FUNCTIONALITY*****************/
 	public void gotoBack(View v)
@@ -305,7 +315,6 @@ public class MainActivity extends Activity {
 	
 	public void gotoRoutineView(View v){
 		routineView = new RoutineView(this);
-		gotoLayout(R.layout.routine_view);
 		routineView.viewRoutines();
 	}
 
@@ -390,12 +399,20 @@ public class MainActivity extends Activity {
 	/****************WORKOUT SLIDER METHODS******************/
 	public void startWorkout(View v)
 	{
-		String dayID = "1";
-		workout = new Workout(this, dayID, "Back Day");
-		workout.viewSession();
-		v.setVisibility(View.INVISIBLE);
-		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
-		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		if(routineView.getStatus() == "days")
+		{
+			String dayID = routineView.getDayID();
+			String name = routineView.getTopbar();
+			workout = new Workout(this, dayID, name);
+			workout.viewSession();
+			v.setVisibility(View.INVISIBLE);
+			findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
+			findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		}
+		else if (routineView.getStatus() == "sets") 
+		{
+			
+		}
 	}
 	
 	public void finishWorkout(View v)
