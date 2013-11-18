@@ -210,28 +210,31 @@ public class MainActivity extends Activity {
 	{
 		String status = routineView.getStatus();
  		
-		if(status == "routines")
-		{
+		if(status == "routines") {
 			cli_routineView_routines(TV);
 		}
 		else if(status == "weeks"){
-			cli_routineView_days(TV);
+			cli_routineView_weeks(TV);
 		}
 		else if (status == "days"){
+			cli_routineView_days(TV);
+		}
+		else if (status == "exercises"){
+			cli_routineView_exercises(TV);
+		}
+		else if (status == "sets") {
 			cli_routineView_sets(TV);
 		}
-		else if (status == "sets")
-			cli_routineView_exercises(TV);
 	}
 	
-	private void cli_routineView_sets(TextView tV) {
+	private void cli_routineView_exercises(TextView tV) {
 		LinearLayout ll = (LinearLayout)tV.getParent();
 		TextView tV1 = (TextView)ll.getChildAt(0);
 		TextView tV2 = (TextView)ll.getChildAt(2);
 		routineView.viewSets(tV1.getText().toString(), tV2.getText().toString());
 	}
 
-	private void cli_routineView_days(TextView tV) {
+	private void cli_routineView_weeks(TextView tV) {
 		routineView.viewDays();
 	}
 
@@ -241,10 +244,14 @@ public class MainActivity extends Activity {
 		routineView.viewWeeks(name);
 	}
 
-	private void cli_routineView_exercises(TextView TV){
+	private void cli_routineView_days(TextView TV){
 		LinearLayout ll = (LinearLayout)TV.getParent();
 		TV = (TextView)ll.getChildAt(1);
 		routineView.viewExercise(TV.getText().toString());
+	}
+	
+	private void cli_routineView_sets(TextView TV){
+		
 	}
 		
 	/***************NAVIGATION FUNCTIONALITY*****************/
