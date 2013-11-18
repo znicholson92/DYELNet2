@@ -16,61 +16,65 @@ public class Goal {
 	private MainActivity app;
 	private Stack<String> previous_SQL = new Stack<String>();
 	private String status;
+	private String userID;
 	private boolean running = false;
 
 	public String dayID = null;
 
 	private LinearLayout col_head;
 
-	public Goal(MainActivity a) {
+	public Goal(MainActivity a, String userID) {
 		app = a;
 		running = true;
+		this.userID = userID; 
+	}
+	public void createGoal(){
 		//col_head = (LinearLayout) app.findViewById(R.id.working_out_col_header);
 		
-		EditText userNameET =  (EditText) app.findViewById(R.id.creategoal_goal_name);
-        EditText noteET =	   (EditText) app.findViewById(R.id.creategoal_notes);
-        EditText startDateTy = (EditText) app.findViewById(R.id.creategoal_dateofbirth_year);
-        EditText startDateTm = (EditText) app.findViewById(R.id.creategoal_dateofbirth_month);
-        EditText startDateTd = (EditText) app.findViewById(R.id.creategoal_dateofbirth_day);
-        EditText endDateTy =   (EditText) app.findViewById(R.id.creategoal_dateofbirth_year2);
-        EditText endDateTm =   (EditText) app.findViewById(R.id.creategoal_dateofbirth_month2);
-        EditText endDateTd =   (EditText) app.findViewById(R.id.creategoal_dateofbirth_day2);
-        //category
-        //completed?
-        
-        String userName = userNameET.getText().toString();
-        String note = noteET.getText().toString();
-        String startDate = startDateTy.getText().toString()+"-"+startDateTm.getText().toString()+"-"+startDateTd.getText().toString();
-        String endDate = endDateTy.getText().toString()+"-"+endDateTm.getText().toString()+"-"+endDateTd.getText().toString();
-        //category
-        //completed?
-        
-        
-        String SQL = "INSERT INTO  `dyel-net_main`.`goals` "
-                        +"(`username` , `note`, `start_date` , `end_date`)"
-                        +"VALUES ( "
-                        +"'"+userName+"', "
-                        +"'"+note+"', "
-                        +"'"+startDate+"', "
-                        +"'"+endDate+"');";
-     
-        
-        connection con = new connection("dyel-net_admin", "teamturtle", app);
-        
-        ProgressDialog pd;
-        pd = ProgressDialog.show(app, "Loading", "Creating account...");
-        
-        try {
-        	con.writeQuery(SQL);
-			Thread.sleep(2500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        pd.cancel();        
-        con.logout();        
-        app.setContentView(R.layout.main_menu); 
+				EditText userNameET =  (EditText) app.findViewById(R.id.creategoal_goal_name);
+		        EditText noteET =	   (EditText) app.findViewById(R.id.creategoal_notes);
+		        EditText startDateTy = (EditText) app.findViewById(R.id.creategoal_dateofbirth_year);
+		        EditText startDateTm = (EditText) app.findViewById(R.id.creategoal_dateofbirth_month);
+		        EditText startDateTd = (EditText) app.findViewById(R.id.creategoal_dateofbirth_day);
+		        EditText endDateTy =   (EditText) app.findViewById(R.id.creategoal_dateofbirth_year2);
+		        EditText endDateTm =   (EditText) app.findViewById(R.id.creategoal_dateofbirth_month2);
+		        EditText endDateTd =   (EditText) app.findViewById(R.id.creategoal_dateofbirth_day2);
+		        //category
+		        //completed?
+		        
+		        String userName = userNameET.getText().toString();
+		        String note = noteET.getText().toString();
+		        String startDate = startDateTy.getText().toString()+"-"+startDateTm.getText().toString()+"-"+startDateTd.getText().toString();
+		        String endDate = endDateTy.getText().toString()+"-"+endDateTm.getText().toString()+"-"+endDateTd.getText().toString();
+		        //category
+		        //completed?
+		        
+		        
+		        String SQL = "INSERT INTO  `dyel-net_main`.`goals` "
+		                        +"(`username` , `note`, `start_date` , `end_date`)"
+		                        +"VALUES ( "
+		                        +"'"+userName+"', "
+		                        +"'"+note+"', "
+		                        +"'"+startDate+"', "
+		                        +"'"+endDate+"');";
+		     
+		        
+		        connection con = new connection("dyel-net_admin", "teamturtle", app);
+		        
+		        ProgressDialog pd;
+		        pd = ProgressDialog.show(app, "Loading", "Creating account...");
+		        
+		        try {
+		        	con.writeQuery(SQL);
+					Thread.sleep(2500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        
+		        pd.cancel();        
+		        con.logout();        
+		        app.setContentView(R.layout.main_menu); 
 	}
 
 	public void cancel() {
@@ -81,7 +85,7 @@ public class Goal {
 		return running;
 	}
 
-	public void viewGoal(String name) {
+	public void viewGoal2(String name) {
 		
 		/***TODO***/
 		/***Just copied from Workout.java ***/
@@ -98,6 +102,11 @@ public class Goal {
 		pushBack(SQL);
 		status = "session";
 
+	}
+	
+	public void viewGoal()
+	{	
+		GoalViewer.viewDetail(app, userID);		
 	}
 
 	// back button functionality for listview query menus

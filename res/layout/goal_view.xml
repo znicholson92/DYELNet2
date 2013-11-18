@@ -1,0 +1,130 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/goal_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+     >
+<RelativeLayout
+    android:id="@+id/goal_view_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="439dp" >
+
+    <LinearLayout
+        android:id="@+id/goal_view_body"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <include
+            
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
+        <LinearLayout
+            android:id="@+id/goal_view_topbar"
+            android:layout_width="fill_parent"
+            android:layout_height="32dp"
+            android:orientation="horizontal" >
+            
+            <TextView
+		        android:id="@+id/goal_view_topbar_text"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_centerHorizontal="true"
+		        android:text="topbar"
+            	android:gravity="center"
+		         />
+            
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/goal_view_horizontalScrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="334dp" >
+
+            <LinearLayout
+                android:id="@+id/goal_view_linear_scroll3"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+
+                <!-- Column Header -->
+
+                    <LinearLayout
+                        android:id="@+id/goal_view_col_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#10A3A3" >
+
+                        <TextView android:id="@+id/goal_view_col1"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/goal_view_col2"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/goal_view_col3"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/goal_view_col4"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                        <TextView android:id="@+id/goal_view_col5"
+                            android:layout_height="fill_parent"
+                            android:layout_width="wrap_content"
+                            android:text=""
+                            android:gravity="center"
+                            android:width="65dip"
+                            android:height="20dip"
+                        />
+                    </LinearLayout>
+
+
+                <!-- List Divider -->
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:background="?android:attr/listDivider" />
+
+                <ListView
+                    android:id="@+id/goal_view_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="392dp"
+                    android:orientation="horizontal" >
+                </ListView>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>
+
+<include
+    android:layout_height="24dp"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@+id/goal_view_horizontalScrollView3"
+    layout="@layout/footer" />
+</LinearLayout>
