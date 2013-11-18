@@ -50,20 +50,6 @@
                 android:height="47dip"
                 android:text="Reps" />
             
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:height="47dip"
-                android:text="Distance" />
-            
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:height="47dip"
-                android:text="Time" />
-            
             
         </LinearLayout>
 
@@ -83,10 +69,11 @@
 		            android:layout_gravity="center_horizontal"
 		            android:layout_weight="0.73"
 		            android:gravity="center"
-		            android:onClick="set_update"
+		            android:onClick="browse_exercises"
 		            android:text="Browse" />
 
 	            <TextView
+	                android:id="@+id/addset_exercise_name"
 	                android:layout_width="98dp"
 	                android:layout_height="match_parent"
 	                android:layout_weight="0.51"
@@ -117,22 +104,6 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:height="40dip" />
-            
-            <EditText
-                android:id="@+id/addset_distance"
-                android:inputType="numberDecimal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:height="40dip" />
-            
-            <EditText
-                android:id="@+id/addset_time"
-                android:inputType="numberDecimal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:height="40dip" />
          
         </LinearLayout>
     </LinearLayout>
@@ -151,7 +122,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.73"
             android:gravity="center"
-            android:onClick="set_update"
+            android:onClick="set_add"
             android:text="Add" />
 
         <Button
@@ -160,7 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:onClick="set_update"
+            android:onClick="set_add"
             android:text="Cancel" />
     </LinearLayout>
 

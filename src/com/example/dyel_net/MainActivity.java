@@ -18,6 +18,7 @@ import android.view.View;
 import android.app.*;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -57,6 +58,7 @@ public class MainActivity extends Activity {
 	/**************PROCESS CLASSES***************************/
 	public Workout workout;
 	public RoutineView routineView;
+	public display_exercises exerciseViewer;
 	
 	public void login(View v)
 	{
@@ -112,18 +114,13 @@ public class MainActivity extends Activity {
 	}
 	
 	/***************MAIN GOTO RELAY**************************/
-	public void clickedListItem(View v)
+
+	
+	private void clickedListItem(View v)
 	{
 		LinearLayout L = (LinearLayout)v.getParent();
 		L.setBackgroundColor(0xFF5D65F5);	//highlight row
-
-		doubleClickedListItem(v);
-
-	}
-	
-	// TODO
-	private void doubleClickedListItem(View v)
-	{
+		
 		TextView tv = (TextView)v;	
 		
 		switch(current_layout)
@@ -215,14 +212,38 @@ public class MainActivity extends Activity {
 		{
 			cli_routineView_routines(TV);
 		}
+		else if(status == "weeks"){
+			cli_routineView_days(TV);
+		}
+		else if (status == "days"){
+			cli_routineView_sets(TV);
+		}
+		else if (status == "sets")
+			cli_routineView_exercises(TV);
 	}
-		
+	
+	private void cli_routineView_sets(TextView tV) {
+		LinearLayout ll = (LinearLayout)tV.getParent();
+		TextView tV1 = (TextView)ll.getChildAt(0);
+		TextView tV2 = (TextView)ll.getChildAt(2);
+		routineView.viewSets(tV1.getText().toString(), tV2.getText().toString());
+	}
+
+	private void cli_routineView_days(TextView tV) {
+		routineView.viewDays();
+	}
+
 	private void cli_routineView_routines(TextView TV){
 		LinearLayout L = (LinearLayout)TV.getParent();
-		routineView.viewWeeks();
+		String name = TV.getText().toString();
+		routineView.viewWeeks(name);
 	}
 
-
+	private void cli_routineView_exercises(TextView TV){
+		LinearLayout ll = (LinearLayout)TV.getParent();
+		TV = (TextView)ll.getChildAt(1);
+		routineView.viewExercise(TV.getText().toString());
+	}
 		
 	/***************NAVIGATION FUNCTIONALITY*****************/
 	public void gotoBack(View v)
@@ -294,7 +315,6 @@ public class MainActivity extends Activity {
 	
 	public void gotoRoutineView(View v){
 		routineView = new RoutineView(this);
-		gotoLayout(R.layout.routine_view);
 		routineView.viewRoutines();
 	}
 
@@ -346,17 +366,53 @@ public class MainActivity extends Activity {
 		workout.goBack();
 	}
 	
+	public void set_add(View v)
+	{
+		Button tv = (Button)v;
+		Log.w("BUTTON TEXT", tv.getText().toString());
+		if(tv.getText().toString().equals("Add") ){
+			workout.addSet();
+		}
+		
+		setContentView(R.layout.workingout);
+		
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		
+		workout.goBack();
+	}
+	
+	public void browse_exercises(View v)
+	{
+		gotoLayout(R.layout.display_exercises);
+		//exerciseViewer = new display_exercises(this);
+		//exerciseViewer.load();
+	}
+	
+	public void exerciseViewerChanged(View v)
+	{
+		//exerciseViewer.load();
+	}
 	
 	
 	/****************WORKOUT SLIDER METHODS******************/
 	public void startWorkout(View v)
 	{
-		String dayID = "1";
-		workout = new Workout(this, dayID, "Back Day");
-		workout.viewSession();
-		v.setVisibility(View.INVISIBLE);
-		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
-		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		if(routineView.getStatus() == "days")
+		{
+			String dayID = routineView.getDayID();
+			String name = routineView.getTopbar();
+			workout = new Workout(this, dayID, name);
+			workout.viewSession();
+			v.setVisibility(View.INVISIBLE);
+			findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
+			findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		}
+		else if (routineView.getStatus() == "sets") 
+		{
+			
+		}
 	}
 	
 	public void finishWorkout(View v)
@@ -602,8 +658,20 @@ public class MainActivity extends Activity {
 			changes_bar.setVisibility(View.VISIBLE);
 	}
 	
+	public boolean check_for_exists(String username)
+	{
+		String sql_query = "SELECT username FROM user WHERE username = '" + username +"'";
+		
+		String result = con.readQuery(sql_query);
+		
+		if (result.length() > 3) //user exists already
+			return true;
+		
+		return false;
+	}
+	
+	
 	/***************REGISTRATION METHODS*********************/
-	// TODO make it so two users with same username don't register
     public void CreateUser(View view)
     {
 
@@ -635,6 +703,13 @@ public class MainActivity extends Activity {
         	showDialog("Missing Fields");
         	return;
         }
+        
+        if (check_for_exists(username) == true)
+        {
+        	showDialog("Username already exists.");
+        	return;
+        }
+        
         
         String SQL = "INSERT INTO  `dyel-net_main`.`user` "
                         +"(`username` , `password`, `firstname` , `lastname` , `dateofbirth` , `sex`)"
