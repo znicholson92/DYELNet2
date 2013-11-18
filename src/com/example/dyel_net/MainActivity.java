@@ -658,8 +658,20 @@ public class MainActivity extends Activity {
 			changes_bar.setVisibility(View.VISIBLE);
 	}
 	
+	public boolean check_for_exists(String username)
+	{
+		String sql_query = "SELECT username FROM user WHERE username = '" + username +"'";
+		
+		String result = con.readQuery(sql_query);
+		
+		if (result.length() > 3) //user exists already
+			return true;
+		
+		return false;
+	}
+	
+	
 	/***************REGISTRATION METHODS*********************/
-	// TODO make it so two users with same username don't register
     public void CreateUser(View view)
     {
 
@@ -691,6 +703,13 @@ public class MainActivity extends Activity {
         	showDialog("Missing Fields");
         	return;
         }
+        
+        if (check_for_exists(username) == true)
+        {
+        	showDialog("Username already exists.");
+        	return;
+        }
+        
         
         String SQL = "INSERT INTO  `dyel-net_main`.`user` "
                         +"(`username` , `password`, `firstname` , `lastname` , `dateofbirth` , `sex`)"
