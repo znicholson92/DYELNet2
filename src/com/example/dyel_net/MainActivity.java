@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
 	public Workout workout;
 	public RoutineView routineView;
 	public display_exercises exerciseViewer;
+	public Goal goal;
 	
 	public void login(View v)
 	{
@@ -281,7 +282,10 @@ public class MainActivity extends Activity {
 	
 	public void gotoGoal(View v)
 	{
-		gotoLayout(R.layout.create_goal);
+		//gotoLayout(R.layout.create_goal);
+		goal = new Goal(this, con.username());
+		goal.viewGoal();
+		
 	}
 	
 	public void gotoUserData(View v)
