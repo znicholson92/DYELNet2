@@ -1,6 +1,7 @@
 package com.example.dyel_net;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Stack;
 import java.util.concurrent.locks.Lock;
@@ -34,6 +35,8 @@ public class Workout
 	private String sessionID;
 	private editSet new_set;
 	private String current_exercise;
+	
+	private ArrayList< ArrayList<Boolean> > completed = new ArrayList< ArrayList<Boolean> >();
 	
 	public static boolean isRunning(Workout w)
 	{

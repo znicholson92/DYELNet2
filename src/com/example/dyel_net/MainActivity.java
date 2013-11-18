@@ -116,7 +116,8 @@ public class MainActivity extends Activity {
 	/***************MAIN GOTO RELAY**************************/
 
 	
-	private void clickedListItem(View v)
+	@SuppressWarnings("unused")
+	public void clickedListItem(View v)
 	{
 		LinearLayout L = (LinearLayout)v.getParent();
 		L.setBackgroundColor(0xFF5D65F5);	//highlight row
@@ -662,7 +663,9 @@ public class MainActivity extends Activity {
 	{
 		String sql_query = "SELECT username FROM user WHERE username = '" + username +"'";
 		
-		String result = con.readQuery(sql_query);
+		connection _con = new connection("dyel-net_admin", "teamturtle", this);
+		
+		String result = _con.readQuery(sql_query);
 		
 		if (result.length() > 3) //user exists already
 			return true;
@@ -704,7 +707,7 @@ public class MainActivity extends Activity {
         	return;
         }
         
-        if (check_for_exists(username) == true)
+        if (check_for_exists(username))
         {
         	showDialog("Username already exists.");
         	return;
@@ -722,17 +725,17 @@ public class MainActivity extends Activity {
                         +"'"+sex+"');";
      
         
-        connection con = new connection("dyel-net_admin", "teamturtle", this);
+        connection _con = new connection("dyel-net_admin", "teamturtle", this);
         
         ProgressDialog pd;
         pd = ProgressDialog.show(this, "Loading", "Creating account...");
         
-        con.writeQuery(SQL);
+        _con.writeQuery(SQL);
 		//Thread.sleep(2500);
         
         pd.cancel();
         
-        con.logout();
+        _con.logout();
   
         setContentView(R.layout.login);
         
