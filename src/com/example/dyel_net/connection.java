@@ -195,7 +195,18 @@ public class connection
 	            	for(int i=0; i < jArray.length(); i++) {
 	            		HashMap<String, String> map = new HashMap<String, String>();
 	                	JSONObject j = jArray.getJSONObject(i);
-	
+	                	/*String jString = j.toString().substring(1, j.toString().length()-1);
+	                	//Log.w("CONNECTION", jString);
+	                	String[] str_array = jString.split(",");
+	                	for(int k=0; k < str_array.length; k++)
+	                	{
+	                		String[] jPair = str_array[k].split(":");
+	                		String key = jPair[0].substring(1, jPair[0].length()-1);
+	                		String value = jPair[1].substring(1, jPair[1].length()-1);
+	                		map.put(key, value);
+	                		//Log.w(key, value);
+	                        Columns.get(k).setText(key);
+	                	}*/
 	                	@SuppressWarnings("unchecked")
 						Iterator<String> iter = j.keys();
 	                	int col= 0;

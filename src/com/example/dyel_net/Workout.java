@@ -3,6 +3,7 @@ package com.example.dyel_net;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.Stack;
 import java.util.concurrent.locks.Lock;
 
@@ -37,6 +38,7 @@ public class Workout
 	private String current_exercise;
 	
 	private ArrayList< ArrayList<Boolean> > completed = new ArrayList< ArrayList<Boolean> >();
+	private ArrayList<Boolean> exCompleted;
 	
 	public static boolean isRunning(Workout w)
 	{
@@ -103,9 +105,27 @@ public class Workout
 		pushBack(SQL);
 		status = "session";
 		
+		if(completed.isEmpty()){
+			for(int i = 0; i < listview.getChildCount(); i++)
+				completed.add(new ArrayList<Boolean>());
+		} else {
+			for(int i = 0; i < listview.getChildCount(); i++)
+			{
+				boolean done = true;
+				Iterator<Boolean> it = completed.get(i).iterator();
+				while(it.hasNext()){
+					if(it.equals(Boolean.FALSE))
+						done = false;
+				}
+				if(done){
+					LinearLayout curLL = (LinearLayout)listview.getChildAt(i);
+					curLL.setBackgroundColor(0xFF4BFA37);
+				}
+			}
+		}
 	}
 	
-	public void viewExercise(String exercise)
+	public void viewExercise(String exercise, int index)
 	{
 		current_exercise = exercise;
 		
@@ -123,6 +143,18 @@ public class Workout
 		
 		pushBack(SQL);
 		status = "exercise";
+		
+		
+		exCompleted = completed.get(index);
+		Iterator<Boolean> it = exCompleted.iterator();
+		int c = 0;
+		while(it.hasNext()){
+			if(it.equals(Boolean.TRUE)){
+				LinearLayout curLL = (LinearLayout)listview.getChildAt(c);
+				curLL.setBackgroundColor(0xFF4BFA37);
+			}
+			++c;
+		}
 		
 	}
 	
@@ -183,12 +215,14 @@ public class Workout
 		private String setnumber = null;
 		private String setID = null;
 		private String type = null;
+		private int list_index;
 		
 		public editSet(String setnum)
 		{
 			setnumber = setnum;
 			exerciseID = get_exerciseID();
 			setID = get_setID();
+			list_index = Integer.parseInt(setnum) - 1;
 		}
 		
 		private String get_exerciseID()
@@ -227,6 +261,8 @@ public class Workout
 			
 			return ret;
 		}
+		
+		
 		
 		public void open_editSet()
 		{
@@ -312,6 +348,8 @@ public class Workout
 							 				  	
 				app.con.writeQuery(SQL);
 				
+				exCompleted.set(list_index, Boolean.TRUE);
+				
 			} else {
 				return;
 			}
@@ -339,6 +377,8 @@ public class Workout
 	}
 	
 
+	//TODO make it do two pops on first back use
+	
 	//back button functionality for listview query menus
 	//sets query to listview as the previous one
 	public boolean goBack()

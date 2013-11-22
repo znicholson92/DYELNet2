@@ -14,40 +14,46 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <CheckBox
-        android:id="@+id/CheckBox07"
+        android:id="@+id/CheckBox_Forearms"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
+        android:onClick="exerciseViewerChanged"
         android:text="Forearms"
          />
 
     <CheckBox
-        android:id="@+id/CheckBox06"
+        android:id="@+id/CheckBox_Arms"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
+        android:onClick="exerciseViewerChanged"
         android:text="Arms" />
 
     <CheckBox
-        android:id="@+id/CheckBox05"
+        android:id="@+id/CheckBox_Chest"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
+        android:onClick="exerciseViewerChanged"
         android:text="Chest"/>
 
     <CheckBox
-        android:id="@+id/CheckBox04"
+        android:id="@+id/CheckBox_Back"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
+        android:onClick="exerciseViewerChanged"
         android:text="Back" />
 
     <CheckBox
-        android:id="@+id/CheckBox03"
+        android:id="@+id/CheckBox_Legs"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
+        android:onClick="exerciseViewerChanged"
         android:text="Legs" />
 
     <CheckBox
-        android:id="@+id/CheckBox02"
+        android:id="@+id/CheckBox_Shoulders"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
+        android:onClick="exerciseViewerChanged"
         android:text="Shoulders" />
     
     <View

@@ -79,6 +79,12 @@
 	                android:layout_weight="0.51"
 	                android:gravity="center"
 	                android:text="Exercise" />
+
+	            <TextView
+	                android:id="@+id/addset_exercise_id"
+	                android:layout_width="18dp"
+	                android:layout_height="match_parent"
+	                android:gravity="center" />
             
             </LinearLayout>
             <EditText

@@ -28,6 +28,9 @@ public class RoutineView extends Activity {
 	private ListView listView;
 	
 	private TextView topbar;
+	private String day_name = "ERROR";
+	
+	private String previous_addset_state = null;
 	
 	public static boolean isRunning(RoutineView rv)
 	{
@@ -73,6 +76,15 @@ public class RoutineView extends Activity {
 		return setID;
 	}
 	
+	public String getDayName()
+	{
+		if(status == "sets" || status == "exercises"){
+			return day_name;
+		} else {
+			return "ERROR";
+		}
+	}
+	
 	public String getTopbar()
 	{
 		return topbar.getText().toString();
@@ -103,7 +115,8 @@ public class RoutineView extends Activity {
 		status = "weeks";
 	}
 	
-	public void viewDays(){
+	public void viewDays(String _weekID){
+		weekID = _weekID;
 		String query = "SELECT dayID, day, name FROM schedule_day " +
 				" WHERE routineID=" + routineID +
 				" AND weekID=" + weekID;
@@ -114,7 +127,7 @@ public class RoutineView extends Activity {
 		status = "days";
 	}
 	
-	public void viewSets(String dID, String name){
+	public void viewExercises(String dID, String name){
 		
 		dayID = dID;
 		
@@ -126,11 +139,13 @@ public class RoutineView extends Activity {
 		app.con.readQuery(SQL, listView, col_head);
 		topbar.setText(name);
 		
+		day_name = name;
+		
 		pushBack(SQL);
-		status = "sets";
+		status = "exercises";
 	}
 	
-	public void viewExercise(String exercise)
+	public void viewSets(String exercise)
 	{
 		
 		String SQL = "SELECT setnumber, reps, weight FROM _set " +
@@ -146,9 +161,77 @@ public class RoutineView extends Activity {
 		topbar.setText(exercise);
 		
 		pushBack(SQL);
-		status = "exercises";
+		status = "sets";
 		
 	}
+	
+	public void openAddNewSet(String...strings)
+	{
+		app.gotoLayout(R.layout.add_set);
+		
+		if(strings.length > 0){
+			String exercise = strings[0];
+			String exerciseID = strings[1];
+			TextView exerciseTV = (TextView)app.findViewById(R.id.addset_exercise_name);
+			TextView exerciseID_TV = (TextView)app.findViewById(R.id.addset_exercise_id);
+			exerciseTV.setText(exercise);
+			exerciseID_TV.setText(exerciseID);
+			TextView setnumTV = (TextView)app.findViewById(R.id.addset_setnumber);
+			setnumTV.setText(getSetNumber(exercise));				
+		}
+	}
+	
+	private String getSetNumber(String exercise)
+	{		
+		String setnum = null;
+		String SQL = "SELECT count(*) As COUNT FROM _set INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " + 
+					 "WHERE _set.dayID = " + dayID + " AND exercise.name='" + exercise + "' AND isReal=0 AND isGoal=0";
+		
+		String jString = app.con.readQuery(SQL);
+		
+		try {
+			JSONObject jsonObject = new JSONObject(jString);
+			JSONArray jArray = jsonObject.getJSONArray("data");
+			JSONObject j = jArray.getJSONObject(0);
+			setnum = j.get("COUNT").toString();
+		} catch (JSONException e) {e.printStackTrace();}
+		
+		Integer int_setnum = Integer.parseInt(setnum) + 1;
+		
+		return int_setnum.toString();
+	}
+	
+	public void addSet()
+	{
+		TextView exerciseID_TV = (TextView)app.findViewById(R.id.addset_exercise_id);
+		TextView setnumTV = (TextView)app.findViewById(R.id.addset_setnumber);
+		TextView repsTV = (TextView)app.findViewById(R.id.addset_reps);
+		TextView weightTV = (TextView)app.findViewById(R.id.addset_weight);
+		
+		String exerciseID = exerciseID_TV.getText().toString();
+		String setnum = setnumTV.getText().toString();
+		String reps = repsTV.getText().toString();
+		String weight = weightTV.getText().toString();
+		
+		if(exerciseID == "" || setnum == "" || reps == "" || weight == ""){
+			app.showDialog("Missing Fields");
+		} else {
+			String SQL = "INSERT INTO _set(dayID, exerciseID, reps, weight, setnumber, isReal, isGoal) " +
+	 				  	 "VALUES(" + dayID + "," + 
+	 				  			  exerciseID + "," + 
+	 				  			  reps + "," +
+	 				  			  weight + "," + 
+	 				  			  setnum + "," + 
+	 				  			  "0,0)";
+			
+			app.con.writeQuery(SQL);
+		}
+	}
+	
+	/*public void setExercise_addset(String exercise)
+	{
+		openAddNewSet(exercise);
+	}*/
 	
 	public String getRoutineID(String name)
 	{
@@ -175,8 +258,10 @@ public class RoutineView extends Activity {
 	
 	//back button functionality for listview query menus
 	//sets query to listview as the previous one
-	public boolean goBack(int pops, ListView l)
+	public boolean goBack()
 	{
+		int pops = 1;
+		
 		if(pops > 0 && !previous_SQL.isEmpty())
 		{
 			String SQL = null;
@@ -186,7 +271,7 @@ public class RoutineView extends Activity {
 				tbar_text = previous_topbar.pop();
 			}
 			
-			app.con.readQuery(SQL, l, col_head);
+			app.con.readQuery(SQL, listView, col_head);
 
 			if(tbar_text != null)
 				topbar.setText(tbar_text);

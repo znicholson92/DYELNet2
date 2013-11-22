@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import android.R.layout;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.Editable;
@@ -33,11 +34,34 @@ import org.json.JSONObject;
 
 public class MainActivity extends Activity {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-		
+		if(savedInstanceState != null)
+		{
+			workout = (Workout)savedInstanceState.get("workout");
+			routineView = (RoutineView)savedInstanceState.get("routineView");
+			con = (connection)savedInstanceState.get("con");
+			previous_layouts = (Stack<Integer>)savedInstanceState.get("previous_layouts");
+			current_layout = (Integer)savedInstanceState.getInt("current_layout");
+		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	  super.onSaveInstanceState(savedInstanceState);
+	  // Save UI state changes to the savedInstanceState.
+	  // This bundle will be passed to onCreate if the process is
+	  // killed and restarted.
+	  savedInstanceState.putParcelable("workout", (Parcelable) workout);
+	  savedInstanceState.putParcelable("routineView", (Parcelable) routineView);
+	  savedInstanceState.putParcelable("con", (Parcelable)con);
+	  savedInstanceState.putParcelable("previous_layouts", (Parcelable)previous_layouts);
+	  savedInstanceState.putInt("current_layout", (int)current_layout);
+	  // etc.
+	  
 	}
 
 	@Override
@@ -54,6 +78,7 @@ public class MainActivity extends Activity {
 	public connection con;
 	Stack<Integer> previous_layouts = new Stack<Integer>();
 	Integer current_layout;
+	boolean locked = false;
 	
 	/**************PROCESS CLASSES***************************/
 	public Workout workout;
@@ -120,10 +145,15 @@ public class MainActivity extends Activity {
 	@SuppressWarnings("unused")
 	public void clickedListItem(View v)
 	{
+		if(locked)
+			return;
+		
 		LinearLayout L = (LinearLayout)v.getParent();
 		L.setBackgroundColor(0xFF5D65F5);	//highlight row
 		
-		TextView tv = (TextView)v;	
+		TextView tv = (TextView)v;
+		
+		locked = true;
 		
 		switch(current_layout)
 		{
@@ -138,7 +168,14 @@ public class MainActivity extends Activity {
 			case R.layout.workout_history:
 				cli_history(tv);
 				break;
+				
+			case R.layout.display_exercises:
+				cli_display_exercises(tv);
+				break;
 		}
+		
+		locked = false;
+		
 	}
 	
 	private long lastClickedTime = (long) 0;
@@ -173,6 +210,14 @@ public class MainActivity extends Activity {
 		}	
 	}
 	
+	private void cli_display_exercises(TextView TV)
+	{
+		LinearLayout LL = (LinearLayout)TV.getParent();
+		TextView TV1 = (TextView) LL.getChildAt(0);
+		TextView TV2 = (TextView) LL.getChildAt(1);
+		routineView.openAddNewSet(TV1.getText().toString(), TV2.getText().toString());
+	}
+	
 	private void cli_workingout(TextView TV)
 	{
 		String status = workout.getStatus();
@@ -193,7 +238,8 @@ public class MainActivity extends Activity {
 	{	
 		LinearLayout L = (LinearLayout)TV.getParent();
 		TextView exerciseTV = (TextView)L.getChildAt(1);
-		workout.viewExercise(exerciseTV.getText().toString());
+		int ind = L.indexOfChild((View)TV);
+		workout.viewExercise(exerciseTV.getText().toString(), ind);
 	}
 	
 	@SuppressLint("UseValueOf")
@@ -227,29 +273,38 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	private void cli_routineView_exercises(TextView tV) {
-		LinearLayout ll = (LinearLayout)tV.getParent();
-		TextView tV1 = (TextView)ll.getChildAt(0);
-		TextView tV2 = (TextView)ll.getChildAt(2);
-		routineView.viewSets(tV1.getText().toString(), tV2.getText().toString());
+	private void cli_routineView_days(TextView TV) {
+		LinearLayout LL = (LinearLayout)TV.getParent();
+		TV = (TextView)LL.getChildAt(2);
+		String dID = TV.getText().toString();
+		TV = (TextView)LL.getChildAt(0);
+		String name = TV.getText().toString();
+		routineView.viewExercises(dID, name);
+		workoutSliderShowStart();
 	}
 
-	private void cli_routineView_weeks(TextView tV) {
-		routineView.viewDays();
+	private void cli_routineView_weeks(TextView TV) {
+		LinearLayout LL = (LinearLayout)TV.getParent();
+		TV = (TextView)LL.getChildAt(0);
+		routineView.viewDays(TV.getText().toString());
+		workoutSliderHideAll();
 	}
 
 	private void cli_routineView_routines(TextView TV){
 		LinearLayout L = (LinearLayout)TV.getParent();
 		String name = TV.getText().toString();
 		routineView.viewWeeks(name);
+		workoutSliderHideAll();
 	}
 
-	private void cli_routineView_days(TextView TV){
+	private void cli_routineView_exercises(TextView TV){
 		LinearLayout ll = (LinearLayout)TV.getParent();
 		TV = (TextView)ll.getChildAt(1);
-		routineView.viewExercise(TV.getText().toString());
+		routineView.viewSets(TV.getText().toString());
+		workoutSliderShowStart();
 	}
 	
+	//TODO make user able to modify routine here
 	private void cli_routineView_sets(TextView TV){
 		
 	}
@@ -257,7 +312,7 @@ public class MainActivity extends Activity {
 	/***************NAVIGATION FUNCTIONALITY*****************/
 	public void gotoBack(View v)
 	{	Log.w("BACK", "gotoBACK");
-		//TODO add conditional for if in Workout
+		//TODO needs work, back functionality sucks
 		if(current_layout == R.layout.workingout && workout.getStatus() == "exercise")
 		{
 			workout.goBack();
@@ -361,6 +416,8 @@ public class MainActivity extends Activity {
 	
 	
 	/****************WORKING OUT METHHODS********************/
+	
+	
 	public void set_update(View v)
 	{
 		Button tv = (Button)v;
@@ -371,9 +428,7 @@ public class MainActivity extends Activity {
 		
 		setContentView(R.layout.workingout);
 		
-		findViewById(R.id.workingout_startworkout_button).setVisibility(View.INVISIBLE);
-		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
-		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		workoutSliderShowFinish();
 		
 		workout.goBack();
 	}
@@ -383,71 +438,89 @@ public class MainActivity extends Activity {
 		Button tv = (Button)v;
 		Log.w("BUTTON TEXT", tv.getText().toString());
 		if(tv.getText().toString().equals("Add") ){
-			workout.addSet();
+			routineView.addSet();
 		}
 		
-		setContentView(R.layout.workingout);
+		if(Workout.isRunning(workout))
+		{
+			setContentView(R.layout.workingout);
+			workout.goBack();
+		} 
+		else if (RoutineView.isRunning(routineView)) 
+		{
+			setContentView(R.layout.routine_view);
+			routineView.goBack();
+		}
 		
-		findViewById(R.id.workingout_startworkout_button).setVisibility(View.INVISIBLE);
-		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
-		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+		workoutSliderShowFinish();
 		
-		workout.goBack();
 	}
 	
 	public void browse_exercises(View v)
 	{
-		gotoLayout(R.layout.display_exercises);
-		//exerciseViewer = new display_exercises(this);
-		//exerciseViewer.load();
+		//gotoLayout(R.layout.display_exercises);
+		exerciseViewer = new display_exercises(this);
+		exerciseViewer.load();
 	}
 	
 	public void exerciseViewerChanged(View v)
 	{
-		//exerciseViewer.load();
+		exerciseViewer.load();
 	}
 	
 	
 	/****************WORKOUT SLIDER METHODS******************/
+	
+	public void workoutSliderHideAll()
+	{
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.INVISIBLE);
+	}
+	
+	public void workoutSliderShowStart()
+	{
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.INVISIBLE);
+	}
+	
+	public void workoutSliderShowFinish()
+	{
+		findViewById(R.id.workingout_startworkout_button).setVisibility(View.INVISIBLE);
+		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
+		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
+	}
+	
 	public void startWorkout(View v)
 	{
-		if(routineView.getStatus() == "days")
+		if(routineView.getStatus() == "days" || routineView.getStatus() == "sets")
 		{
 			String dayID = routineView.getDayID();
-			String name = routineView.getTopbar();
+			String name = routineView.getDayName();
 			workout = new Workout(this, dayID, name);
 			workout.viewSession();
-			v.setVisibility(View.INVISIBLE);
-			findViewById(R.id.workingout_finishworkout_button).setVisibility(View.VISIBLE);
-			findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.VISIBLE);
-		}
-		else if (routineView.getStatus() == "sets") 
-		{
-			
+			workoutSliderShowFinish();
 		}
 	}
 	
 	public void finishWorkout(View v)
 	{
 		workout.finish();
-		v.setVisibility(View.GONE);
-		findViewById(R.id.workingout_startworkout_button).setVisibility(View.VISIBLE);
-		findViewById(R.id.workingout_deleteworkout_button).setVisibility(View.GONE);
+		workoutSliderHideAll();
 		gotoLayout(R.layout.routine_view);
 	}
 	
 	public void deleteWorkout(View v)
 	{
 		workout.cancel();
-		v.setVisibility(View.GONE);
-		findViewById(R.id.workingout_startworkout_button).setVisibility(View.VISIBLE);
-		findViewById(R.id.workingout_finishworkout_button).setVisibility(View.GONE);
+		workoutSliderHideAll();
 		gotoLayout(R.layout.routine_view);
 	}
 
 	public void workout_addNewSet(View v)
 	{
-		gotoLayout(R.layout.add_set);
+		routineView.openAddNewSet();
 	}
 	
 	public void workout_viewHistory(View v)
@@ -755,11 +828,21 @@ public class MainActivity extends Activity {
 	/***************************************************************/
     /***********************OTHER METHODS***************************/
     /***************************************************************/
-	private void showDialog(String text)
+	public void showDialog(String text)
 	{
 		AlertDialog dialog = new AlertDialog.Builder(this).create();
         dialog.setTitle(text);
         dialog.show();
 	}
+	
+	public void lockApp(long delay)
+	{
+		locked = true;
+		try {Thread.sleep(delay);} 
+		catch (InterruptedException e) {e.printStackTrace();}
+		locked = false;
+	}
+	
+	
 }
 

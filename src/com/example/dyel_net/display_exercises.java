@@ -2,6 +2,7 @@ package com.example.dyel_net;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -13,12 +14,15 @@ public class display_exercises {
 	ArrayList<String> muscle_groups = new ArrayList<String>();
 	String muscle_groups_str = "";
 	MainActivity app;
-	ListView lv = (ListView) app.findViewById(R.id.display_exercise_col_header);
-	LinearLayout layout = (LinearLayout) app.findViewById(R.id.display_exercise_col_header);
+	ListView lv;
+	LinearLayout layout;
 	
 	public display_exercises(MainActivity a)
 	{
 		app = a;	
+		app.gotoLayout(R.layout.display_exercises);
+		lv = (ListView) app.findViewById(R.id.display_exercises_listview);
+		layout = (LinearLayout) app.findViewById(R.id.display_exercise_col_header);
 	}
 	
 	void string_append(String s)
@@ -33,8 +37,7 @@ public class display_exercises {
 					return; 
 			i++; 
 		}
-		
-		
+			
 		//otherwise we need to add it. 
 		muscle_groups.add(s);
 		String hold = list_to_string();
@@ -50,8 +53,8 @@ public class display_exercises {
 		
 		while (iter < len)
 		{
-			String item;
-			if ((item = muscle_groups.get(iter)) == s)
+			String item = muscle_groups.get(iter);
+			if (item == s)
 			{
 				muscle_groups.remove(iter);
 				break;
@@ -66,8 +69,10 @@ public class display_exercises {
 	
 	void query_combine()
 	{
-		query_final = "SELECT exercise.name, muscle.name from exercise inner " +
-					  "join muscle ON exercise.muscleID = muscle.muscleID WHERE "
+		query_final = "SELECT exercise.exerciseID As 'ID', exercise.name AS 'Name', muscle.musclegroup As 'Muscle Group' from exercise " +
+					  "INNER JOIN muscle2exercise ON muscle2exercise.exerciseID = exercise.exerciseID " + 
+					  "INNER JOIN muscle ON muscle2exercise.muscleID = muscle.muscleID " +
+					  "WHERE "
 					  + muscle_groups_str;
 		return;
 	}
@@ -80,18 +85,18 @@ public class display_exercises {
 		{
 			list_string += "musclegroup = '" + s + "' OR ";
 		}
-		
-		list_string = list_string.substring(0, list_string.length() - 4);
+		Log.w("DISP EXERCISES", list_string);
+		if(list_string.length() > 4)
+			list_string = list_string.substring(0, list_string.length() - 4);
 		
 		return list_string;
 	}
 	
-	void display_exercises_toggle_forearms(View v)
+	private void toggle_forearms(CheckBox temp)
 	{
-		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			string_append("forearms");
+			string_append("Forearms");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
@@ -99,19 +104,18 @@ public class display_exercises {
 		
 		if (temp.isChecked() == false)
 		{
-			string_remove("forearms");
+			string_remove("Forearms");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
 		}
 	}
 	
-	void display_exercises_toggle_arms(View v)
+	private void toggle_arms(CheckBox temp)
 	{
-		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			string_append("arms");
+			string_append("Arms");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
@@ -119,19 +123,18 @@ public class display_exercises {
 		
 		if (temp.isChecked() == false)
 		{
-			string_remove("arms");
+			string_remove("Arms");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
 		}
 	}
 	
-	void display_exercises_toggle_chest(View v)
+	private void toggle_chest(CheckBox temp)
 	{
-		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			string_append("chest");
+			string_append("Chest");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
@@ -139,19 +142,18 @@ public class display_exercises {
 		
 		if (temp.isChecked() == false)
 		{
-			string_remove("chest");
+			string_remove("Chest");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
 		}
 	}
 	
-	void display_exercises_toggle_back(View v)
+	private void toggle_back(CheckBox temp)
 	{
-		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			string_append("back");
+			string_append("Back");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
@@ -159,19 +161,18 @@ public class display_exercises {
 		
 		if (temp.isChecked() == false)
 		{
-			string_remove("back");
+			string_remove("Back");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
 		}
 	}
 	
-	void display_exercises_toggle_legs(View v)
+	private void toggle_legs(CheckBox temp)
 	{
-		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
 		{
-			string_append("legs");
+			string_append("Legs");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
@@ -179,19 +180,18 @@ public class display_exercises {
 		
 		if (temp.isChecked() == false)
 		{
-			string_remove("legs");
+			string_remove("Legs");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
 		}
 	}
 	
-	void display_exercises_toggle_shoulders(View v)
+	private void toggle_shoulders(CheckBox temp)
 	{
-		CheckBox temp = (CheckBox)v;
 		if (temp.isChecked() == true)
-		{
-			string_append("shoulders");
+		{	Log.w("DISP EXERCISES", "SHOULDERS CHECKED");
+			string_append("Shoulders");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
@@ -199,11 +199,30 @@ public class display_exercises {
 		
 		if (temp.isChecked() == false)
 		{
-			string_remove("shoulders");
+			Log.w("DISP EXERCISES", "SHOULDERS NOT CHECKED");
+			string_remove("Shoulders");
 			query_combine();
 			app.con.readQuery(query_final, lv, layout);
 
 		}
+	}
+	
+	public void load()
+	{
+		Log.w("DISP EXERCISES", "LOAD");
+		CheckBox checkArms = (CheckBox)app.findViewById(R.id.CheckBox_Arms);
+		CheckBox checkForearms = (CheckBox)app.findViewById(R.id.CheckBox_Forearms);
+		CheckBox checkChest = (CheckBox)app.findViewById(R.id.CheckBox_Chest);
+		CheckBox checkShoulders = (CheckBox)app.findViewById(R.id.CheckBox_Shoulders);
+		CheckBox checkLegs = (CheckBox)app.findViewById(R.id.CheckBox_Legs);
+		CheckBox checkBack = (CheckBox)app.findViewById(R.id.CheckBox_Back);
+		
+		toggle_arms(checkArms);
+		toggle_forearms(checkForearms);
+		toggle_chest(checkChest);
+		toggle_shoulders(checkShoulders);
+		toggle_legs(checkLegs);
+		toggle_back(checkBack);
 	}
 
 }
