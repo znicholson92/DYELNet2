@@ -48,5 +48,6 @@
                             android:gravity="center"
                             android:width="65dip"
                             android:height="20dip"
+                            android:visibility="invisible"
                         />
                     </LinearLayout>

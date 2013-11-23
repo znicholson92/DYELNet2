@@ -214,7 +214,6 @@ public class Workout
 		private String exerciseID = null;
 		private String setnumber = null;
 		private String setID = null;
-		private String type = null;
 		private int list_index;
 		
 		public editSet(String setnum)
@@ -275,7 +274,7 @@ public class Workout
 			
 			setnumTV.setText(setnumber);
 			
-			String SQL = "SELECT exercise.name, exercise.type, reps, weight, distance, time " + 
+			String SQL = "SELECT exercise.name, reps, weight, " + 
 						 "FROM _set INNER JOIN exercise ON _set.exerciseID = exercise.exerciseID " +
 						 "WHERE setID=" + setID;
 			
@@ -285,22 +284,13 @@ public class Workout
 				JSONObject jsonObject = new JSONObject(jString);
 				JSONArray jArray = jsonObject.getJSONArray("data");
 				JSONObject j = jArray.getJSONObject(0);
-				
-				type = j.get("type").toString();
 						
 				exercise.setText(j.get("name").toString());
 				
-				if(type.equals("1")){
-					TV1.setText("Distance");
-					TV2.setText("Time");
-					ET1.setHint(j.get("distance").toString());
-					ET2.setHint(j.get("time").toString());
-				} else {
-					TV1.setText("Reps");
-					TV2.setText("Weight");
-					ET1.setHint(j.get("reps").toString());
-					ET2.setHint(j.get("weight").toString());
-				}
+				TV1.setText("Reps");
+				TV2.setText("Weight");
+				ET1.setHint(j.get("reps").toString());
+				ET2.setHint(j.get("weight").toString());
 				
 			} catch (JSONException e) {e.printStackTrace();}
 		}
@@ -311,21 +301,13 @@ public class Workout
 			EditText ET2 = (EditText)app.findViewById(R.id.editset_et2);
 			EditText notes = (EditText)app.findViewById(R.id.editset_notes);
 			
-			String reps, weight, time, distance;
+			String reps, weight;
 			
 			if(exerciseID != null)
 			{
-				if(type.equals("1")){
-					distance = ET1.getText().toString();
-					time = ET2.getText().toString();
-					weight = "NULL";
-					reps = "NULL";
-				} else {
-					reps = ET1.getText().toString();
-					weight = ET2.getText().toString();
-					time = "NULL";
-					distance = "NULL";
-				}
+				
+				reps = ET1.getText().toString();
+				weight = ET2.getText().toString();
 				
 				String note;
 				if(notes.getText().toString().length() < 1)
@@ -333,16 +315,14 @@ public class Workout
 				else
 					note = notes.getText().toString();
 				
-				String SQL = "INSERT INTO _set(sessionID, dayID, exerciseID, reps, weight, setnumber, distance, " +
-							 				  "time, notes, isReal, isGoal) " +
+				String SQL = "INSERT INTO _set(sessionID, dayID, exerciseID, reps, weight, setnumber, " +
+							 				  " notes, isReal, isGoal) " +
 							 "VALUES(" + sessionID + "," +
 							 		   	 dayID + "," + 
 							 		   	 exerciseID + "," + 
 							 		   	 reps + "," +
 							 		     weight + "," + 
 							 		   	 setnumber + "," + 
-							 		     distance + "," +
-							 		   	 time + "," +
 							 		     note + "," +
 							 		   	 "1,0)";
 							 				  	

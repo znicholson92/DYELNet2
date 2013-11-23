@@ -1,6 +1,8 @@
 package com.example.dyel_net;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
 
 import android.util.Log;
 import android.view.View;
@@ -15,14 +17,14 @@ public class display_exercises {
 	String muscle_groups_str = "";
 	MainActivity app;
 	ListView lv;
-	LinearLayout layout;
+	LinearLayout ch;
 	
 	public display_exercises(MainActivity a)
 	{
 		app = a;	
 		app.gotoLayout(R.layout.display_exercises);
 		lv = (ListView) app.findViewById(R.id.display_exercises_listview);
-		layout = (LinearLayout) app.findViewById(R.id.display_exercise_col_header);
+		ch = (LinearLayout) app.findViewById(R.id.display_exercise_col_header);
 	}
 	
 	void string_append(String s)
@@ -69,11 +71,12 @@ public class display_exercises {
 	
 	void query_combine()
 	{
-		query_final = "SELECT exercise.exerciseID As 'ID', exercise.name AS 'Name', muscle.musclegroup As 'Muscle Group' from exercise " +
+		query_final = "SELECT DISTINCT exercise.exerciseID, exercise.name AS 'Name', muscle.musclegroup As 'Muscle Group' from exercise " +
 					  "INNER JOIN muscle2exercise ON muscle2exercise.exerciseID = exercise.exerciseID " + 
 					  "INNER JOIN muscle ON muscle2exercise.muscleID = muscle.muscleID " +
 					  "WHERE "
-					  + muscle_groups_str;
+					  + muscle_groups_str +
+					  " ORDER BY muscle.musclegroup ASC";
 		return;
 	}
 	
@@ -85,7 +88,7 @@ public class display_exercises {
 		{
 			list_string += "musclegroup = '" + s + "' OR ";
 		}
-		Log.w("DISP EXERCISES", list_string);
+
 		if(list_string.length() > 4)
 			list_string = list_string.substring(0, list_string.length() - 4);
 		
@@ -97,17 +100,13 @@ public class display_exercises {
 		if (temp.isChecked() == true)
 		{
 			string_append("Forearms");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
+			//query_combine();
 		}
 		
 		if (temp.isChecked() == false)
 		{
 			string_remove("Forearms");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
+			//query_combine();
 		}
 	}
 	
@@ -116,17 +115,11 @@ public class display_exercises {
 		if (temp.isChecked() == true)
 		{
 			string_append("Arms");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
 		}
 		
 		if (temp.isChecked() == false)
 		{
 			string_remove("Arms");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
 		}
 	}
 	
@@ -135,17 +128,11 @@ public class display_exercises {
 		if (temp.isChecked() == true)
 		{
 			string_append("Chest");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
 		}
 		
 		if (temp.isChecked() == false)
 		{
 			string_remove("Chest");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
 		}
 	}
 	
@@ -154,56 +141,29 @@ public class display_exercises {
 		if (temp.isChecked() == true)
 		{
 			string_append("Back");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
 		}
 		
 		if (temp.isChecked() == false)
 		{
 			string_remove("Back");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
 		}
 	}
 	
 	private void toggle_legs(CheckBox temp)
 	{
-		if (temp.isChecked() == true)
-		{
+		if (temp.isChecked() == true) {
 			string_append("Legs");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
-		}
-		
-		if (temp.isChecked() == false)
-		{
+		} else {
 			string_remove("Legs");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
 		}
 	}
 	
 	private void toggle_shoulders(CheckBox temp)
 	{
-		if (temp.isChecked() == true)
-		{	Log.w("DISP EXERCISES", "SHOULDERS CHECKED");
+		if (temp.isChecked() == true) {
 			string_append("Shoulders");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
-		}
-		
-		if (temp.isChecked() == false)
-		{
-			Log.w("DISP EXERCISES", "SHOULDERS NOT CHECKED");
+		} else {
 			string_remove("Shoulders");
-			query_combine();
-			app.con.readQuery(query_final, lv, layout);
-
 		}
 	}
 	
@@ -223,6 +183,17 @@ public class display_exercises {
 		toggle_shoulders(checkShoulders);
 		toggle_legs(checkLegs);
 		toggle_back(checkBack);
+		
+		query_combine();
+		
+		if(muscle_groups_str.length() > 0 )
+			app.cache.Query(query_final, lv, ch);
+		
+		//if(query_final != "" && app.cache.isLoaded()){
+		//app.cache.Query(query_final, lv, ch);
+		//} else {
+		//	app.loadCache();
+		//}
 	}
 
 }

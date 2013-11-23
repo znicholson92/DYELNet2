@@ -51,5 +51,6 @@
          android:onClick="clickedListItem"
          android:width="100dip"
          android:clickable="true"
+         android:visibility="invisible"
          android:height="30dip"   android:layout_weight="1"/>
 </LinearLayout>

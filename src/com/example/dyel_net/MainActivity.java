@@ -85,6 +85,7 @@ public class MainActivity extends Activity {
 	public RoutineView routineView;
 	public display_exercises exerciseViewer;
 	public Goal goal;
+	public Cache cache;
 	
 	public void login(View v)
 	{
@@ -113,6 +114,8 @@ public class MainActivity extends Activity {
 				setContentView(R.layout.main_menu);
 				TextView username_bar = (TextView) findViewById(R.id.username);
 				username_bar.setText(un_box.getText().toString());
+				cache = new Cache(this);
+				loadCache();
 				return;
 			}
 			else
@@ -213,8 +216,8 @@ public class MainActivity extends Activity {
 	private void cli_display_exercises(TextView TV)
 	{
 		LinearLayout LL = (LinearLayout)TV.getParent();
-		TextView TV1 = (TextView) LL.getChildAt(0);
-		TextView TV2 = (TextView) LL.getChildAt(1);
+		TextView TV1 = (TextView) LL.getChildAt(0); //exercise name
+		TextView TV2 = (TextView) LL.getChildAt(4); //exerciseID
 		routineView.openAddNewSet(TV1.getText().toString(), TV2.getText().toString());
 	}
 	
@@ -275,7 +278,7 @@ public class MainActivity extends Activity {
 	
 	private void cli_routineView_days(TextView TV) {
 		LinearLayout LL = (LinearLayout)TV.getParent();
-		TV = (TextView)LL.getChildAt(2);
+		TV = (TextView)LL.getChildAt(4);
 		String dID = TV.getText().toString();
 		TV = (TextView)LL.getChildAt(0);
 		String name = TV.getText().toString();
@@ -285,15 +288,19 @@ public class MainActivity extends Activity {
 
 	private void cli_routineView_weeks(TextView TV) {
 		LinearLayout LL = (LinearLayout)TV.getParent();
-		TV = (TextView)LL.getChildAt(0);
+		TV = (TextView)LL.getChildAt(4);
 		routineView.viewDays(TV.getText().toString());
 		workoutSliderHideAll();
 	}
 
 	private void cli_routineView_routines(TextView TV){
 		LinearLayout L = (LinearLayout)TV.getParent();
+		TV = (TextView)L.getChildAt(4);
+		String routineID = TV.getText().toString();
+		TV = (TextView)L.getChildAt(0);
 		String name = TV.getText().toString();
-		routineView.viewWeeks(name);
+		Log.w("ROUTINE ID", routineID);
+		routineView.viewWeeks(name, routineID);
 		workoutSliderHideAll();
 	}
 
@@ -824,6 +831,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.login);
         
     }
+    
+
 
 	/***************************************************************/
     /***********************OTHER METHODS***************************/
@@ -842,6 +851,20 @@ public class MainActivity extends Activity {
 		catch (InterruptedException e) {e.printStackTrace();}
 		locked = false;
 	}
+	
+	 public void loadCache()
+	 {
+    	if(!cache.isLoaded())
+    	{
+    		Thread trd = new Thread(new Runnable(){
+    			@Override
+    			public void run(){
+    				cache.load();
+    			}
+    		});
+    		trd.start();
+    	}
+    }
 	
 	
 }

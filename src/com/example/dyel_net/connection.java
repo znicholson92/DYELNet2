@@ -37,10 +37,11 @@ public class connection
 	private boolean success;
 	private String username;
 	private String password;
-	private String result;
+	private String result = "NULL";
 	private MainActivity app;
 	private ListView list;
 	private LinearLayout col_header;
+	private boolean lock;
 	
 	//constructor, represents the user logging in, tests the connection and either returns success or fails and logs out
 	public connection(String un, String pw, MainActivity _app)
@@ -66,6 +67,13 @@ public class connection
 		{
 			working = false;
 		}
+	}
+	
+	public connection(MainActivity _app)
+	{
+		username = "dyel-net_admin";
+		password = "team turtle";
+		app = _app;
 	}
 	
 	//gets the boolean value of whether or not the async task is running
@@ -99,13 +107,18 @@ public class connection
 	//send a transaction and return the results as a JSON string
 	public String readQuery(String SQL)
 	{
+		result = "NULL";
 		_connection task = new _connection();
 		task.execute("read", SQL, "NO");
-		
-		try {Thread.sleep(100);} 
+		try {Thread.sleep(1000);} 
 		catch (InterruptedException e) {e.printStackTrace();}
 		while(working){}
+		long ti = System.currentTimeMillis();
+		long timer = (long)0;
 		
+		while(result.length() < 5 && timer < (long)20000){
+			timer = System.currentTimeMillis() - ti;
+		}
 		return result;
 	}
 	
@@ -140,6 +153,7 @@ public class connection
 		protected Boolean doInBackground(String... params) 
 		{	Log.w("CONNECTION", "WORKING = TRUE");
 			working = true;
+			result = "NULL";
 			Log.w("SQL", params[1]);
 			if(params[0] == "read")
 			{
@@ -190,33 +204,24 @@ public class connection
 	        			Columns.add((TextView) col_header.getChildAt(i));
 	        		}
 	        		
-	        		
 	        		//parse JSON string
 	            	for(int i=0; i < jArray.length(); i++) {
 	            		HashMap<String, String> map = new HashMap<String, String>();
 	                	JSONObject j = jArray.getJSONObject(i);
-	                	/*String jString = j.toString().substring(1, j.toString().length()-1);
-	                	//Log.w("CONNECTION", jString);
-	                	String[] str_array = jString.split(",");
-	                	for(int k=0; k < str_array.length; k++)
-	                	{
-	                		String[] jPair = str_array[k].split(":");
-	                		String key = jPair[0].substring(1, jPair[0].length()-1);
-	                		String value = jPair[1].substring(1, jPair[1].length()-1);
-	                		map.put(key, value);
-	                		//Log.w(key, value);
-	                        Columns.get(k).setText(key);
-	                	}*/
+	               
 	                	@SuppressWarnings("unchecked")
 						Iterator<String> iter = j.keys();
 	                	int col= 0;
 	                    while (iter.hasNext()) {
 	                        String key = iter.next();
 	                        String value = (String)j.get(key);
+	                        if(key.contains("ID")){
+	                        	Columns.get(4).setText(key);
+	                        } else {
+	                        	Columns.get(col).setText(key);
+	                        	col++;
+	                        }
 	                        map.put(key, value);
-	                        //Log.w(key, value);
-	                        Columns.get(col).setText(key);
-	                        col++;
 	                    }
 	                	tableList.add(map);
 	            	}
@@ -227,7 +232,7 @@ public class connection
 	        								  R.layout.my_list_item,
 	        								  new String[] {Columns.get(0).getText().toString(), Columns.get(1).getText().toString(), Columns.get(2).getText().toString() , Columns.get(3).getText().toString(), Columns.get(4).getText().toString()}, 
 	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
-	
+	        		
 	        		list.setAdapter(myAdapter);
 	        		
 	            	

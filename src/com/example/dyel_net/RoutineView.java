@@ -30,8 +30,6 @@ public class RoutineView extends Activity {
 	private TextView topbar;
 	private String day_name = "ERROR";
 	
-	private String previous_addset_state = null;
-	
 	public static boolean isRunning(RoutineView rv)
 	{
 		if(rv != null) {
@@ -91,7 +89,7 @@ public class RoutineView extends Activity {
 	}
 	
 	public void viewRoutines(){
-		String query = "SELECT name " +
+		String query = "SELECT routineID, name " +
 				" FROM routine" +
 				" WHERE username='" + app.con.username() + "'" +
 				" ORDER BY lastedited DESC";
@@ -102,9 +100,9 @@ public class RoutineView extends Activity {
 		status = "routines";
 	}
 	
-	public void viewWeeks(String routineName){
+	public void viewWeeks(String routineName, String _routineID){
 		
-		routineID = getRoutineID(routineName);
+		routineID = _routineID;
 		
 		String query = "SELECT weekID, week FROM schedule_week" +
 				" WHERE routineID=" + routineID;
@@ -131,7 +129,7 @@ public class RoutineView extends Activity {
 		
 		dayID = dID;
 		
-		String SQL = "SELECT exercise.name, count(*) As 'Sets' FROM _set " + 
+		String SQL = " SELECT exercise.name, count(*) As 'Sets' FROM _set " + 
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " + 
 					 " WHERE _set.dayID = " + dayID + " AND isReal=0 AND isGoal=0 " + 
 					 " GROUP BY _set.exerciseID";
