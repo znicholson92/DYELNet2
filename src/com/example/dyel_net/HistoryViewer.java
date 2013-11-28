@@ -25,9 +25,9 @@ public class HistoryViewer {
 		currentExercise = exercise;
 		
 		app.gotoLayout(R.layout.workout_history);
-		LinearLayout history_col_head = (LinearLayout)app.findViewById(R.id.workout_history_col_header);
-		ListView history_listview = (ListView)app.findViewById(R.id.workout_history_listView);
-		TextView history_topbar = (TextView)app.findViewById(R.id.workout_history_topbar_text);
+		LinearLayout history_col_head = (LinearLayout)app.findViewById(R.id.history_col_header);
+		ListView history_listview = (ListView)app.findViewById(R.id.history_listView);
+		TextView history_topbar = (TextView)app.findViewById(R.id.history_topbar_text);
 		
 		String SQL = "SELECT routine.name As 'Routine', session.datetime As 'Date and Time' " + 
 					 "FROM _set, exercise, session, routine, schedule_day " +
@@ -53,10 +53,10 @@ public class HistoryViewer {
 	public static void viewHistory_session(String datetime, String exercise, String dayID, MainActivity app)
 	{
 		status = 2;
-		
-		LinearLayout history_col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
-		ListView history_listview = (ListView)app.findViewById(R.id.workingout_listView);
-		TextView history_topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
+	
+		LinearLayout history_col_head = (LinearLayout)app.findViewById(R.id.history_col_header);
+		ListView history_listview = (ListView)app.findViewById(R.id.history_listView);
+		TextView history_topbar = (TextView)app.findViewById(R.id.history_topbar_text);
 		
 		String SQL = "  SELECT _set.setnumber as 'Set', _set.reps As Reps, _set.weight As Weight FROM _set, exercise, session " +
 				 	 "  WHERE _set.exerciseID = exercise.exerciseID " +
@@ -77,15 +77,22 @@ public class HistoryViewer {
 		LinearLayout ch = (LinearLayout)app.findViewById(R.id.working_out_col_header);
 		ListView l = (ListView)app.findViewById(R.id.workingout_listView);
 		
-		if(!previous_SQL.isEmpty()){
+		if(!previous_SQL.isEmpty())
+		{
 			String SQL = previous_SQL.pop();
 			app.con.readQuery(SQL, l, ch);
-		} else {
-			if(!Workout.isRunning(app.workout)){
-				app.workout.goBack();
-			} else {
-				
-			}
+		} 
+		else if(Workout.isRunning(app.workout))
+		{
+			app.workout.goBack();
+		} 
+		else if (RoutineView.isRunning(app.routineView))
+		{
+			app.routineView.goBack();
+		}
+		else
+		{
+			app.gotoMenu(null);
 		}
 		
 	}

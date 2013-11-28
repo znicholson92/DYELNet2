@@ -157,7 +157,7 @@ public class MainActivity extends Activity {
 		TextView tv = (TextView)v;
 		
 		locked = true;
-		
+		Log.w("CLI", "clicked");
 		switch(current_layout)
 		{
 			case R.layout.workingout:
@@ -224,7 +224,7 @@ public class MainActivity extends Activity {
 	private void cli_workingout(TextView TV)
 	{
 		String status = workout.getStatus();
-		
+		Log.w("CLI", "GETTING STATUS");
 		if(status == "session")
 		{
 			cli_workingout_session(TV);
@@ -240,18 +240,24 @@ public class MainActivity extends Activity {
 	private void cli_workingout_session(TextView TV)
 	{	
 		LinearLayout L = (LinearLayout)TV.getParent();
-		TextView exerciseTV = (TextView)L.getChildAt(1);
+		TV = (TextView)L.getChildAt(1);
+		String exercise_name = TV.getText().toString();
+		TV = (TextView)L.getChildAt(4);
+		String exerciseID = TV.getText().toString();
 		int ind = L.indexOfChild((View)TV);
-		workout.viewExercise(exerciseTV.getText().toString(), ind);
+		workout.viewExercise(exercise_name, exerciseID, ind);
 	}
 	
 	@SuppressLint("UseValueOf")
 	private void cli_workingout_exercise(TextView TV)
 	{
+		Log.w("CLI", "EXERCISE");
 		LinearLayout L = (LinearLayout)TV.getParent();
 		ListView LV = (ListView)L.getParent();
 		int sn = LV.indexOfChild((View)L) + 1;
-		workout.addRealSet(new Integer(sn).toString());
+		TV = (TextView)L.getChildAt(4);
+		String setID = TV.getText().toString();
+		workout.addRealSet(new Integer(sn).toString(), setID);
 	}
 	
 	// TODO
@@ -433,11 +439,9 @@ public class MainActivity extends Activity {
 			workout.insertRealSet();
 		}
 		
-		setContentView(R.layout.workingout);
+		workout.goBack();
 		
 		workoutSliderShowFinish();
-		
-		workout.goBack();
 	}
 	
 	public void set_add(View v)
@@ -465,7 +469,6 @@ public class MainActivity extends Activity {
 	
 	public void browse_exercises(View v)
 	{
-		//gotoLayout(R.layout.display_exercises);
 		exerciseViewer = new display_exercises(this);
 		exerciseViewer.load();
 	}
@@ -501,7 +504,7 @@ public class MainActivity extends Activity {
 	
 	public void startWorkout(View v)
 	{
-		if(routineView.getStatus() == "days" || routineView.getStatus() == "sets")
+		if(routineView.getStatus() == "exercises" || routineView.getStatus() == "sets")
 		{
 			String dayID = routineView.getDayID();
 			String name = routineView.getDayName();
@@ -535,7 +538,7 @@ public class MainActivity extends Activity {
 		if(Workout.isRunning(workout)){
 			workout.viewHistory();
 		} else {
-			
+			routineView.viewHistory();
 		}
 	}
 	

@@ -151,16 +151,16 @@ public class connection
 		//executes async task, relays to the appropriate method
 		@Override
 		protected Boolean doInBackground(String... params) 
-		{	Log.w("CONNECTION", "WORKING = TRUE");
+		{	
 			working = true;
 			result = "NULL";
 			Log.w("SQL", params[1]);
 			if(params[0] == "read")
 			{
 				result = ReadQuery(params[1]);
-				if(params[2] == "update"){Log.w("CONNECTION", "UPDATE=TRUE");
+				if(params[2] == "update"){
 					return true;
-				} else {Log.w("CONNECTION", "UPDATE=FALSE");
+				} else {
 					working = false;
 	        		return false;
 				}
@@ -188,17 +188,18 @@ public class connection
 		//handles the post execution. If "update" is true, write the data to the bound ListView
 		@Override
 		protected void onPostExecute(Boolean update) 
-		{ Log.w("CONNECTION", "POST EXECUTE");
+		{ 
 	        if(update)	//true if we want to update the listview
 	        {
-	        	Log.w("CONNECTION", "UPDATE");
+	        	String col0 = null;
 	        	try{
 	        		
 	        		JSONObject jsonObject = new JSONObject(result);
 	        		JSONArray jArray = jsonObject.getJSONArray("data");
 	        		
 	        		ArrayList<TextView> Columns = new ArrayList<TextView>();
-	        		
+	        		//TODO fix exception here from history viewer
+	        		Log.w("COL HEADER CHILD COUNT", Integer.toString(col_header.getChildCount()));
 	        		for(int i = 0; i < col_header.getChildCount(); i++)
 	        		{
 	        			Columns.add((TextView) col_header.getChildAt(i));
@@ -217,6 +218,13 @@ public class connection
 	                        String value = (String)j.get(key);
 	                        if(key.contains("ID")){
 	                        	Columns.get(4).setText(key);
+	                        } else if (key.equals("finished")) {
+	                        	col0 = key;
+	                        	value = (String)j.get(key);
+	                        	if(value.equals("1"))
+	                        		value = "DONE";
+	                        	else
+	                        		value = "";
 	                        } else {
 	                        	Columns.get(col).setText(key);
 	                        	col++;
@@ -230,8 +238,13 @@ public class connection
 	        				new SimpleAdapter(app, 
 	        								  tableList, 
 	        								  R.layout.my_list_item,
-	        								  new String[] {Columns.get(0).getText().toString(), Columns.get(1).getText().toString(), Columns.get(2).getText().toString() , Columns.get(3).getText().toString(), Columns.get(4).getText().toString()}, 
-	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
+	        								  new String[] {Columns.get(0).getText().toString(), 
+	        												Columns.get(1).getText().toString(), 
+	        												Columns.get(2).getText().toString(), 
+	        												Columns.get(3).getText().toString(), 
+	        												Columns.get(4).getText().toString(),
+	        												col0}, 
+	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell0});
 	        		
 	        		list.setAdapter(myAdapter);
 	        		

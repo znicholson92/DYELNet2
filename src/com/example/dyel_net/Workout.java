@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -30,12 +31,14 @@ public class Workout
 	private boolean running = false;
 	private String dayID = null;
 	private LinearLayout col_head;
-	private String name;
+	private String workout_name;
 	private ListView listview;
 	private TextView topbar;
 	private String sessionID;
 	private editSet new_set;
 	private String current_exercise;
+	private String current_SQL;
+	private String current_exerciseID = null;
 	
 	private ArrayList< ArrayList<Boolean> > completed = new ArrayList< ArrayList<Boolean> >();
 	private ArrayList<Boolean> exCompleted;
@@ -53,7 +56,7 @@ public class Workout
 	{
 		app = a;
 		dayID = dID;
-		name = n;
+		workout_name = n;
 		
 		app.gotoLayout(R.layout.workingout);
 		
@@ -88,73 +91,109 @@ public class Workout
 	
 	public void viewSession()
 	{	
+		
 		app.gotoLayout(R.layout.workingout);
 		col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
 		listview = (ListView)app.findViewById(R.id.workingout_listView);
 		topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
 		
-		String SQL = "SELECT exercise.name, count(*) As 'Sets' FROM _set " + 
+		//display each distinct exercise with the number of sets of each
+		String SQL = " SELECT exercise.name As 'Name', count(*) As 'Sets', exerciseID FROM _set " + 
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " + 
 					 " WHERE _set.dayID = " + dayID + " AND isReal=0 AND isGoal=0 " + 
 					 " GROUP BY _set.exerciseID";
 		
 		app.con.readQuery(SQL, listview, col_head);
 
-		topbar.setText(name);
+		//set topbar to the current workout name
+		topbar.setText(workout_name);
 		
-		pushBack(SQL);
+		//sets the status variable to session because we are viewing a session
 		status = "session";
 		
-		if(completed.isEmpty()){
-			for(int i = 0; i < listview.getChildCount(); i++)
-				completed.add(new ArrayList<Boolean>());
-		} else {
-			for(int i = 0; i < listview.getChildCount(); i++)
-			{
-				boolean done = true;
-				Iterator<Boolean> it = completed.get(i).iterator();
-				while(it.hasNext()){
-					if(it.equals(Boolean.FALSE))
-						done = false;
+	    //push current state's info the  previous_SQL stack for back functionality
+		pushBack(SQL); 
+		
+		//start asynchronous task that checks if each exercise was completed
+		//initializes the needed data structures if not initialized yet
+		completedHandler task = new completedHandler();
+		task.execute();
+
+	}
+	
+	//asynchronous task that checks if each exercise was completed
+	//initializes the needed data structures if not initialized yet
+	private class completedHandler extends AsyncTask<String, Void, Boolean>
+	{
+
+		//background task waits until the listview is set with children
+		//waits until child count is nonzero and then delays another second because
+		//all children are not added instantly
+		@Override
+		protected Boolean doInBackground(String... arg0) {
+			while(listview.getChildCount() == 0) {}
+			try {Thread.sleep(1000);} 
+			catch (InterruptedException e) {e.printStackTrace();}
+			return true;
+		}
+		
+		//initialize the 'completed' data structure is uninitialized
+		//otherwise check if each exercise was completed
+		@Override
+		protected void onPostExecute(Boolean result){
+			if(completed.isEmpty()){
+				for(int i = 0; i < listview.getChildCount(); i++){
+					LinearLayout tempLL = (LinearLayout)listview.getChildAt(i);
+					TextView tempTV = (TextView)tempLL.getChildAt(0);
+					int setcount = Integer.parseInt(tempTV.getText().toString());
+					completed.add(new ArrayList<Boolean>(setcount));
+					for(int j=0; j < setcount; j++)
+						completed.get(i).add(j, false);
 				}
-				if(done){
-					LinearLayout curLL = (LinearLayout)listview.getChildAt(i);
-					curLL.setBackgroundColor(0xFF4BFA37);
+			} else {
+				for(int i = 0; i < listview.getChildCount(); i++)
+				{//TODO figure out why this is not working
+					boolean done = true;
+					ArrayList<Boolean> curExCompleted = completed.get(i);
+					for(int j=0; j < curExCompleted.size(); j++){
+						if(!curExCompleted.get(j)){
+							done = false;
+							break;
+						}
+					}
+					if(done){
+						LinearLayout curLL = (LinearLayout)listview.getChildAt(i);
+						curLL.setBackgroundColor(0xFF4BFA37);
+					}
 				}
 			}
 		}
 	}
 	
-	public void viewExercise(String exercise, int index)
+	public void viewExercise(String exercise_name, String exerciseID, int index)
 	{
-		current_exercise = exercise;
+		current_exercise = exercise_name;
+		current_exerciseID = exerciseID;
 		
-		String SQL = "SELECT setnumber, reps, weight FROM _set " +
+		String SQL = " SELECT setnumber, reps, weight, setID, finished FROM _set " +
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " +
 					 " WHERE dayID = " + dayID + 
-					 " AND exercise.name='" + exercise + "'" +
+					 " AND exercise.name='" + exercise_name + "'" +
 					 " AND isReal = 0 " +
 					 " ORDER BY setnumber ASC";
 		
 		
 		app.con.readQuery(SQL, listview, col_head);
 		
-		topbar.setText(exercise);
+		topbar.setText(exercise_name);
 		
 		pushBack(SQL);
 		status = "exercise";
 		
-		
 		exCompleted = completed.get(index);
-		Iterator<Boolean> it = exCompleted.iterator();
-		int c = 0;
-		while(it.hasNext()){
-			if(it.equals(Boolean.TRUE)){
-				LinearLayout curLL = (LinearLayout)listview.getChildAt(c);
-				curLL.setBackgroundColor(0xFF4BFA37);
-			}
-			++c;
-		}
+		
+		exCompletedHandler task = new exCompletedHandler();
+		task.execute();
 		
 	}
 	
@@ -173,10 +212,6 @@ public class Workout
 		
 		app.con.writeQuery(SQL);
 		
-		//while(app.con.working()){}
-		//try { Thread.sleep(500);} 
-		//catch (InterruptedException e) {e.printStackTrace();}
-		
 		SQL = "SELECT sessionID FROM session WHERE isReal=1 AND username='" + app.con.username() + "' ORDER BY datetime DESC";
 		String jString = app.con.readQuery(SQL);
 		
@@ -190,10 +225,10 @@ public class Workout
 		return sID;
 	}
 	
-	public void addRealSet(String setnumber)
+	public void addRealSet(String setnumber, String setID)
 	{
 		app.gotoLayout(R.layout.edit_set);
-		new_set = new editSet(setnumber);
+		new_set = new editSet(setnumber, current_exerciseID, setID);
 		new_set.open_editSet();
 	}
 	
@@ -216,51 +251,13 @@ public class Workout
 		private String setID = null;
 		private int list_index;
 		
-		public editSet(String setnum)
+		public editSet(String setnum, String eID, String sID)
 		{
 			setnumber = setnum;
-			exerciseID = get_exerciseID();
-			setID = get_setID();
+			exerciseID = eID;
+			setID = sID;
 			list_index = Integer.parseInt(setnum) - 1;
 		}
-		
-		private String get_exerciseID()
-		{
-			String ret = null;
-			
-			String SQL = "SELECT exerciseID FROM exercise WHERE name='" + topbar.getText().toString() + "'";
-			
-			String jString = app.con.readQuery(SQL);
-			
-			try {
-				JSONObject jsonObject = new JSONObject(jString);
-				JSONArray jArray = jsonObject.getJSONArray("data");
-				JSONObject j = jArray.getJSONObject(0);
-				ret = (String) j.get("exerciseID");
-			} catch (JSONException e) {e.printStackTrace();}
-			
-			return ret;
-		}
-		
-		private String get_setID()
-		{
-			String ret = null;
-			
-			String SQL = "SELECT setID FROM _set WHERE isReal=0 AND isGoal=0 " + 
-						 " AND dayID=" + dayID + " AND setnumber=" + setnumber + " AND exerciseID=" + exerciseID;
-			
-			String jString = app.con.readQuery(SQL);
-			
-			try {
-				JSONObject jsonObject = new JSONObject(jString);
-				JSONArray jArray = jsonObject.getJSONArray("data");
-				JSONObject j = jArray.getJSONObject(0);
-				ret = (String) j.get("setID");
-			} catch (JSONException e) {e.printStackTrace();}
-			
-			return ret;
-		}
-		
 		
 		
 		public void open_editSet()
@@ -274,7 +271,7 @@ public class Workout
 			
 			setnumTV.setText(setnumber);
 			
-			String SQL = "SELECT exercise.name, reps, weight, " + 
+			String SQL = "SELECT exercise.name, reps, weight " + 
 						 "FROM _set INNER JOIN exercise ON _set.exerciseID = exercise.exerciseID " +
 						 "WHERE setID=" + setID;
 			
@@ -305,6 +302,14 @@ public class Workout
 			
 			if(exerciseID != null)
 			{
+				Thread trd = new Thread(new Runnable(){
+	    			@Override
+	    			public void run(){
+	    				connection con2 = new connection(app);
+	    				con2.writeQuery("UPDATE _set SET finished = 1 WHERE setID ='" + setID + "'");
+	    			}
+	    		});
+	    		trd.start();
 				
 				reps = ET1.getText().toString();
 				weight = ET2.getText().toString();
@@ -328,7 +333,7 @@ public class Workout
 							 				  	
 				app.con.writeQuery(SQL);
 				
-				exCompleted.set(list_index, Boolean.TRUE);
+				exCompleted.add(list_index, Boolean.TRUE);
 				
 			} else {
 				return;
@@ -363,23 +368,29 @@ public class Workout
 	//sets query to listview as the previous one
 	public boolean goBack()
 	{
-		Log.w("WORKOUT", "GO BACK PRE");
 		if(!previous_SQL.isEmpty())
 		{
+			app.setContentView(R.layout.workingout);
+			app.current_layout = R.layout.workingout;
+			
 			col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
 			listview = (ListView)app.findViewById(R.id.workingout_listView);
 			topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
-			
-			Log.w("WORKOUT", "GO BACK");
-			String SQL = previous_SQL.pop();
-			app.con.readQuery(SQL, listview, col_head);
-			Log.w("PREVIOUS TOP BAR", previous_topbar.peek());
-			topbar.setText(previous_topbar.pop());
-			
-			if(previous_SQL.isEmpty()){
-				status = "session";
-			} else {
+	
+			String SQL;
+			if(app.current_layout == R.layout.edit_set || app.current_layout == R.layout.add_set){
+				SQL = previous_SQL.pop();
+				app.con.readQuery(SQL, listview, col_head);
+				topbar.setText(previous_topbar.pop());
 				status = "exercise";
+				exCompletedHandler task = new exCompletedHandler();
+				task.execute();
+			} else {
+				SQL = previous_SQL.pop();
+				app.con.readQuery(SQL, listview, col_head);
+				topbar.setText(previous_topbar.pop());
+				status = "session";
+				app.current_layout = R.layout.workingout;
 			}
 			
 			return true;
@@ -388,10 +399,33 @@ public class Workout
 			return false;
 	}
 	
+	private class exCompletedHandler extends AsyncTask<Void, Void, Boolean>
+	{
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			while(listview.getChildCount() == 0){}
+			try {Thread.sleep(1000);} 
+			catch (InterruptedException e) {e.printStackTrace();}
+			return true;
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result){
+			Log.w("exCompleted", Integer.toString(exCompleted.size()));
+			for(int i=0; i < exCompleted.size(); i++){Log.w("COMPLETED", "LOOPING");
+				if(exCompleted.get(i).equals(Boolean.TRUE)){
+					LinearLayout curLL = (LinearLayout)listview.getChildAt(i);
+					curLL.setBackgroundColor(0xFF4BFA37);Log.w("COMPLETED", "SET BACKGROUND");
+				}
+			}
+		}
+	}
 
 	private void pushBack(String SQL)
 	{
 		previous_SQL.push(SQL);
+		current_SQL = SQL;
 		previous_topbar.push(topbar.getText().toString());
 	}
 }

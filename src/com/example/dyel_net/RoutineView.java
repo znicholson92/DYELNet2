@@ -29,6 +29,7 @@ public class RoutineView extends Activity {
 	
 	private TextView topbar;
 	private String day_name = "ERROR";
+	private String current_SQL = null;
 	
 	public static boolean isRunning(RoutineView rv)
 	{
@@ -104,7 +105,7 @@ public class RoutineView extends Activity {
 		
 		routineID = _routineID;
 		
-		String query = "SELECT weekID, week FROM schedule_week" +
+		String query = "SELECT weekID, week, finished FROM schedule_week" +
 				" WHERE routineID=" + routineID;
 		
 		app.con.readQuery(query, listView, col_head);
@@ -115,7 +116,7 @@ public class RoutineView extends Activity {
 	
 	public void viewDays(String _weekID){
 		weekID = _weekID;
-		String query = "SELECT dayID, day, name FROM schedule_day " +
+		String query = "SELECT dayID, day, name, finished FROM schedule_day " +
 				" WHERE routineID=" + routineID +
 				" AND weekID=" + weekID;
 		
@@ -146,7 +147,7 @@ public class RoutineView extends Activity {
 	public void viewSets(String exercise)
 	{
 		
-		String SQL = "SELECT setnumber, reps, weight FROM _set " +
+		String SQL = "SELECT setnumber, reps, weight, finished FROM _set " +
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " +
 					 " WHERE dayID = " + dayID + 
 					 " AND exercise.name='" + exercise + "'" +
@@ -226,10 +227,13 @@ public class RoutineView extends Activity {
 		}
 	}
 	
-	/*public void setExercise_addset(String exercise)
-	{
-		openAddNewSet(exercise);
-	}*/
+	public void viewHistory()
+	{	
+		if(status == "exercise"){
+			String current_exercise = topbar.getText().toString();
+			HistoryViewer.viewHistory(current_exercise, dayID, app);
+		}
+	}
 	
 	public String getRoutineID(String name)
 	{
@@ -262,6 +266,9 @@ public class RoutineView extends Activity {
 		
 		if(pops > 0 && !previous_SQL.isEmpty())
 		{
+			if(current_SQL.equals((String)previous_SQL.peek()))
+				pops = 2;
+			
 			String SQL = null;
 			String tbar_text = null;
 			for(int i = 0; i < pops && !previous_SQL.isEmpty(); ++i){
@@ -270,19 +277,23 @@ public class RoutineView extends Activity {
 			}
 			
 			app.con.readQuery(SQL, listView, col_head);
-
+			
 			if(tbar_text != null)
 				topbar.setText(tbar_text);
 			
+			app.current_layout = R.layout.routine_view;
+			
 			return true;
-		}
-		else
+		} else {
+			app.setContentView(R.layout.main_menu);
 			return false;
+		}
 	}
 	
 	public void pushBack(String SQL)
 	{
 		previous_SQL.push(SQL);
+		current_SQL = SQL;
 		previous_topbar.push(topbar.getText().toString());
 	}
 }

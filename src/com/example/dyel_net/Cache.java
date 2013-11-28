@@ -158,8 +158,8 @@ public class Cache {
                 	Columns.get(4).setText(key);
                 } else {
                 	Columns.get(col).setText(key);
+                	col++;
                 }
-		        col++;
 		        map.put(key,value);
 			}
 			tableList.add(map);
@@ -170,7 +170,11 @@ public class Cache {
 				new SimpleAdapter(app, 
 								  tableList, 
 								  R.layout.my_list_item,
-								  new String[] {Columns.get(0).getText().toString(), Columns.get(1).getText().toString(), Columns.get(2).getText().toString() , Columns.get(3).getText().toString(), Columns.get(4).getText().toString()}, 
+								  new String[] {Columns.get(0).getText().toString(), 
+												Columns.get(1).getText().toString(), 
+												Columns.get(2).getText().toString(), 
+												Columns.get(3).getText().toString(), 
+												Columns.get(4).getText().toString()}, 
 								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
 
 		listview.setAdapter(myAdapter);

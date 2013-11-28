@@ -7,20 +7,22 @@
      android:layout_width="fill_parent"
      android:layout_height="fill_parent"
      android:orientation="horizontal">
- 
-     <TextView android:id="@+id/cell1"
-         android:layout_height="fill_parent"
+  
+     <TextView
+         android:id="@+id/cell1"
          android:layout_width="100dip"
-         android:gravity="center"
-         android:width="100dip"
-         android:onClick="clickedListItem"
+         android:layout_height="fill_parent"
+         android:layout_weight="1"
          android:clickable="true"
-         android:height="30dip" />
+         android:gravity="left|center_vertical"
+         android:height="30dip"
+         android:onClick="clickedListItem"
+         android:width="100dip" />
  
      <TextView android:id="@+id/cell2"
          android:layout_height="fill_parent"
          android:layout_width="100dip"
-         android:gravity="center"
+         android:gravity="left|center_vertical"
          android:width="100dip"
          android:onClick="clickedListItem"
          android:clickable="true"
@@ -29,7 +31,7 @@
      <TextView android:id="@+id/cell3"
          android:layout_height="fill_parent"
          android:layout_width="100dip"
-         android:gravity="center"
+         android:gravity="left|center_vertical"
          android:width="100dip"
          android:onClick="clickedListItem"
          android:clickable="true"
@@ -38,7 +40,7 @@
      <TextView android:id="@+id/cell4"
          android:layout_height="fill_parent"
          android:layout_width="100dip"
-         android:gravity="center"
+         android:gravity="left|center_vertical"
          android:width="100dip"
          android:onClick="clickedListItem"
          android:clickable="true"
@@ -46,11 +48,22 @@
  
      <TextView android:id="@+id/cell5"
          android:layout_height="fill_parent"
-         android:layout_width="100dip"
-         android:gravity="center"
+         android:layout_width="40dip"
+         android:gravity="left|center_vertical"
          android:onClick="clickedListItem"
          android:width="100dip"
          android:clickable="true"
          android:visibility="invisible"
          android:height="30dip"   android:layout_weight="1"/>
+     
+      <TextView android:id="@+id/cell0"
+         android:layout_height="fill_parent"
+         android:layout_width="50dip"
+         android:gravity="left|center_vertical"
+         android:onClick="clickedListItem"
+         android:width="50dip"
+         android:clickable="true"
+         android:height="30dip"/>
+    
+     
 </LinearLayout>
