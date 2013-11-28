@@ -28,6 +28,7 @@ public class Cache {
 	private boolean loaded;
 	
 	private connection con;
+	
 	public Cache(MainActivity a) {
 		app = a;
 		File dbFile = app.getDatabasePath("cache.db");
@@ -37,6 +38,61 @@ public class Cache {
 		createTable_exercise();
 		createTable_muscle();
 		createTable_muscle2exercise();
+		makeRoutineCache();
+	}
+	
+	/*****************ROUTINE GENERATOR METHODS***********************************/
+	public void makeRoutineCache(){	
+		db.execSQL("CREATE TABLE routine(routineHash TEXT, day INT, set INT, setnumber INT, exerciseID INT)");
+	}
+	
+	public void addSet(String routineHash, String day, int sets, String exercise_name){
+		
+		String exerciseID = getExerciseID(exercise_name);
+		String set = Integer.toString(getSetCount(routineHash) + 1);
+		for(int s=0; s < sets; s++){
+			String sql = "INSERT INTO routine(routineHash, day, set, setnumber, exerciseID) " +
+					 	 "VALUES('" + routineHash + "'," + day + "," + set + "," + Integer.toString(s) + "," + exerciseID + ")";
+			db.execSQL(sql);
+		}
+	}
+	
+	private int getSetCount(String routineHash){
+		String sql = "SELECT count(*) FROM routine WHERE routineHash='" + routineHash + "'";
+		Cursor cursor = db.rawQuery(sql, null);
+		return cursor.getInt(0);
+	}
+	private String getExerciseID(String exercise_name){
+		String sql = "SELECT exerciseID FROM exercise WHERE name='" + exercise_name + "'";
+		Cursor cursor = db.rawQuery(sql, null);
+		String exerciseID = cursor.getString(0);
+		return exerciseID;
+	}
+	
+	public int getExerciseID(String routineHash, int day, int set){
+		String sql = "SELECT exerciseID FROM routine " + "" +
+				     "WHERE routineHash='" + routineHash + "'" +
+				     "AND day=" + day +
+				     "AND set=" + set;
+		Cursor cursor = db.rawQuery(sql, null);
+		return cursor.getInt(0);
+	}
+
+	public int getSetNumber(String routineHash, int day, int set){
+		String sql = "SELECT setnumber FROM routine " + "" +
+				     "WHERE routineHash='" + routineHash + "'" +
+				     "AND day=" + day +
+				     "AND set=" + set;
+		Cursor cursor = db.rawQuery(sql, null);
+		return cursor.getInt(0);
+	}
+	
+	public int getNumberOfSets(String routineHash, int day){
+		String sql = "SELECT count(*) FROM routin " +
+					 "WHERE routineHash='" + routineHash + "'" +
+					 "AND day=" + day;
+		Cursor cursor = db.rawQuery(sql, null);
+		return cursor.getInt(0);
 	}
 	
 	/*******************CREATE TABLE METHODS***************************/
