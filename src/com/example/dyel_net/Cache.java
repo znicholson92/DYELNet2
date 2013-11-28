@@ -43,7 +43,7 @@ public class Cache {
 	
 	/*****************ROUTINE GENERATOR METHODS***********************************/
 	public void makeRoutineCache(){	
-		db.execSQL("CREATE TABLE routine(routineHash TEXT, day INT, set INT, setnumber INT, exerciseID INT)");
+		db.execSQL("CREATE TABLE routine(routineHash TEXT, day INT, _set INT, setnumber INT, exerciseID INT)");
 	}
 	
 	public void addSet(String routineHash, String day, int sets, String exercise_name){
@@ -51,7 +51,7 @@ public class Cache {
 		String exerciseID = getExerciseID(exercise_name);
 		String set = Integer.toString(getSetCount(routineHash) + 1);
 		for(int s=0; s < sets; s++){
-			String sql = "INSERT INTO routine(routineHash, day, set, setnumber, exerciseID) " +
+			String sql = "INSERT INTO routine(routineHash, day, _set, setnumber, exerciseID) " +
 					 	 "VALUES('" + routineHash + "'," + day + "," + set + "," + Integer.toString(s) + "," + exerciseID + ")";
 			db.execSQL(sql);
 		}
@@ -73,7 +73,7 @@ public class Cache {
 		String sql = "SELECT exerciseID FROM routine " + "" +
 				     "WHERE routineHash='" + routineHash + "'" +
 				     "AND day=" + day +
-				     "AND set=" + set;
+				     "AND _set=" + set;
 		Cursor cursor = db.rawQuery(sql, null);
 		return cursor.getInt(0);
 	}
@@ -82,7 +82,7 @@ public class Cache {
 		String sql = "SELECT setnumber FROM routine " + "" +
 				     "WHERE routineHash='" + routineHash + "'" +
 				     "AND day=" + day +
-				     "AND set=" + set;
+				     "AND _set=" + set;
 		Cursor cursor = db.rawQuery(sql, null);
 		return cursor.getInt(0);
 	}

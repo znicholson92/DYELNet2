@@ -240,7 +240,7 @@ public class MainActivity extends Activity {
 	private void cli_workingout_session(TextView TV)
 	{	
 		LinearLayout L = (LinearLayout)TV.getParent();
-		TV = (TextView)L.getChildAt(1);
+		TV = (TextView)L.getChildAt(0);
 		String exercise_name = TV.getText().toString();
 		TV = (TextView)L.getChildAt(4);
 		String exerciseID = TV.getText().toString();
@@ -434,8 +434,8 @@ public class MainActivity extends Activity {
 	public void set_update(View v)
 	{
 		Button tv = (Button)v;
-		Log.w("BUTTON TEXT", tv.getText().toString());
-		if(tv.getText().toString().equals("Update") ){Log.d("SET_UPDATE", "POINT B");
+
+		if(tv.getText().toString().equals("Update") ){
 			workout.insertRealSet();
 		}
 		

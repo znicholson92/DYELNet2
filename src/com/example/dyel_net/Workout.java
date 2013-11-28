@@ -98,7 +98,7 @@ public class Workout
 		topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
 		
 		//display each distinct exercise with the number of sets of each
-		String SQL = " SELECT exercise.name As 'Name', count(*) As 'Sets', exerciseID FROM _set " + 
+		String SQL = " SELECT exercise.name As 'Name', count(*) As 'Sets', _set.exerciseID FROM _set " + 
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " + 
 					 " WHERE _set.dayID = " + dayID + " AND isReal=0 AND isGoal=0 " + 
 					 " GROUP BY _set.exerciseID";
@@ -116,8 +116,8 @@ public class Workout
 		
 		//start asynchronous task that checks if each exercise was completed
 		//initializes the needed data structures if not initialized yet
-		completedHandler task = new completedHandler();
-		task.execute();
+		//completedHandler task = new completedHandler();
+		//task.execute();
 
 	}
 	
@@ -190,10 +190,10 @@ public class Workout
 		pushBack(SQL);
 		status = "exercise";
 		
-		exCompleted = completed.get(index);
+		//exCompleted = completed.get(index);
 		
-		exCompletedHandler task = new exCompletedHandler();
-		task.execute();
+		//exCompletedHandler task = new exCompletedHandler();
+		//task.execute();
 		
 	}
 	
@@ -333,7 +333,7 @@ public class Workout
 							 				  	
 				app.con.writeQuery(SQL);
 				
-				exCompleted.add(list_index, Boolean.TRUE);
+				//exCompleted.add(list_index, Boolean.TRUE);
 				
 			} else {
 				return;
@@ -383,8 +383,8 @@ public class Workout
 				app.con.readQuery(SQL, listview, col_head);
 				topbar.setText(previous_topbar.pop());
 				status = "exercise";
-				exCompletedHandler task = new exCompletedHandler();
-				task.execute();
+				//exCompletedHandler task = new exCompletedHandler();
+				//task.execute();
 			} else {
 				SQL = previous_SQL.pop();
 				app.con.readQuery(SQL, listview, col_head);

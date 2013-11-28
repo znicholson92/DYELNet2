@@ -146,7 +146,7 @@ public class routineGenerator {
 		return app.cache.getSetNumber(routineHash, day, set);
 	}
 	
-	public void addToDatabase(JSONObject MainJSON)
+	private void addToDatabase(JSONObject MainJSON)
 	{
 		String SQL = "";
 		try 

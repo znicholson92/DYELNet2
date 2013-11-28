@@ -130,7 +130,7 @@ public class RoutineView extends Activity {
 		
 		dayID = dID;
 		
-		String SQL = " SELECT exercise.name, count(*) As 'Sets' FROM _set " + 
+		String SQL = " SELECT exercise.name, count(*), _set.exerciseID As 'Sets' FROM _set " + 
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " + 
 					 " WHERE _set.dayID = " + dayID + " AND isReal=0 AND isGoal=0 " + 
 					 " GROUP BY _set.exerciseID";
