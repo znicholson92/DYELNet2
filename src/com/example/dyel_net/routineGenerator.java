@@ -9,11 +9,11 @@ import org.json.JSONObject;
 
 import android.widget.TextView;
 
-public class routineGeneratorLoader {
+public class routineGenerator {
 
 	private MainActivity app;
 	
-	public routineGeneratorLoader(MainActivity _app){
+	public routineGenerator(MainActivity _app){
 		app = _app;
 		
 	}
