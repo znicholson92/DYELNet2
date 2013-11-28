@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 import android.widget.TextView;
 
-public class routineGenerator {
+public class RoutineGenerator {
 
 	private MainActivity app;
 	private String routineHash;
@@ -22,7 +22,7 @@ public class routineGenerator {
 	
 	private ArrayList<String> dayNames = new ArrayList<String>();
 	
-	public routineGenerator(MainActivity _app, String _routine_name, int _weeks){
+	public RoutineGenerator(MainActivity _app, String _routine_name, int _weeks){
 		app = _app;
 		routineHash = Long.toString(System.currentTimeMillis());
 		weeks = _weeks;
