@@ -71,7 +71,7 @@ public class RoutineGenerator {
 		JSONObject MainJSON = new JSONObject();
 		MainJSON.put("name", routine_name);
 		
-		/*************ADDING WEEK*******************/
+		/*************ADDING WEEKS*******************/
 		JSONArray jArray_week = new JSONArray();
 		for(int week=0; week < weeks; week++){
 			JSONObject jsonObject_week = new JSONObject();
@@ -86,7 +86,7 @@ public class RoutineGenerator {
 	private void makeJSON_week(JSONObject jsonObject_week, int week) throws JSONException{
 		
 		jsonObject_week.put("week", Integer.toString(week));
-		/*************ADDING DAY*******************/
+		/*************ADDING DAYS*******************/
 		JSONArray jArray_day = new JSONArray();
 		for(int day=0; day < 7; day++){
 			JSONObject jsonObject_day = new JSONObject();

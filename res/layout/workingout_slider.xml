@@ -57,6 +57,13 @@
         			android:layout_height="60dp"
 	                android:onClick="workout_viewHistory"
 	                android:text="History" />
+               
+                <Button
+	                android:id="@+id/workingout_history_button"
+	                android:layout_width="120dp"
+        			android:layout_height="60dp"
+	                android:onClick="clearDones"
+	                android:text="Clear" />
                 
                 
             </LinearLayout>

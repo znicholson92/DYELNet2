@@ -240,11 +240,11 @@ public class connection
 	        								  R.layout.my_list_item,
 	        								  new String[] {Columns.get(0).getText().toString(), 
 	        												Columns.get(1).getText().toString(), 
-	        												Columns.get(2).getText().toString(), 
-	        												Columns.get(3).getText().toString(), 
-	        												Columns.get(4).getText().toString(),
-	        												col0}, 
-	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell0});
+	        												Columns.get(2).getText().toString(),
+	        												col0,
+	        												Columns.get(3).getText().toString(),
+	        												Columns.get(4).getText().toString()}, 
+	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell0, R.id.cell4, R.id.cell5});
 	        		
 	        		list.setAdapter(myAdapter);
 	        		

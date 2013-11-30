@@ -75,6 +75,11 @@ public class RoutineView extends Activity {
 		return setID;
 	}
 	
+	public String getRoutineID()
+	{
+		return routineID;
+	}
+	
 	public String getDayName()
 	{
 		if(status == "sets" || status == "exercises"){
@@ -130,7 +135,7 @@ public class RoutineView extends Activity {
 		
 		dayID = dID;
 		
-		String SQL = " SELECT exercise.name, count(*), _set.exerciseID As 'Sets' FROM _set " + 
+		String SQL = " SELECT exercise.name, count(*) As 'Sets', _set.exerciseID FROM _set " + 
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " + 
 					 " WHERE _set.dayID = " + dayID + " AND isReal=0 AND isGoal=0 " + 
 					 " GROUP BY _set.exerciseID";
@@ -256,6 +261,11 @@ public class RoutineView extends Activity {
 	public String getStatus()
 	{
 		return status;
+	}
+	
+	public String getSQL()
+	{
+		return previous_SQL.peek();
 	}
 	
 	//back button functionality for listview query menus

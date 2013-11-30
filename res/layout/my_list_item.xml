@@ -37,6 +37,15 @@
          android:clickable="true"
          android:height="30dip"  android:layout_weight="1"/>
      
+     <TextView android:id="@+id/cell0"
+         android:layout_height="fill_parent"
+         android:layout_width="50dip"
+         android:gravity="left|center_vertical"
+         android:onClick="clickedListItem"
+         android:width="50dip"
+         android:clickable="true"
+         android:height="30dip"/>
+     
      <TextView android:id="@+id/cell4"
          android:layout_height="fill_parent"
          android:layout_width="100dip"
@@ -56,14 +65,7 @@
          android:visibility="invisible"
          android:height="30dip"   android:layout_weight="1"/>
      
-      <TextView android:id="@+id/cell0"
-         android:layout_height="fill_parent"
-         android:layout_width="50dip"
-         android:gravity="left|center_vertical"
-         android:onClick="clickedListItem"
-         android:width="50dip"
-         android:clickable="true"
-         android:height="30dip"/>
+      
     
      
 </LinearLayout>
