@@ -175,12 +175,16 @@ public class MainActivity extends Activity {
 			case R.layout.display_exercises:
 				cli_display_exercises(tv);
 				break;
+			case R.layout.goal_view:
+				cli_display_goal(tv);
+				break;	
 		}
 		
 		locked = false;
 		
 	}
-	
+
+
 	private long lastClickedTime = (long) 0;
 	private View lastClickedItem = null;
 	
@@ -320,6 +324,21 @@ public class MainActivity extends Activity {
 	//TODO make user able to modify routine here
 	private void cli_routineView_sets(TextView TV){
 		
+	}
+	
+	
+	private void cli_display_goal(TextView TV) {
+		LinearLayout L = (LinearLayout)TV.getParent();
+		TV = (TextView)L.getChildAt(1);
+		String goalName = TV.getText().toString();
+		Log.w("GOAL NAME", goalName);
+		setContentView(R.layout.goal_view_detail);
+		try {
+			goal.viewGoalDetail(goalName);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 		
 	/***************NAVIGATION FUNCTIONALITY*****************/

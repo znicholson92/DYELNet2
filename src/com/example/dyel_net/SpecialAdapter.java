@@ -55,13 +55,6 @@ public class SpecialAdapter extends SimpleAdapter {
     	text.add((TextView) view.findViewById(R.id.cell0));
     	
     	for (TextView eachText : text){
-    		/*TextView text = (TextView) view.findViewById(R.id.cell1);    	
-        	text.setTextColor(Color.WHITE);
-            //text.setBackgroundColor(Color.RED); 
-            int color = Color.argb( 200, 255, 64, 64 );
-            text.setBackgroundColor( color );
-            text.setPaintFlags(text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            */
         	eachText.setTextColor(Color.WHITE);
             //text.setBackgroundColor(Color.RED); 
             int color = Color.argb( 200, 255, 64, 64 );
