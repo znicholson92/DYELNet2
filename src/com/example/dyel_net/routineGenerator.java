@@ -51,6 +51,8 @@ public class RoutineGenerator {
 	private void generateRegression(){
 		
 		/*****generate regression function************/
+		//It's gonna be pretty fkin large idk if you want it all here
+		//call LinReg::PullData()
 	
 	}
 	
