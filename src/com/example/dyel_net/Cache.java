@@ -62,7 +62,7 @@ public class Cache {
 		Cursor cursor = db.rawQuery(sql, null);
 		return cursor.getInt(0);
 	}
-	private String getExerciseID(String exercise_name){
+	public String getExerciseID(String exercise_name){
 		String sql = "SELECT exerciseID FROM exercise WHERE name='" + exercise_name + "'";
 		Cursor cursor = db.rawQuery(sql, null);
 		String exerciseID = cursor.getString(0);

@@ -241,13 +241,33 @@ public class connection
 	        								  new String[] {Columns.get(0).getText().toString(), 
 	        												Columns.get(1).getText().toString(), 
 	        												Columns.get(2).getText().toString(),
-	        												col0,
 	        												Columns.get(3).getText().toString(),
 	        												Columns.get(4).getText().toString()}, 
-	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell0, R.id.cell4, R.id.cell5});
+	        								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5});
 	        		
 	        		list.setAdapter(myAdapter);
 	        		
+	        		ListView done_list = null;
+	        		
+	        		if(col0.equals("finished")){
+		        		if(app.current_layout == R.layout.workingout){
+		        			done_list = (ListView)app.findViewById(R.id.routineview_listView_done);
+		        		} 
+		        		else if (app.current_layout == R.layout.routine_view){
+		        			done_list = (ListView)app.findViewById(R.id.routineview_listView_done);
+		        		}
+		        		
+		        		if(done_list != null){
+		        			SimpleAdapter myAdapter2 = 
+			        				new SimpleAdapter(app, 
+			        								  tableList, 
+			        								  R.layout.my_list_item,
+			        								  new String[] {col0}, 
+			        								  new int[] {R.id.cell0});
+		        			
+		        			done_list.setAdapter(myAdapter2);
+		        		}
+	        		}
 	            	
 	        	} catch (JSONException e) {
 	            	Log.e("JSONException", "Error: " + e.toString());
