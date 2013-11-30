@@ -478,8 +478,52 @@ public class MainActivity extends Activity {
 		exerciseViewer.load();
 	}
 	
-	
 	/****************WORKOUT SLIDER METHODS******************/
+	
+	public void clearDones(View v){
+		
+		if(current_layout == R.layout.routine_view){
+			
+			String status = routineView.getStatus();
+			String SQL = null;
+					
+			if(status == "weeks")
+			{
+				SQL = "UPDATE schedule_week SET finished=0 WHERE routineID=" + routineView.getRoutineID();
+				con.writeQuery(SQL);
+				
+				SQL = "UPDATE schedule_daySET finished=0 WHERE routineID=" + routineView.getRoutineID();
+				con.writeQuery(SQL);
+				
+				String INNER_SQL = "SELECT _set.* FROM _set INNER JOIN schedule_day on _set.dayID=schedule_day.dayID " +
+						   		   "WHERE routineID=" + routineView.getRoutineID();
+				SQL = "UPDATE _set SET finished=0 WHERE IN(" + INNER_SQL + ")";
+			}
+			else if (status == "days")
+			{
+				SQL = "UPDATE schedule_day SET finished=0 WHERE weekID=" + routineView.getWeekID();
+				con.writeQuery(SQL);
+				
+				String INNER_SQL = "SELECT _set.* FROM _set INNER JOIN schedule_day on _set.dayID=schedule_day.dayID " +
+								   "WHERE weekID=" + routineView.getWeekID();
+				SQL = "UPDATE _set SET finished=0 WHERE IN(" + INNER_SQL + ")";
+			}
+			else if (status == "exercises")
+			{
+				SQL += "UPDATE _set ";
+				SQL += "SET finished=0 WHERE dayID=" + routineView.getDayID();
+			}
+			if (status == "sets") 
+			{
+				SQL += "UPDATE _set ";
+				SQL += "SET finished=0 WHERE IN(" + routineView.getSQL() + ")";
+			}
+			
+			con.writeQuery(SQL);
+			
+		}
+		
+	}
 	
 	public void workoutSliderHideAll()
 	{
