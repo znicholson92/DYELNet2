@@ -44,6 +44,7 @@ public class MainActivity extends Activity {
 			workout = (Workout)savedInstanceState.get("workout");
 			routineView = (RoutineView)savedInstanceState.get("routineView");
 			con = (connection)savedInstanceState.get("con");
+			cache = (Cache)savedInstanceState.get("cache");
 			previous_layouts = (Stack<Integer>)savedInstanceState.get("previous_layouts");
 			current_layout = (Integer)savedInstanceState.getInt("current_layout");
 		}
@@ -57,7 +58,8 @@ public class MainActivity extends Activity {
 	  // killed and restarted.
 	  savedInstanceState.putParcelable("workout", (Parcelable) workout);
 	  savedInstanceState.putParcelable("routineView", (Parcelable) routineView);
-	  savedInstanceState.putParcelable("con", (Parcelable)con);
+	  //savedInstanceState.putParcelable("con", (Parcelable)con);
+	  savedInstanceState.putParcelable("cache", (Parcelable)cache);
 	  savedInstanceState.putParcelable("previous_layouts", (Parcelable)previous_layouts);
 	  savedInstanceState.putInt("current_layout", (int)current_layout);
 	  // etc.
@@ -86,6 +88,7 @@ public class MainActivity extends Activity {
 	public display_exercises exerciseViewer;
 	public Goal goal;
 	public Cache cache;
+	public RoutineGenerator routineGenerator;
 	
 	public void login(View v)
 	{
@@ -218,13 +221,25 @@ public class MainActivity extends Activity {
 		LinearLayout LL = (LinearLayout)TV.getParent();
 		TextView TV1 = (TextView) LL.getChildAt(0); //exercise name
 		TextView TV2 = (TextView) LL.getChildAt(4); //exerciseID
-		routineView.openAddNewSet(TV1.getText().toString(), TV2.getText().toString());
+		
+		switch(exerciseViewer.getPrevLayout()){
+		
+			case R.layout.routine_view:
+				routineView.openAddNewSet(TV1.getText().toString(), TV2.getText().toString());
+				break;
+				
+			case R.layout.routine_generator:
+				String day = routineGenerator.getCurrentDay();
+				routineGenerator.addSet(day, TV1.getText().toString());
+				restore_routine_generator();
+				break;
+		
+		}
 	}
 	
 	private void cli_workingout(TextView TV)
 	{
 		String status = workout.getStatus();
-		Log.w("CLI", "GETTING STATUS");
 		if(status == "session")
 		{
 			cli_workingout_session(TV);
@@ -251,7 +266,6 @@ public class MainActivity extends Activity {
 	@SuppressLint("UseValueOf")
 	private void cli_workingout_exercise(TextView TV)
 	{
-		Log.w("CLI", "EXERCISE");
 		LinearLayout L = (LinearLayout)TV.getParent();
 		ListView LV = (ListView)L.getParent();
 		int sn = LV.indexOfChild((View)L) + 1;
@@ -260,7 +274,6 @@ public class MainActivity extends Activity {
 		workout.addRealSet(new Integer(sn).toString(), setID);
 	}
 	
-	// TODO
 	private void cli_routine_view(TextView TV)
 	{
 		String status = routineView.getStatus();
@@ -317,9 +330,13 @@ public class MainActivity extends Activity {
 		workoutSliderShowStart();
 	}
 	
-	//TODO make user able to modify routine here
 	private void cli_routineView_sets(TextView TV){
-		
+		LinearLayout L = (LinearLayout)TV.getParent();
+		ListView LV = (ListView)L.getParent();
+		int sn = LV.indexOfChild((View)L) + 1;
+		TV = (TextView)L.getChildAt(4);
+		String setID = TV.getText().toString();
+		routineView.updateSet(Integer.toString(sn), setID);
 	}
 		
 	/***************NAVIGATION FUNCTIONALITY*****************/
@@ -430,18 +447,36 @@ public class MainActivity extends Activity {
 	
 	/****************WORKING OUT METHHODS********************/
 	
-	
 	public void set_update(View v)
 	{
 		Button tv = (Button)v;
-
-		if(tv.getText().toString().equals("Update") ){
-			workout.insertRealSet();
+		String buttontext = tv.getText().toString();
+		
+		boolean from_workout = false;
+		if(Workout.isRunning(workout)){
+			from_workout = workout.isEditingSet();
 		}
 		
-		workout.goBack();
-		
-		workoutSliderShowFinish();
+		if(from_workout){
+			if(buttontext.equals("Update") ){
+				workout.insertRealSet();
+			} else if (buttontext.equals("Cancel")){
+				workout.cancelInsertSet();
+			} else if (buttontext.equals("Delete")){
+				workout.cancelInsertSet();
+			}
+			workout.goBack();
+			workoutSliderShowFinish();
+		} else {
+			if(buttontext.equals("Update") ){
+				routineView.submitUpdateSet();
+			} else if (buttontext.equals("Delete")){
+				routineView.deleteSet();
+			}
+			setContentView(R.layout.routine_view);
+			routineView.goBack();
+			workoutSliderShowStart();
+		}
 	}
 	
 	public void set_add(View v)
@@ -469,7 +504,7 @@ public class MainActivity extends Activity {
 	
 	public void browse_exercises(View v)
 	{
-		exerciseViewer = new display_exercises(this);
+		exerciseViewer = new display_exercises(this, R.layout.routine_view);
 		exerciseViewer.load();
 	}
 	
@@ -492,31 +527,31 @@ public class MainActivity extends Activity {
 				SQL = "UPDATE schedule_week SET finished=0 WHERE routineID=" + routineView.getRoutineID();
 				con.writeQuery(SQL);
 				
-				SQL = "UPDATE schedule_daySET finished=0 WHERE routineID=" + routineView.getRoutineID();
+				SQL = "UPDATE schedule_day SET finished=0 WHERE routineID=" + routineView.getRoutineID();
 				con.writeQuery(SQL);
-				
-				String INNER_SQL = "SELECT _set.* FROM _set INNER JOIN schedule_day on _set.dayID=schedule_day.dayID " +
-						   		   "WHERE routineID=" + routineView.getRoutineID();
-				SQL = "UPDATE _set SET finished=0 WHERE IN(" + INNER_SQL + ")";
+
+				String INNER_SQL = "SELECT schedule_day.dayID FROM schedule_day WHERE routineID=" + routineView.getRoutineID();
+				SQL = "UPDATE _set SET finished=0 WHERE _set.dayID IN(" + INNER_SQL + ")";
 			}
 			else if (status == "days")
 			{
 				SQL = "UPDATE schedule_day SET finished=0 WHERE weekID=" + routineView.getWeekID();
 				con.writeQuery(SQL);
 				
-				String INNER_SQL = "SELECT _set.* FROM _set INNER JOIN schedule_day on _set.dayID=schedule_day.dayID " +
-								   "WHERE weekID=" + routineView.getWeekID();
-				SQL = "UPDATE _set SET finished=0 WHERE IN(" + INNER_SQL + ")";
+				String INNER_SQL = "SELECT schedule_day.dayID FROM schedule_day WHERE weekID=" + routineView.getWeekID();
+				SQL = "UPDATE _set SET finished=0 WHERE _set.dayID IN(" + INNER_SQL + ")";
 			}
 			else if (status == "exercises")
 			{
-				SQL += "UPDATE _set ";
+				SQL = "UPDATE _set ";
 				SQL += "SET finished=0 WHERE dayID=" + routineView.getDayID();
 			}
 			if (status == "sets") 
 			{
-				SQL += "UPDATE _set ";
-				SQL += "SET finished=0 WHERE IN(" + routineView.getSQL() + ")";
+				String INNER_SQL = routineView.getSQL();
+				INNER_SQL = "SELECT _set.setID " + INNER_SQL.substring(40);
+				SQL = "UPDATE _set ";
+				SQL += "SET finished=0 WHERE setID IN(" + INNER_SQL + ")";
 			}
 			
 			con.writeQuery(SQL);
@@ -869,7 +904,6 @@ public class MainActivity extends Activity {
         pd = ProgressDialog.show(this, "Loading", "Creating account...");
         
         _con.writeQuery(SQL);
-		//Thread.sleep(2500);
         
         pd.cancel();
         
@@ -879,6 +913,54 @@ public class MainActivity extends Activity {
         
     }
     
+    /***********************ROUTINE GENERATOR METHODS*******************************/
+    
+    public void gotoRoutineGenerator(){
+    	
+    	gotoLayout(R.layout.routine_generator);
+    	routineGenerator = new RoutineGenerator(this);
+	
+    }
+    
+    public void routineGenerator_add_day(View v){
+    	int day = routineGenerator.getNumDays() + 1;
+    	EditText dayName_Text = (EditText)findViewById(R.id.routine_generator_dayname);
+    	String dayName = dayName_Text.getText().toString();
+    	routineGenerator.addDay(dayName, day);
+    	
+    	routineGenerator_load();
+    }
+    
+    public void routineGenerator_addexercise(View v)
+    {
+    	EditText rt_name = (EditText)findViewById(R.id.routine_generator_routinename);
+    	EditText num_weeks = (EditText)findViewById(R.id.routine_generator_numweeks);
+    	routineGenerator.setNumWeeks(Integer.parseInt(num_weeks.getText().toString()));
+    	routineGenerator.setRoutineName(rt_name.getText().toString());
+    	exerciseViewer = new display_exercises(this, R.layout.routine_generator);
+    	exerciseViewer.load();
+    }
+    
+    public void routineGenerator_renameday(View v)
+    {
+    	//TODO make simple edittext to rename the day
+    }
+    
+    private void routineGenerator_load()
+    {
+    	routineGenerator.displayPlan();
+    }
+    
+    private void restore_routine_generator(){
+    	setContentView(R.layout.routine_generator);
+    	current_layout = R.layout.routine_generator;
+    	EditText rt_name = (EditText)findViewById(R.id.routine_generator_routinename);
+    	EditText num_weeks = (EditText)findViewById(R.id.routine_generator_numweeks);
+    	rt_name.setText(routineGenerator.getRoutineName());
+    	num_weeks.setText(routineGenerator.getNumWeeks());
+    	routineGenerator_load();
+    }
+
 
 
 	/***************************************************************/

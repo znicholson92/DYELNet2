@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 public class RoutineGenerator {
@@ -17,20 +18,52 @@ public class RoutineGenerator {
 	private MainActivity app;
 	private String routineHash;
 	
-	private String routine_name;
-	private int weeks;
+	private String number_of_weeks = null;
+	private String routine_name = null;
+	
+	private int weeks = 0;
+	private String curDay;
+	
+	
 	
 	private ArrayList<String> dayNames = new ArrayList<String>();
 	
-	public RoutineGenerator(MainActivity _app, String _routine_name, int _weeks){
+	public RoutineGenerator(MainActivity _app){
 		app = _app;
 		routineHash = Long.toString(System.currentTimeMillis());
-		weeks = _weeks;
-		routine_name = _routine_name;
+		dayNames.add("dummy");
 	}
 	
 	private String getDayName(int day){
 		return dayNames.get(day);
+	}
+	
+	public String getRoutineName(){
+		return routine_name;
+	}
+	
+	public void setRoutineName(String rn){
+		routine_name = rn;
+	}
+	
+	public String getNumWeeks(){
+		return Integer.toString(weeks);
+	}
+	
+	public void setNumWeeks(int _weeks){
+		weeks = _weeks;
+	}
+	
+	public void setCurrentDay(String _day){
+		curDay = _day;
+	}
+	
+	public String getCurrentDay(){
+		return curDay;
+	}
+	
+	public int getNumDays(){
+		return dayNames.size();
 	}
 	
 	public void go(){
@@ -56,17 +89,7 @@ public class RoutineGenerator {
 	
 	}
 	
-	public void addSet(String day, int sets, String exercise_name){
 	
-		app.cache.addSet(routineHash, day, sets, exercise_name);
-	
-	}
-	
-	public void addDay(String _dayName, int _day){
-		
-		dayNames.set(_day, _dayName);
-	
-	}
 	
 	private JSONObject generateMainJSON() throws JSONException{
 		
@@ -117,8 +140,8 @@ public class RoutineGenerator {
 	
 	private void makeJSON_Set(JSONObject jsonObject_set, int set, int day, int week) throws JSONException{
 		
-		int exerciseID = getExerciseID(routineHash, day, set);
-		int setnumber = getSetNumber(routineHash, day, set);
+		int exerciseID = getExerciseID(day, set);
+		int setnumber = getSetNumber(day, set);
 		HashMap<String, String> result = function(week, setnumber, exerciseID);
 		jsonObject_set.put("exerciseID", Integer.toString(exerciseID));
 		jsonObject_set.put("setnumber", Integer.toString(setnumber));
@@ -140,11 +163,11 @@ public class RoutineGenerator {
 		return app.cache.getNumberOfSets(routineHash, day);
 	}
 	
-	private int getExerciseID(String routineHash, int day, int set){
+	private int getExerciseID(int day, int set){
 		return app.cache.getExerciseID(routineHash, day, set);
 	}
 	
-	private int getSetNumber(String routineHash, int day, int set){
+	private int getSetNumber(int day, int set){
 		return app.cache.getSetNumber(routineHash, day, set);
 	}
 	
@@ -226,6 +249,24 @@ public class RoutineGenerator {
 		}
 		
 		
+	}
+	
+	public void addSet(String day, String exercise_name){
+		
+		app.cache.addExercise(routineHash, day, 4, exercise_name);
+	
+	}
+	
+	public void addDay(String _dayName, int _day){
+		
+		dayNames.set(_day, _dayName);
+		app.cache.addDay(routineHash, Integer.toString(_day), _dayName);
+	
+	}
+	
+	public void displayPlan(){
+		ExpandableListView listview = (ExpandableListView)app.findViewById(R.id.routine_generator_listview);
+		app.cache.displayRoutineGeneratorPlan(routineHash, listview);
 	}
 	
 }

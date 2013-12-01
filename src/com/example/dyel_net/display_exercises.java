@@ -18,13 +18,19 @@ public class display_exercises {
 	MainActivity app;
 	ListView lv;
 	LinearLayout ch;
+	int prev_layout;
 	
-	public display_exercises(MainActivity a)
+	public display_exercises(MainActivity a, int previousLayout)
 	{
 		app = a;	
 		app.gotoLayout(R.layout.display_exercises);
 		lv = (ListView) app.findViewById(R.id.display_exercises_listview);
 		ch = (LinearLayout) app.findViewById(R.id.display_exercise_col_header);
+		prev_layout = previousLayout;
+	}
+	
+	public int getPrevLayout(){
+		return prev_layout;
 	}
 	
 	void string_append(String s)

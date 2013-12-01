@@ -43,6 +43,8 @@ public class Workout
 	private ArrayList< ArrayList<Boolean> > completed = new ArrayList< ArrayList<Boolean> >();
 	private ArrayList<Boolean> exCompleted;
 	
+	private boolean editing_set = false;
+	
 	public static boolean isRunning(Workout w)
 	{
 		if(w == null) {
@@ -262,6 +264,8 @@ public class Workout
 		
 		public void open_editSet()
 		{
+			editing_set = true;
+			
 			TextView exercise = (TextView)app.findViewById(R.id.editset_exercise);
 			TextView setnumTV = (TextView)app.findViewById(R.id.editset_setnumber);
 			EditText ET1 = (EditText)app.findViewById(R.id.editset_et1);
@@ -333,11 +337,10 @@ public class Workout
 							 				  	
 				app.con.writeQuery(SQL);
 				
-				//exCompleted.add(list_index, Boolean.TRUE);
 				
-			} else {
-				return;
+				
 			}
+			editing_set = false;
 		}
 	
 	}
@@ -361,7 +364,10 @@ public class Workout
 		return status;
 	}
 	
-
+	public boolean isEditingSet(){
+		return editing_set;
+	}
+	
 	//TODO make it do two pops on first back use
 	
 	//back button functionality for listview query menus
@@ -371,7 +377,6 @@ public class Workout
 		if(!previous_SQL.isEmpty())
 		{
 			app.setContentView(R.layout.workingout);
-			app.current_layout = R.layout.workingout;
 			
 			col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
 			listview = (ListView)app.findViewById(R.id.workingout_listView);
@@ -383,15 +388,14 @@ public class Workout
 				app.con.readQuery(SQL, listview, col_head);
 				topbar.setText(previous_topbar.pop());
 				status = "exercise";
-				//exCompletedHandler task = new exCompletedHandler();
-				//task.execute();
 			} else {
 				SQL = previous_SQL.pop();
 				app.con.readQuery(SQL, listview, col_head);
 				topbar.setText(previous_topbar.pop());
 				status = "session";
-				app.current_layout = R.layout.workingout;
 			}
+			
+			app.current_layout = R.layout.workingout;
 			
 			return true;
 		}
@@ -399,33 +403,16 @@ public class Workout
 			return false;
 	}
 	
-	private class exCompletedHandler extends AsyncTask<Void, Void, Boolean>
-	{
 
-		@Override
-		protected Boolean doInBackground(Void... arg0) {
-			while(listview.getChildCount() == 0){}
-			try {Thread.sleep(1000);} 
-			catch (InterruptedException e) {e.printStackTrace();}
-			return true;
-		}
-		
-		@Override
-		protected void onPostExecute(Boolean result){
-			Log.w("exCompleted", Integer.toString(exCompleted.size()));
-			for(int i=0; i < exCompleted.size(); i++){Log.w("COMPLETED", "LOOPING");
-				if(exCompleted.get(i).equals(Boolean.TRUE)){
-					LinearLayout curLL = (LinearLayout)listview.getChildAt(i);
-					curLL.setBackgroundColor(0xFF4BFA37);Log.w("COMPLETED", "SET BACKGROUND");
-				}
-			}
-		}
-	}
 
 	private void pushBack(String SQL)
 	{
 		previous_SQL.push(SQL);
 		current_SQL = SQL;
 		previous_topbar.push(topbar.getText().toString());
+	}
+
+	public void cancelInsertSet() {
+		editing_set = false;
 	}
 }

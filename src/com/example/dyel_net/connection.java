@@ -191,7 +191,7 @@ public class connection
 		{ 
 	        if(update)	//true if we want to update the listview
 	        {
-	        	String col0 = null;
+	        	String col0 = "NULL";
 	        	try{
 	        		
 	        		JSONObject jsonObject = new JSONObject(result);
@@ -222,7 +222,7 @@ public class connection
 	                        	col0 = key;
 	                        	value = (String)j.get(key);
 	                        	if(value.equals("1"))
-	                        		value = "DONE";
+	                        		value = "X";
 	                        	else
 	                        		value = "";
 	                        } else {
@@ -249,24 +249,27 @@ public class connection
 	        		
 	        		ListView done_list = null;
 	        		
+	        		if(app.current_layout == R.layout.workingout){
+	        			done_list = (ListView)app.findViewById(R.id.workingout_listView_done);
+	        		} 
+	        		else if (app.current_layout == R.layout.routine_view){
+	        			done_list = (ListView)app.findViewById(R.id.routineview_listView_done);
+	        		}
+	        		
 	        		if(col0.equals("finished")){
-		        		if(app.current_layout == R.layout.workingout){
-		        			done_list = (ListView)app.findViewById(R.id.routineview_listView_done);
-		        		} 
-		        		else if (app.current_layout == R.layout.routine_view){
-		        			done_list = (ListView)app.findViewById(R.id.routineview_listView_done);
-		        		}
-		        		
+		        	
 		        		if(done_list != null){
 		        			SimpleAdapter myAdapter2 = 
 			        				new SimpleAdapter(app, 
 			        								  tableList, 
 			        								  R.layout.my_list_item,
 			        								  new String[] {col0}, 
-			        								  new int[] {R.id.cell0});
+			        								  new int[] {R.id.cell1});
 		        			
 		        			done_list.setAdapter(myAdapter2);
 		        		}
+	        		} else {
+	        			done_list.setAdapter(null);
 	        		}
 	            	
 	        	} catch (JSONException e) {

@@ -51,7 +51,7 @@
 
             <LinearLayout
                 android:id="@+id/linear_scroll"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:orientation="vertical" >
 
@@ -128,34 +128,46 @@
 
                 <ListView
                     android:id="@+id/workingout_listView"
-                    android:layout_width="match_parent"
+                    android:layout_width="259dp"
                     android:layout_height="392dp"
                     android:orientation="horizontal" >
                 </ListView>
             </LinearLayout>
         </HorizontalScrollView>
-        <LinearLayout
-                        android:id="@+id/workingout_col_header_done"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#10A3A3" >
 
-                   
-                        <TextView
-                            android:layout_height="fill_parent"
-                            android:layout_width="wrap_content"
-                            android:text="Done?"
-                            android:gravity="left|center_vertical"
-                            android:width="100dip"
-                            android:height="20dip"
-                        />
-            </LinearLayout>
-	        <ListView
-	            android:id="@+id/workingout_listView_done"
-	            android:layout_width="match_parent"
-	            android:layout_height="392dp"
-	            android:orientation="horizontal" >
-	       	</ListView>
+        <LinearLayout
+            android:layout_width="67dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+		        <LinearLayout
+		            android:id="@+id/workingout_col_header_done"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:background="#10A3A3" >       
+		                 <TextView
+		                     android:layout_height="fill_parent"
+		                     android:layout_width="wrap_content"
+		                     android:gravity="left|center_vertical"
+		                     android:width="100dip"
+		                     android:height="20dip"
+		                 />
+		            </LinearLayout>
+		
+		                        <!-- List Divider -->
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:background="?android:attr/listDivider" />
+		        <ListView
+		            android:id="@+id/workingout_listView_done"
+		            android:layout_width="wrap_content"
+		            android:layout_height="392dp"
+		            android:orientation="horizontal" >
+		       	</ListView>
+		       	
+	       	</LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
