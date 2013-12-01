@@ -933,7 +933,7 @@ public class MainActivity extends Activity {
     
     /***********************ROUTINE GENERATOR METHODS*******************************/
     
-    public void gotoRoutineGenerator(){
+    public void gotoRoutineGenerator(View v){
     	
     	gotoLayout(R.layout.routine_generator);
     	routineGenerator = new RoutineGenerator(this);

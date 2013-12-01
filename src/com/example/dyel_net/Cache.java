@@ -46,7 +46,7 @@ public class Cache {
 	/*****************ROUTINE GENERATOR METHODS***********************************/
 	public void makeRoutineCache(){	
 		db.execSQL("CREATE TABLE routine(routineHash TEXT, day INT, _set INT, setnumber INT, exerciseID INT)");
-		db.execSQL("CREATE TABLE days(routineHash Text, day INT, day_name Text");
+		db.execSQL("CREATE TABLE days(routineHash Text, day INT, day_name Text)");
 	}
 	
 	public void addExercise(String routineHash, String day, int sets, String exercise_name){
