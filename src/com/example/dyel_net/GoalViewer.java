@@ -23,6 +23,16 @@ import android.widget.TextView;
 
 public class GoalViewer {
 	
+	/**SQL attribute names **/
+	private static final String SQLcategory = "goal_category";
+	private static final String SQLgoalName = "name";
+	private static final String SQLstartDate = "start_date";
+	private static final String SQLendDate = "goal_date";
+	private static final String SQLnotes = "notes";
+	private static final String SQLcomplete = "completed";
+	private static final String SQLtype = "type";
+	private static final String SQLsubID = "subclassID";
+	/************************/
 	
 	private static Stack<String> previous_SQL = new Stack<String>();
 	private static Stack<String> previous_topbar = new Stack<String>();
@@ -32,7 +42,7 @@ public class GoalViewer {
 	public static String currentDayID = null;
 	public static String currentExercise = null;
 	
-	public static void viewDetail(MainActivity app, String userID)
+	public static void viewSummary(MainActivity app, String userID)
 	{
 		status = 1;
 		
@@ -173,6 +183,60 @@ public class GoalViewer {
 		} catch (JSONException e) {
 			Log.e("JSONException", "Error: " + e.toString());
 		}
+	}
+
+	public static void viewDetail(MainActivity app, String userID,
+			String goalName) throws JSONException {
+		// TODO Auto-generated method stub
+		status = 2;
+		app.gotoLayout(R.layout.goal_view_detail);
+		TextView goalNameTV = (TextView)app.findViewById(R.id.goal_view_detail_goalName);
+		TextView categoryTV = (TextView)app.findViewById(R.id.goal_view_detail_category);
+		TextView startDateTV = (TextView)app.findViewById(R.id.goal_view_detail_startDate);
+		TextView endDateTV = (TextView)app.findViewById(R.id.goal_view_detail_endDate);
+		TextView notesTV = (TextView)app.findViewById(R.id.goal_view_detail_notes);
+		TextView completeTV = (TextView)app.findViewById(R.id.goal_view_detail_completed);
+		
+		String SQL = "select * from goals " +
+					"where username = '"+
+					userID + "'" +
+					" and name = '" +
+					goalName + "'";
+		
+		String queryResult = app.con.readQuery(SQL);
+		//System.out.println(queryResult);
+		JSONObject jsonObject = new JSONObject(queryResult);
+		JSONArray jArray = jsonObject.getJSONArray("data");
+		
+		//parse JSON string
+    	for(int i=0; i < jArray.length(); i++) {
+    		JSONObject j = jArray.getJSONObject(i);
+       
+        	@SuppressWarnings("unchecked")
+			Iterator<String> iter = j.keys();
+        	while (iter.hasNext()) {
+                String key = iter.next();
+                String value = (String)j.get(key);
+                if (key.equals(SQLgoalName)) {                	
+                	goalNameTV.setText(value);
+                }else if (key.equals(SQLcategory)) {                	
+                	categoryTV.setText(value);
+                }else if (key.equals(SQLstartDate)) {                	
+                	startDateTV.setText(value);
+                }else if (key.equals(SQLendDate)) {                	
+                	endDateTV.setText(value);
+                }else if (key.equals(SQLnotes)) {                	
+                	notesTV.setText(value);
+                }else if (key.equals(SQLcomplete)) {                	
+                	completeTV.setText(value);
+                }else if (key.equals(SQLtype)) {                	
+                	//String goalType = value;
+                }else if (key.equals(SQLsubID)) {                	
+                	//String goalSubID = value;
+                }
+                
+            }
+    	}
 	}
 }
 

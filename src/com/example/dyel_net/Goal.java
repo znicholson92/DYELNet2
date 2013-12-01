@@ -2,6 +2,8 @@ package com.example.dyel_net;
 
 import java.util.Stack;
 
+import org.json.JSONException;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.widget.EditText;
@@ -106,7 +108,10 @@ public class Goal {
 	
 	public void viewGoal()
 	{	
-		GoalViewer.viewDetail(app, userID);		
+		GoalViewer.viewSummary(app, userID);		
+	}
+	public void viewGoalDetail(String goalName) throws JSONException{
+		GoalViewer.viewDetail(app, userID, goalName);
 	}
 
 	// back button functionality for listview query menus
