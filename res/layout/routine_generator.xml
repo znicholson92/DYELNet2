@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include layout="@layout/header" />
+
+    <!-- BODY -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="403dp"
+        android:layout_weight="0.50"
+        android:orientation="vertical" >
+        
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="170dp"
+             android:orientation="vertical" >
+             
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.88"
+                android:text="Routine Name" />
+
+            <EditText
+                android:id="@+id/routine_generator_routinename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10" >
+
+                <requestFocus />
+            </EditText>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.79"
+                android:text="Weeks:" />
+
+            <EditText
+                android:id="@+id/routine_generator_numweeks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10" >
+
+                <requestFocus />
+            </EditText>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            
+            
+        
+
+        <Button
+            android:id="@+id/routine_generator_finish_button"
+            android:layout_width="160dp"
+            android:layout_height="76dp"
+            android:gravity="center"
+            android:onClick="routineGenerator_finish"
+            android:text="Generate" />
+
+        <LinearLayout
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+                </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+                
+        <Button
+            android:id="@+id/routine_generator_addday_button"
+            android:layout_width="140dp"
+            android:layout_height="46dp"
+            android:gravity="center"
+            android:onClick="routineGenerator_add_day"
+            android:text="Add Day" />
+        <EditText
+                android:id="@+id/routine_generator_dayname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10" >
+                </EditText>
+</LinearLayout>
+	</LinearLayout>
+       </LinearLayout>
+
+         <ExpandableListView
+             android:id="@+id/routine_generator_listview"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content" >
+         </ExpandableListView>
+        
+    </LinearLayout>
+
+    <include layout="@layout/footer" />
+
+</LinearLayout>

@@ -120,13 +120,13 @@
         android:layout_weight="0.14"
         android:orientation="horizontal" >
 
+
         <Button
             android:id="@+id/add_editset_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.73"
-            android:gravity="center"
+            android:layout_weight="0.30"
             android:onClick="set_update"
             android:text="Update" />
 
@@ -135,9 +135,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:gravity="center"
+            android:layout_weight="0.15"
             android:onClick="set_update"
             android:text="Cancel" />
+        
+        <Button
+            android:id="@+id/delete_editset_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:onClick="set_update"
+            android:text="Delete" />
+        
     </LinearLayout>
 
     <include layout="@layout/footer" />

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="#000000">
+ 
+ 
+    <LinearLayout
+        android:id="@+id/lblListHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:orientation="horizontal"
+        android:textColor="#f9f93d" >
+
+    <TextView
+        android:id="@+id/lblListHeader_Text"
+        android:layout_width="61dp"
+        android:layout_height="wrap_content"
+        android:text="item1"
+        android:textColor="#f9f93d"
+        android:textSize="17dp" />
+        
+    <LinearLayout 
+    android:layout_width="20dp"
+    android:layout_height="wrap_content"/>
+    
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:gravity="left"
+        android:onClick="routineGenerator_renameday"
+        android:text="Rename" />
+    
+    <LinearLayout 
+    android:layout_width="20dp"
+    android:layout_height="wrap_content"/>
+    
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:gravity="left"
+        android:onClick="routineGenerator_addexercise"
+        android:text="Add" />
+    
+    </LinearLayout>
+ 
+</LinearLayout>
