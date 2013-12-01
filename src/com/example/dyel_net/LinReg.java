@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.joda.time.DateTime;
 
 public class LinReg {
 
 	String exer_in;
 	String exer_id; 
 	String data_string; 
-	String dayID;
+	ArrayList<String> dayIDs;
 	MainActivity app;
 	
 	ArrayList<DataNode> nodes = new ArrayList<DataNode>();
@@ -65,12 +66,10 @@ public class LinReg {
 		return "ISH";
 	}
 	
-	String grab_data(String exer_id)
+	ArrayList<String> grab_data(String exer_id)
 	{
 		ArrayList<String> dayIDs = pull_days(exer_id);
-		//push nodes to list
-		
-		return "ish";
+		return dayIDs;
 	}
 
 	
@@ -80,8 +79,10 @@ public class LinReg {
 		exer_in = exercise;
 		exer_id = app.cache.getExerciseID(exercise);
 		exer_id = name_to_ID(exer_in);
-		data_string = grab_data(exer_id);
-		//parse_data(data_string);
+		dayIDs = grab_data(exer_id);
+		//have list of day_ids... 
+		
+		
 		
 		
 		
