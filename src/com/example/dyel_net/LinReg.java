@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-//import org.joda.time.DateTime;
 
 public class LinReg {
 
@@ -59,10 +58,14 @@ public class LinReg {
 		return dayIDs;
 	}
 	
-	String parse_days(String dayID)
+	float get_adjusted(int max, int reps)
 	{
-		//string.split()?
-		return "ISH";
+		/* using Brzycki formula */
+		int den = 37 - reps; 
+		float fract = 36/den; 
+		float adj = max * fract; 
+		
+		return adj;
 	}
 	
 	ArrayList<DataNode> grab_data(ArrayList<String> dayIDs, String exer_id)
@@ -78,10 +81,12 @@ public class LinReg {
 			
 			String query_for_week = "SELECT week FROM schedule_week INNER JOIN schedule_day" +
 					" ON schedule_week.weekID = schedule_day.weekID WHERE dayID = '" + temp.dayID + "';"; 
-			
+
+			String jString = app.con.readQuery(query_for_week);
+
 			String week_s = "";
 			try {
-				JSONObject jsonObject = new JSONObject(query_for_week);
+				JSONObject jsonObject = new JSONObject(jString);
 				JSONArray jArray = jsonObject.getJSONArray("data");
 				JSONObject j = jArray.getJSONObject(0);
 				week_s = (String) j.get("week");
@@ -90,19 +95,130 @@ public class LinReg {
 			int week = Integer.parseInt(week_s);
 			temp.week = week;
 			
-			ArrayList<String> weights = new ArrayList<String>();
-			
 			String get_max = "SELECT MAX(weight) AS Max, reps FROM _set WHERE dayID = '" + temp.dayID
 					+ "' exerciseID = '" + exer_id + "';";
 
+			String jString1 = app.con.readQuery(get_max);
+
+			String max_s = "";
+			String reps_s = "";
+			try {
+				JSONObject jsonObject = new JSONObject(jString1);
+				JSONArray jArray = jsonObject.getJSONArray("data");
+				JSONObject j = jArray.getJSONObject(0);
+				max_s = (String) j.get("Max");
+				reps_s = (String) j.get("reps");
+			} catch (JSONException e) {e.printStackTrace();}
 			
+			int max = Integer.parseInt(max_s);
+			int reps = Integer.parseInt(reps_s);
 			
+			float adjusted = get_adjusted(max, reps);
+			
+			temp.adjusted = (float) Math.log(adjusted);
+			nodes.add(iter, temp);
+			iter++;
 		}
-		
 		
 		return nodes;
 	}
+	
+	float calc_xbar(ArrayList<DataNode> nodes)
+	{
+		int len = nodes.size();
+		int iter = 0;
+		float total = 0;
+		
+		while (iter < len)
+		{
+			DataNode temp = nodes.get(iter);
+			total += temp.adjusted;
+			iter++;
+		}
+		
+		float res = total/len; 
+		return res;
+		
+	}
+	
+	float calc_SXX(ArrayList<DataNode> nodes)
+	{
+		float xbar = calc_xbar(nodes);
+		int len = nodes.size();
+		int iter = 0;
+		float total = 0;
+		
+		while (iter < len)
+		{
+			DataNode temp = nodes.get(iter);
+			float hold = (temp.adjusted - xbar) * (temp.adjusted - xbar);
+			total += hold; 
+			iter++;
+		}
+		
+		return total; 
+	}
+	
+	float calc_ybar(ArrayList<DataNode> nodes)
+	{
+		int len = nodes.size();
+		int iter = 0;
+		float total = 0;
+		
+		while (iter < len)
+		{
+			DataNode temp = nodes.get(iter);
+			total += temp.week;
+			iter++;
+		}
+		
+		float res = total/len; 
+		return res;
+		
+	}
+	
+	float calc_SXY(ArrayList<DataNode> nodes)
+	{
+		float xbar = calc_xbar(nodes);
+		float ybar = calc_ybar(nodes);
+		
+		int len = nodes.size();
+		int iter = 0;
+		float total = 0; 
+		
+		while (iter < len)
+		{
+			DataNode temp = nodes.get(iter);
+			float hold = (temp.adjusted - xbar) * (temp.week - ybar);
+			total += hold;
+			iter++;
+		}
+		
+		return total;
+	}
 
+	float calc_B0(ArrayList<DataNode> nodes, float B1)
+	{
+		float xbar = calc_xbar(nodes);
+		float ybar = calc_ybar(nodes);
+		
+		float B0 = ybar - (B1 * xbar);
+		return B0;
+	}
+	
+	float[] calc_reg(ArrayList<DataNode> nodes)
+	{
+		float SXX = calc_SXX(nodes);
+		float SXY = calc_SXY(nodes);
+		float B1 = SXY/SXX;
+		float B0 = calc_B0(nodes, B1);
+		
+		float RegEqn[] = new float[2];
+		RegEqn[0] = B0;
+		RegEqn[1] = B1; 
+		
+		return RegEqn;
+	}
 	
 	void pull_data(String exercise)
 	{
@@ -113,13 +229,7 @@ public class LinReg {
 		dayIDs = pull_days(exer_id);
 		
 		ArrayList<DataNode> nodes = grab_data(dayIDs, exer_id);
-		
-		//have list of day_ids... 
-		
-		
-		
-		
-		
+		float RegEqn[] = calc_reg(nodes);
 		
 	}
 

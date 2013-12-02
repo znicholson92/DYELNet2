@@ -4,5 +4,6 @@ public class DataNode {
 	int week;
 	String dayID;
 	int diff; 
+	float adjusted; 
 
 }
