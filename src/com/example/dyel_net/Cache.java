@@ -50,7 +50,8 @@ public class Cache {
 	}
 	
 	public void addExercise(String routineHash, String day, int sets, String exercise_name){
-		
+		Log.w("Exercise Name", exercise_name);
+		Log.w("DAY", day);
 		String exerciseID = getExerciseID(exercise_name);
 		String set = Integer.toString(getSetCount(routineHash) + 1);
 		for(int s=0; s < sets; s++){
@@ -64,19 +65,25 @@ public class Cache {
 		
 		String sql = " INSERT INTO days(routineHash, day, day_name) " +
 					 " VALUES('" + routineHash + "'," + day + ",'" + day_name + "')";
-		
+		Log.w("Adding day", day);
 		db.execSQL(sql);
 	}
 	
 	private int getSetCount(String routineHash){
 		String sql = "SELECT count(*) FROM routine WHERE routineHash='" + routineHash + "'";
 		Cursor cursor = db.rawQuery(sql, null);
-		return cursor.getInt(0);
+		cursor.moveToNext();
+		int result = cursor.getInt(0);
+		cursor.close();
+		return result;
 	}
 	public String getExerciseID(String exercise_name){
 		String sql = "SELECT exerciseID FROM exercise WHERE name='" + exercise_name + "'";
 		Cursor cursor = db.rawQuery(sql, null);
-		String exerciseID = cursor.getString(0);
+		cursor.moveToNext();
+		int result = cursor.getInt(0);
+		String exerciseID = Integer.toString(result);
+		cursor.close();
 		return exerciseID;
 	}
 	
@@ -86,7 +93,10 @@ public class Cache {
 				     "AND day=" + day +
 				     "AND _set=" + set;
 		Cursor cursor = db.rawQuery(sql, null);
-		return cursor.getInt(0);
+		cursor.moveToNext();
+		int result = cursor.getInt(0);
+		cursor.close();
+		return result;
 	}
 
 	public int getSetNumber(String routineHash, int day, int set){
@@ -95,7 +105,10 @@ public class Cache {
 				     "AND day=" + day +
 				     "AND _set=" + set;
 		Cursor cursor = db.rawQuery(sql, null);
-		return cursor.getInt(0);
+		cursor.moveToNext();
+		int result = cursor.getInt(0);
+		cursor.close();
+		return result;
 	}
 	
 	public int getNumberOfSets(String routineHash, int day){
@@ -103,7 +116,10 @@ public class Cache {
 					 "WHERE routineHash='" + routineHash + "'" +
 					 "AND day=" + day;
 		Cursor cursor = db.rawQuery(sql, null);
-		return cursor.getInt(0);
+		cursor.moveToNext();
+		int result = cursor.getInt(0);
+		cursor.close();
+		return result;
 	}
 	
 	/*******************CREATE TABLE METHODS***************************/
@@ -270,7 +286,6 @@ public class Cache {
 	    HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();				
 
 	    Cursor cursor1 = db.rawQuery(sql1, null);
-		Cursor cursor2 = db.rawQuery(sql2, null);
 		
 		List<List<String>> subLists = new ArrayList<List<String>>();
 		
@@ -278,15 +293,19 @@ public class Cache {
 		while (cursor1.moveToNext()){
 			String day_name = cursor1.getString(1);
 			listDataHeader.add(day_name);
-			subLists.set(c, new ArrayList<String>());
+			subLists.add(new ArrayList<String>());
 			listDataChild.put(listDataHeader.get(c), subLists.get(c));
 			c++;
 		}
+		Log.w("MAX DAY", Integer.toString(c));
 		cursor1.close();
+		Cursor cursor2 = db.rawQuery(sql2, null);
 		while (cursor2.moveToNext()) {	
 			int day = cursor2.getInt(0);
-			List<String> subList = subLists.get(day);
+			Log.w("Day", Integer.toString(day));
+			List<String> subList = subLists.get(day-1);
 			String exercise_name = cursor2.getString(2);
+			Log.w("CACHE", "ADDING SUBLIST ITEM " + exercise_name);
 			subList.add(exercise_name);
 		}
 		cursor2.close();
@@ -294,7 +313,6 @@ public class Cache {
 		ExpandableListAdapter listAdapter = new ExpandableListAdapter(app, listDataHeader, listDataChild);
 		 
 	    listview.setAdapter(listAdapter);
-
 		
 	}
 	

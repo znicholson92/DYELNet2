@@ -22,10 +22,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,12 +79,12 @@ public class MainActivity extends Activity {
 	public final long DBL_CLICK_THRESHOLD = 600;  //in milliseconds
 	
 	/**************GLOBAL VARIABLES**************************/
-	public connection con;
 	Stack<Integer> previous_layouts = new Stack<Integer>();
 	Integer current_layout;
 	boolean locked = false;
 	
 	/**************PROCESS CLASSES***************************/
+	public connection con;
 	public Workout workout;
 	public RoutineView routineView;
 	public display_exercises exerciseViewer;
@@ -226,15 +228,18 @@ public class MainActivity extends Activity {
 		TextView TV1 = (TextView) LL.getChildAt(0); //exercise name
 		TextView TV2 = (TextView) LL.getChildAt(4); //exerciseID
 		
+		String exercise_name = TV1.getText().toString();
+		String exerciseID = TV2.getText().toString();
 		switch(exerciseViewer.getPrevLayout()){
 		
 			case R.layout.routine_view:
-				routineView.openAddNewSet(TV1.getText().toString(), TV2.getText().toString());
+				routineView.openAddNewSet(exercise_name, exerciseID);
 				break;
 				
 			case R.layout.routine_generator:
 				String day = routineGenerator.getCurrentDay();
-				routineGenerator.addSet(day, TV1.getText().toString());
+				Log.w("DAY", day);
+				routineGenerator.addSet(day, exercise_name);
 				restore_routine_generator();
 				break;
 		
@@ -937,26 +942,55 @@ public class MainActivity extends Activity {
     	
     	gotoLayout(R.layout.routine_generator);
     	routineGenerator = new RoutineGenerator(this);
-	
+
     }
     
     public void routineGenerator_add_day(View v){
-    	int day = routineGenerator.getNumDays() + 1;
+    	int day = routineGenerator.getNumDays();
     	EditText dayName_Text = (EditText)findViewById(R.id.routine_generator_dayname);
     	String dayName = dayName_Text.getText().toString();
+    	dayName_Text.setText("");
+    	Log.w("Adding day", Integer.toString(day));
     	routineGenerator.addDay(dayName, day);
-    	
     	routineGenerator_load();
     }
     
     public void routineGenerator_addexercise(View v)
     {
+    	
     	EditText rt_name = (EditText)findViewById(R.id.routine_generator_routinename);
     	EditText num_weeks = (EditText)findViewById(R.id.routine_generator_numweeks);
-    	routineGenerator.setNumWeeks(Integer.parseInt(num_weeks.getText().toString()));
+    	String str_numWeeks = num_weeks.getText().toString();
+    	
+    	if(str_numWeeks == null)
+    		return;
+    	
+    	LinearLayout LL = (LinearLayout)v.getParent();
+    	TextView dayNameTV = (TextView)LL.getChildAt(0);
+    	String dayName = dayNameTV.getText().toString();
+    	int dayNum = routineGenerator.getDayNum(dayName);
+    	
+    	Log.w("INDEX", Integer.toString(dayNum));
+    	
+    	routineGenerator.setCurrentDay(Integer.toString(dayNum));
+    	
+    	routineGenerator.setNumWeeks(str_numWeeks);
     	routineGenerator.setRoutineName(rt_name.getText().toString());
     	exerciseViewer = new display_exercises(this, R.layout.routine_generator);
     	exerciseViewer.load();
+    }
+    
+    private int routineGenerator_listIndex(View v){
+    	LinearLayout LL = (LinearLayout)v.getParent();
+    	ExpandableListView parent = (ExpandableListView) LL.getParent();
+    	int index = -1;
+    	for(index = 0; index < parent.getChildCount(); index++){
+    		LinearLayout _LL = (LinearLayout)parent.getChildAt(index);
+    		if(_LL.equals(LL)){
+    			return index;
+    		}
+    	}
+    	return -1;
     }
     
     public void routineGenerator_renameday(View v)
@@ -978,7 +1012,36 @@ public class MainActivity extends Activity {
     	num_weeks.setText(routineGenerator.getNumWeeks());
     	routineGenerator_load();
     }
-
+    
+    public void routineGenerator_handleClick(View v){
+    	LinearLayout LL = (LinearLayout)v.getParent();
+    	LinearLayout subLL = (LinearLayout)v;
+    	ExpandableListView parent = (ExpandableListView) LL.getParent();
+    	TextView dayNameTV = (TextView) subLL.getChildAt(0);
+    	String dayName = dayNameTV.getText().toString();
+    	
+    	int index = routineGenerator.getDayNum(dayName) - 1;
+    	
+    	if(index > -1)
+    		parent.expandGroup(index);
+    }
+    
+    
+    public void routineGenerator_generate(View v){
+    	
+    	EditText rt_name = (EditText)findViewById(R.id.routine_generator_routinename);
+    	EditText num_weeks = (EditText)findViewById(R.id.routine_generator_numweeks);
+    	String strRtName = rt_name.getText().toString();
+    	String strNumWeeks = num_weeks.getText().toString();
+    			
+    	if(strRtName != "" && strNumWeeks != ""){
+	    	ProgressDialog pd;
+	        pd = ProgressDialog.show(this, "Loading", "Creating account...");
+	    	routineGenerator.go(strRtName, strNumWeeks);	    	
+	    	pd.cancel();
+    	}
+    	
+    }
 
 
 	/***************************************************************/

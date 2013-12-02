@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -18,13 +19,10 @@ public class RoutineGenerator {
 	private MainActivity app;
 	private String routineHash;
 	
-	private String number_of_weeks = null;
 	private String routine_name = null;
-	
 	private int weeks = 0;
+	
 	private String curDay;
-	
-	
 	
 	private ArrayList<String> dayNames = new ArrayList<String>();
 	
@@ -38,6 +36,12 @@ public class RoutineGenerator {
 		return dayNames.get(day);
 	}
 	
+	public int getDayNum(String dayName){
+		int index = dayNames.indexOf(dayName);
+		Log.w("Index of", dayName + "= " + Integer.toString(index));
+		return index;
+	}
+	
 	public String getRoutineName(){
 		return routine_name;
 	}
@@ -47,11 +51,18 @@ public class RoutineGenerator {
 	}
 	
 	public String getNumWeeks(){
-		return Integer.toString(weeks);
+		
+		if(weeks == 0){
+			return null;
+		} else {
+			return Integer.toString(weeks);
+		}
 	}
 	
-	public void setNumWeeks(int _weeks){
-		weeks = _weeks;
+	public void setNumWeeks(String _weeks){
+		if(_weeks != ""){
+			weeks = Integer.parseInt(_weeks);
+		}
 	}
 	
 	public void setCurrentDay(String _day){
@@ -66,7 +77,10 @@ public class RoutineGenerator {
 		return dayNames.size();
 	}
 	
-	public void go(){
+	public void go(String rtName, String numWeeks){
+		
+		routine_name = rtName;
+		weeks = Integer.parseInt(numWeeks);
 		
 		try 
 		{
@@ -259,7 +273,7 @@ public class RoutineGenerator {
 	
 	public void addDay(String _dayName, int _day){
 		
-		dayNames.set(_day, _dayName);
+		dayNames.add(_dayName);
 		app.cache.addDay(routineHash, Integer.toString(_day), _dayName);
 	
 	}

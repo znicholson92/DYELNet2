@@ -16,7 +16,7 @@
         
          <LinearLayout
              android:layout_width="match_parent"
-             android:layout_height="170dp"
+             android:layout_height="wrap_content"
              android:orientation="vertical" >
              
         <LinearLayout
@@ -55,6 +55,7 @@
                 android:id="@+id/routine_generator_numweeks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:ems="10" >
 
                 <requestFocus />
@@ -74,7 +75,7 @@
             android:layout_width="160dp"
             android:layout_height="76dp"
             android:gravity="center"
-            android:onClick="routineGenerator_finish"
+            android:onClick="routineGenerator_generate"
             android:text="Generate" />
 
         <LinearLayout
@@ -88,28 +89,32 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-                
         <Button
             android:id="@+id/routine_generator_addday_button"
             android:layout_width="140dp"
-            android:layout_height="46dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:onClick="routineGenerator_add_day"
             android:text="Add Day" />
+
         <EditText
-                android:id="@+id/routine_generator_dayname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10" >
+            android:id="@+id/routine_generator_dayname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textSize="9dp" >
+
                 </EditText>
 </LinearLayout>
 	</LinearLayout>
+
+
        </LinearLayout>
 
          <ExpandableListView
              android:id="@+id/routine_generator_listview"
              android:layout_width="match_parent"
-             android:layout_height="wrap_content" >
+             android:layout_height="match_parent" >
          </ExpandableListView>
         
     </LinearLayout>
