@@ -256,7 +256,7 @@ public class connection
 	        			done_list = (ListView)app.findViewById(R.id.routineview_listView_done);
 	        		}
 	        		
-	        		if(col0.equals("finished")){
+	        		if(col0 != null && col0.equals("finished")){
 		        	
 		        		if(done_list != null){
 		        			SimpleAdapter myAdapter2 = 
