@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include layout="@layout/header" />
+
+    <!-- Body -->
+	<TextView
+	    android:id="@+id/exercise_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:height="47dip"
+        android:ems="10"
+        android:text="Day:" />
+	
+    <LinearLayout
+        android:id="@+id/add_routine_day_exercise_set"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.42"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="126dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="47dip"
+                android:ems="10"
+                android:text="Reps" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:height="47dip"
+                android:text="Weight" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="185dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/set_reps"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:height="40dip" />
+
+            <EditText
+                android:id="@+id/set_weight"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:height="40dip" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/add_routine_day_changesbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.14"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/add_routine_day_exercise_set_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.73"
+            android:gravity="center"
+            android:onClick="addRoutineDayExerciseSet"
+            android:text="Add" />
+
+    </LinearLayout>
+
+</LinearLayout>

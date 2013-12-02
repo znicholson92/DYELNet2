@@ -83,6 +83,7 @@ public class MainActivity extends Activity {
 	/**************PROCESS CLASSES***************************/
 	public Workout workout;
 	public RoutineView routineView;
+	public AddRoutine addRoutine;
 	public display_exercises exerciseViewer;
 	public Goal goal;
 	public Cache cache;
@@ -221,8 +222,13 @@ public class MainActivity extends Activity {
 	{
 		LinearLayout LL = (LinearLayout)TV.getParent();
 		TextView TV1 = (TextView) LL.getChildAt(0); //exercise name
-		TextView TV2 = (TextView) LL.getChildAt(4); //exerciseID
-		routineView.openAddNewSet(TV1.getText().toString(), TV2.getText().toString());
+		TextView TV2 = (TextView) LL.getChildAt(5); //exerciseID
+		if(addRoutine != null && addRoutine.running){
+			addRoutine.openAddRoutineDay(TV1.getText().toString(), TV2.getText().toString());
+		}
+		else{
+			routineView.openAddNewSet(TV1.getText().toString(), TV2.getText().toString());
+		}
 	}
 	
 	private void cli_workingout(TextView TV)
@@ -264,6 +270,52 @@ public class MainActivity extends Activity {
 		workout.addRealSet(new Integer(sn).toString(), setID);
 	}
 	
+	public void routineViewAdd(View V){
+		String status = routineView.getStatus();
+		gotoLayout(R.layout.add_routine);
+	}
+	
+	public void routine_add(View v)
+	{
+		addRoutine = new AddRoutine(this);
+		Button tv = (Button)v;
+		Log.w("BUTTON TEXT", tv.getText().toString());
+		int routineID = -1;
+		if(tv.getText().toString().equals("Add") ){
+			routineID = addRoutine.addRoutine();
+		}
+		if(routineID >= 0){
+			TextView weekTV = (TextView)findViewById(R.id.add_routine_num_weeks);
+			TextView dayTV = (TextView)findViewById(R.id.add_routine_num_days);
+			
+			int weeks = Integer.parseInt(weekTV.getText().toString());
+			int days = Integer.parseInt(dayTV.getText().toString());
+			for(int x=1; x<=weeks;x++){
+				String query = "INSERT INTO schedule_week(week,routineID) VALUES("+x+","+routineID+")";
+				con.writeQuery(query);
+			}
+			addRoutine.getWeekIDs(routineID);
+			gotoLayout(R.layout.add_routine_day);
+			TextView header = (TextView)findViewById(R.id.day_name);
+			header.setText("Week: 1 Day: 1");
+		}
+		else{
+			setContentView(R.layout.routine_view);
+		}
+	}
+	
+	public void addRoutineDayExercise(View V){
+		addRoutine.addExercise();
+	}
+	
+	public void addRoutineDayExerciseSet(View V){
+		addRoutine.addSet();
+	}
+	
+	public void addRoutineDay(View V){
+		addRoutine.addDay();
+	}
+	
 	// TODO
 	private void cli_routine_view(TextView TV)
 	{
@@ -288,37 +340,37 @@ public class MainActivity extends Activity {
 	
 	private void cli_routineView_days(TextView TV) {
 		LinearLayout LL = (LinearLayout)TV.getParent();
-		TV = (TextView)LL.getChildAt(4);
+		TV = (TextView)LL.getChildAt(5);
 		String dID = TV.getText().toString();
 		TV = (TextView)LL.getChildAt(0);
 		String name = TV.getText().toString();
 		routineView.viewExercises(dID, name);
-		workoutSliderShowStart();
+		//workoutSliderShowStart();
 	}
 
 	private void cli_routineView_weeks(TextView TV) {
 		LinearLayout LL = (LinearLayout)TV.getParent();
-		TV = (TextView)LL.getChildAt(4);
+		TV = (TextView)LL.getChildAt(5);
 		routineView.viewDays(TV.getText().toString());
-		workoutSliderHideAll();
+		//workoutSliderHideAll();
 	}
 
 	private void cli_routineView_routines(TextView TV){
 		LinearLayout L = (LinearLayout)TV.getParent();
-		TV = (TextView)L.getChildAt(4);
+		TV = (TextView)L.getChildAt(5);
 		String routineID = TV.getText().toString();
 		TV = (TextView)L.getChildAt(0);
 		String name = TV.getText().toString();
 		Log.w("ROUTINE ID", routineID);
 		routineView.viewWeeks(name, routineID);
-		workoutSliderHideAll();
+		//workoutSliderHideAll();
 	}
 
 	private void cli_routineView_exercises(TextView TV){
 		LinearLayout ll = (LinearLayout)TV.getParent();
 		TV = (TextView)ll.getChildAt(1);
 		routineView.viewSets(TV.getText().toString());
-		workoutSliderShowStart();
+		//workoutSliderShowStart();
 	}
 	
 	//TODO make user able to modify routine here

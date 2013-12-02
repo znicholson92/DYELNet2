@@ -156,9 +156,19 @@
         </LinearLayout>
     </LinearLayout>
 
-    <include
-        android:layout_alignParentBottom="true"
-        layout="@layout/workingout_slider" />
+    <Button
+    	    android:id="@+id/routine_view_add_button"
+    	    android:layout_width="140dip"
+    	    android:layout_height="40dip"
+    	    android:layout_alignParentBottom="true"
+    	    android:layout_centerHorizontal="true"
+    	    android:onClick="routineViewAdd"
+    	    android:orientation="horizontal"
+    	    android:background="#DAE3EB"
+    	    android:layout_marginRight="4dip"
+        	android:layout_marginLeft="8dip"
+        	android:layout_weight="1"
+    	    android:text="Add Routine" />
 
 
 </RelativeLayout>

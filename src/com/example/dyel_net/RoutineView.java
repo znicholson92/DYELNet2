@@ -1,5 +1,7 @@
 package com.example.dyel_net;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
@@ -110,9 +112,9 @@ public class RoutineView extends Activity {
 		
 		routineID = _routineID;
 		
-		String query = "SELECT weekID, week, finished FROM schedule_week" +
+		String query = "SELECT weekID, week FROM schedule_week" +
 				" WHERE routineID=" + routineID;
-		
+
 		app.con.readQuery(query, listView, col_head);
 		
 		pushBack(query);
@@ -121,7 +123,7 @@ public class RoutineView extends Activity {
 	
 	public void viewDays(String _weekID){
 		weekID = _weekID;
-		String query = "SELECT dayID, day, name, finished FROM schedule_day " +
+		String query = "SELECT dayID, day, name FROM schedule_day " +
 				" WHERE routineID=" + routineID +
 				" AND weekID=" + weekID;
 		
