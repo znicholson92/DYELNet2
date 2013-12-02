@@ -15,8 +15,6 @@ public class LinReg {
 	ArrayList<String> dayIDs;
 	MainActivity app;
 	
-	ArrayList<DataNode> nodes = new ArrayList<DataNode>();
-	
 	public LinReg(MainActivity a)
 	{
 		app = a;	
@@ -42,7 +40,8 @@ public class LinReg {
 	@SuppressWarnings("null")
 	private ArrayList<String> pull_days(String exer_id)
 	{
-		String temp = "SELECT dayID FROM _set WHERE exerciseID == " + exer_id + ";";
+		String temp = "SELECT dayID FROM session WHERE exerciseID == " + exer_id + "AND username " +
+				"== " + app.con.username() + ";";
 		String jString = app.con.readQuery(temp);
 		
 		ArrayList<String> dayIDs = new ArrayList<String>();
@@ -66,10 +65,23 @@ public class LinReg {
 		return "ISH";
 	}
 	
-	ArrayList<String> grab_data(String exer_id)
+	ArrayList<DataNode> grab_data(ArrayList<String> dayIDs)
 	{
-		ArrayList<String> dayIDs = pull_days(exer_id);
-		return dayIDs;
+		ArrayList<DataNode> nodes = new ArrayList<DataNode>();
+		
+		int iter = 0;
+		int day_len = dayIDs.size();
+		while (iter < day_len)
+		{
+			DataNode temp = new DataNode();
+			temp.dayID = dayIDs.get(iter);
+			
+			String query_for_date = "SELECT datetime FROM session where dayID == " + temp.dayID + ";"; 
+
+		}
+		
+		
+		return nodes;
 	}
 
 	
@@ -79,7 +91,7 @@ public class LinReg {
 		exer_in = exercise;
 		exer_id = app.cache.getExerciseID(exercise);
 		exer_id = name_to_ID(exer_in);
-		dayIDs = grab_data(exer_id);
+		dayIDs = pull_days(exer_id);
 		//have list of day_ids... 
 		
 		
