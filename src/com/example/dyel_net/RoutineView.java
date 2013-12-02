@@ -9,7 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import android.app.Activity;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,6 +30,8 @@ public class RoutineView extends Activity {
 	private String dayID;
 	private String setID;
 	private ListView listView;
+	
+	private editSet new_set;
 	
 	private TextView topbar;
 	private String day_name = "ERROR";
@@ -112,9 +116,16 @@ public class RoutineView extends Activity {
 		
 		routineID = _routineID;
 		
-		String query = "SELECT weekID, week FROM schedule_week" +
-				" WHERE routineID=" + routineID;
-
+		String query = "SELECT weekID, week, min(C.finished1) as finished FROM ( ( " +
+					   "SELECT schedule_week.weekID, week, min(_set.finished) as finished1 FROM schedule_week " + 
+					   "LEFT JOIN schedule_day on schedule_day.weekID=schedule_week.weekID  " +
+					   "LEFT JOIN _set on _set.dayID=schedule_day.dayID  " +
+					   "WHERE schedule_week.routineID=" + routineID + " ) " +
+					   "UNION ( " +
+					   "SELECT schedule_week.weekID, week, 1 as finished1 FROM schedule_week " +  
+					   "WHERE schedule_week.routineID=" + routineID + ")) As C " +
+					   "GROUP BY weekID";
+		
 		app.con.readQuery(query, listView, col_head);
 		
 		pushBack(query);
@@ -123,9 +134,15 @@ public class RoutineView extends Activity {
 	
 	public void viewDays(String _weekID){
 		weekID = _weekID;
-		String query = "SELECT dayID, day, name FROM schedule_day " +
-				" WHERE routineID=" + routineID +
-				" AND weekID=" + weekID;
+		
+		String query = "SELECT dayID, day, name, min(finished1) as finished FROM ( " +
+					   "(SELECT schedule_day.dayID, day, name, min(_set.finished) as finished1 FROM schedule_day " +
+					   "INNER JOIN _set on _set.dayID=schedule_day.dayID " +
+					   "WHERE routineID=" + routineID + " AND weekID=" + weekID +
+					   ") UNION " +
+					   "(SELECT schedule_day.dayID, day, name, 1 as finished1 FROM schedule_day " +
+					   "WHERE routineID=" + routineID + " AND weekID=" + weekID + 
+					   ")) As A GROUP BY dayID";
 		
 		app.con.readQuery(query, listView, col_head);
 		
@@ -308,4 +325,98 @@ public class RoutineView extends Activity {
 		current_SQL = SQL;
 		previous_topbar.push(topbar.getText().toString());
 	}
+	
+	public void updateSet(String setnumber, String setID)
+	{
+		app.gotoLayout(R.layout.edit_set);
+		new_set = new editSet(setnumber, setID);
+		new_set.open_editSet();
+	}
+	
+	public void submitUpdateSet()
+	{
+		new_set.update_editSet();
+	}
+	
+	private class editSet
+	{
+		private String setnumber = null;
+		private String setID = null;
+		private int list_index;
+		
+		public editSet(String setnum, String sID)
+		{
+			setnumber = setnum;
+			setID = sID;
+			list_index = Integer.parseInt(setnum) - 1;
+		}
+		
+		
+		public void open_editSet()
+		{
+			TextView exercise = (TextView)app.findViewById(R.id.editset_exercise);
+			TextView setnumTV = (TextView)app.findViewById(R.id.editset_setnumber);
+			EditText ET1 = (EditText)app.findViewById(R.id.editset_et1);
+			EditText ET2 = (EditText)app.findViewById(R.id.editset_et2);
+			TextView TV1 = (TextView)app.findViewById(R.id.editset_tv1);
+			TextView TV2 = (TextView)app.findViewById(R.id.editset_tv2);
+			
+			setnumTV.setText(setnumber);
+			
+			String SQL = "SELECT exercise.name, reps, weight " + 
+						 "FROM _set INNER JOIN exercise ON _set.exerciseID = exercise.exerciseID " +
+						 "WHERE setID=" + setID;
+			
+			String jString = app.con.readQuery(SQL);
+			
+			try {
+				JSONObject jsonObject = new JSONObject(jString);
+				JSONArray jArray = jsonObject.getJSONArray("data");
+				JSONObject j = jArray.getJSONObject(0);
+						
+				exercise.setText(j.get("name").toString());
+				
+				TV1.setText("Reps");
+				TV2.setText("Weight");
+				ET1.setText(j.get("reps").toString());
+				ET2.setText(j.get("weight").toString());
+				
+			} catch (JSONException e) {e.printStackTrace();}
+		}
+		
+		public void update_editSet()
+		{
+			EditText ET1 = (EditText)app.findViewById(R.id.editset_et1);
+			EditText ET2 = (EditText)app.findViewById(R.id.editset_et2);
+			EditText notes = (EditText)app.findViewById(R.id.editset_notes);
+			
+			String reps, weight;
+			
+				
+				reps = ET1.getText().toString();
+				weight = ET2.getText().toString();
+				
+				String note;
+				if(notes.getText().toString().length() < 1)
+					note = "NULL";
+				else
+					note = notes.getText().toString();
+				
+				String SQL = "UPDATE _set SET " +
+				 		   	 "reps=" + reps + "," +
+				 		     "weight=" + weight + "," + 
+				 		     "notes='" + note + "'" +
+				 		     "WHERE setID=" + setID;
+					 				  	
+				app.con.writeQuery(SQL);
+				
+		}
+	
+	}
+
+	public void deleteSet() {
+		String SQL = "DELETE _set WHERE setID=" + setID;		  	
+		app.con.writeQuery(SQL);
+	}
+	
 }

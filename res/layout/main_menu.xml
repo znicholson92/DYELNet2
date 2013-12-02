@@ -77,8 +77,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:minHeight="80dp"
-                        android:onClick="gotoTestWorkout"
-                        android:text="TestWorkout" />
+                        android:onClick="gotoRoutineGenerator"
+                        android:text="Generate Routine" />
 
                     <Button
                         android:id="@+id/menu_button_6"

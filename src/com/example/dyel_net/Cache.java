@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +14,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -44,9 +46,10 @@ public class Cache {
 	/*****************ROUTINE GENERATOR METHODS***********************************/
 	public void makeRoutineCache(){	
 		db.execSQL("CREATE TABLE routine(routineHash TEXT, day INT, _set INT, setnumber INT, exerciseID INT)");
+		db.execSQL("CREATE TABLE days(routineHash Text, day INT, day_name Text)");
 	}
 	
-	public void addSet(String routineHash, String day, int sets, String exercise_name){
+	public void addExercise(String routineHash, String day, int sets, String exercise_name){
 		
 		String exerciseID = getExerciseID(exercise_name);
 		String set = Integer.toString(getSetCount(routineHash) + 1);
@@ -55,6 +58,14 @@ public class Cache {
 					 	 "VALUES('" + routineHash + "'," + day + "," + set + "," + Integer.toString(s) + "," + exerciseID + ")";
 			db.execSQL(sql);
 		}
+	}
+	
+	public void addDay(String routineHash, String day, String day_name){
+		
+		String sql = " INSERT INTO days(routineHash, day, day_name) " +
+					 " VALUES('" + routineHash + "'," + day + ",'" + day_name + "')";
+		
+		db.execSQL(sql);
 	}
 	
 	private int getSetCount(String routineHash){
@@ -240,6 +251,54 @@ public class Cache {
 	public boolean isLoaded(){
 		return loaded;
 	}
+	
+
+	
+
+	
+	public void displayRoutineGeneratorPlan(String routineHash, ExpandableListView listview){
+		
+		String sql1 =  " SELECT day, day_name FROM days WHERE routineHash='" + routineHash + "' ORDER BY day ASC";
+		
+		String sql2 = " SELECT routine.day, max(routine.setnumber), exercise.name FROM routine " +
+					  " INNER JOIN exercise ON exercise.exerciseID = routine.exerciseID " +
+					  " WHERE routineHash='" + routineHash + "' " +
+					  " GROUP BY exercise.name " +
+					  " ORDER BY routine.day ASC ";
+		
+		List<String> listDataHeader = new ArrayList<String>();
+	    HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();				
+
+	    Cursor cursor1 = db.rawQuery(sql1, null);
+		Cursor cursor2 = db.rawQuery(sql2, null);
+		
+		List<List<String>> subLists = new ArrayList<List<String>>();
+		
+		int c = 0;
+		while (cursor1.moveToNext()){
+			String day_name = cursor1.getString(1);
+			listDataHeader.add(day_name);
+			subLists.set(c, new ArrayList<String>());
+			listDataChild.put(listDataHeader.get(c), subLists.get(c));
+			c++;
+		}
+		cursor1.close();
+		while (cursor2.moveToNext()) {	
+			int day = cursor2.getInt(0);
+			List<String> subList = subLists.get(day);
+			String exercise_name = cursor2.getString(2);
+			subList.add(exercise_name);
+		}
+		cursor2.close();
+		
+		ExpandableListAdapter listAdapter = new ExpandableListAdapter(app, listDataHeader, listDataChild);
+		 
+	    listview.setAdapter(listAdapter);
+
+		
+	}
+	
+
 	
 	
 
