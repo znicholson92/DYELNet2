@@ -93,15 +93,17 @@ public class AddRoutine {
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			JSONArray jArray = jsonObject.getJSONArray("data");
-    		JSONObject j = jArray.getJSONObject(0);
-    		Iterator<String> iter = j.keys();
-            while (iter.hasNext()) {
-                String key = iter.next();
-                String value = (String)j.get(key);
-                if(key.contains("ID")){
-                	weekIDs.add(Integer.parseInt(value));
-                }
-            }
+			for(int x=0; x<jArray.length(); x++){
+	    		JSONObject j = jArray.getJSONObject(x);
+	    		Iterator<String> iter = j.keys();
+	            while (iter.hasNext()) {
+	                String key = iter.next();
+	                String value = (String)j.get(key);
+	                if(key.contains("ID")){
+	                	weekIDs.add(Integer.parseInt(value));
+	                }
+	            }
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -135,15 +137,17 @@ public class AddRoutine {
 			try {
 				JSONObject jsonObject = new JSONObject(result);
 				JSONArray jArray = jsonObject.getJSONArray("data");
-	    		JSONObject j = jArray.getJSONObject(0);
-	    		Iterator<String> iter = j.keys();
-	            while (iter.hasNext()) {
-	                String key = iter.next();
-	                String value = (String)j.get(key);
-	                if(key.contains("ID")){
-	                	dayIDs.add(Integer.parseInt(value));
-	                }
-	            }
+				for(int x=0; x<jArray.length(); x++){
+		    		JSONObject j = jArray.getJSONObject(x);
+		    		Iterator<String> iter = j.keys();
+		            while (iter.hasNext()) {
+		                String key = iter.next();
+		                String value = (String)j.get(key);
+		                if(key.contains("ID")){
+		                	dayIDs.add(Integer.parseInt(value));
+		                }
+		            }
+				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
