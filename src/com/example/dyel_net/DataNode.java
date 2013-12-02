@@ -1,7 +1,7 @@
 package com.example.dyel_net;
 
 public class DataNode {
-	String date;
+	int week;
 	String dayID;
 	int diff; 
 
