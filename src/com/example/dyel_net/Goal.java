@@ -24,7 +24,10 @@ public class Goal {
 	public String dayID = null;
 
 	private LinearLayout col_head;
-
+	private String type;
+	private String subID;
+	private GoalViewer gv = null;
+	
 	public Goal(MainActivity a, String userID) {
 		app = a;
 		running = true;
@@ -112,6 +115,7 @@ public class Goal {
 	}
 	public void viewGoalDetail(String goalName) throws JSONException{
 		GoalViewer.viewDetail(app, userID, goalName);
+		subID = GoalViewer.getSubID();
 	}
 
 	// back button functionality for listview query menus
@@ -131,5 +135,9 @@ public class Goal {
 	public void pushBack(String SQL)
 	{
 		previous_SQL.push(SQL);
+	}
+	public void viewSetGoals() {
+		//GoalSet gs = new GoalSet(this.app, subID);
+		GoalSet.open_editSet(app, subID);
 	}
 }
