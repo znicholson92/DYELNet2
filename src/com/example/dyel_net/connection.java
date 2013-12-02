@@ -249,7 +249,7 @@ public class connection
 	        		
 	        		ListView done_list = null;
 	        		
-	        		if(col0.equals("finished")){
+	        		if(col0 != null && col0.equals("finished")){
 		        		if(app.current_layout == R.layout.workingout){
 		        			done_list = (ListView)app.findViewById(R.id.routineview_listView_done);
 		        		} 
