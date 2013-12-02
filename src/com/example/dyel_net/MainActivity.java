@@ -358,14 +358,14 @@ public class MainActivity extends Activity {
 		TV = (TextView)LL.getChildAt(0);
 		String name = TV.getText().toString();
 		routineView.viewExercises(dID, name);
-		workoutSliderShowStart();
+		//workoutSliderShowStart();
 	}
 
 	private void cli_routineView_weeks(TextView TV) {
 		LinearLayout LL = (LinearLayout)TV.getParent();
 		TV = (TextView)LL.getChildAt(4);
 		routineView.viewDays(TV.getText().toString());
-		workoutSliderHideAll();
+		//workoutSliderHideAll();
 	}
 
 	private void cli_routineView_routines(TextView TV){
@@ -376,7 +376,7 @@ public class MainActivity extends Activity {
 		String name = TV.getText().toString();
 		Log.w("ROUTINE ID", routineID);
 		routineView.viewWeeks(name, routineID);
-		workoutSliderHideAll();
+		//workoutSliderHideAll();
 	}
 
 	private void cli_display_goal(TextView TV) {
@@ -397,7 +397,7 @@ public class MainActivity extends Activity {
 		LinearLayout ll = (LinearLayout)TV.getParent();
 		TV = (TextView)ll.getChildAt(1);
 		routineView.viewSets(TV.getText().toString());
-		workoutSliderShowStart();
+		//workoutSliderShowStart();
 	}
 	
 	private void cli_routineView_sets(TextView TV){
