@@ -124,6 +124,7 @@
          	       android:layout_height="60dp"
          	       android:layout_marginTop="0dp"
          	       android:minHeight="60dp"
+         	       android:onClick="viewSetGoals"
           	       android:text="Set Goals" />
                 <!-- <Button
                 	android:id="@+id/goal_view_detail_routinegoal_button"
@@ -138,7 +139,8 @@
          	       android:layout_width="60dp"
          	       android:layout_height="60dp"
          	       android:layout_marginTop="0dp"
-         	       android:minHeight="60dp"
+         	       android:minHeight="60dp"         	       
+         	       android:onClick="viewUserDataGoals"
           	       android:text="User Goals" />
             </LinearLayout>
 

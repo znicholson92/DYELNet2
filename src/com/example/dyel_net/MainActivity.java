@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
 	public Workout workout;
 	public RoutineView routineView;
 	public display_exercises exerciseViewer;
-	public Goal goal;
+	public Goal goal = null;
 	public Cache cache;
 	public RoutineGenerator routineGenerator;
 	
@@ -402,7 +402,7 @@ public class MainActivity extends Activity {
 	public void gotoUserData(View v)
 	{
 		gotoLayout(R.layout.userdata);
-		userdata_load();
+		userdata_load(false);
 	}
 	
 	public void gotoMenu(View v)
@@ -746,16 +746,25 @@ public class MainActivity extends Activity {
 	}
 	
 	/****************USER DATA METHODS***********************/
-	public void userdata_load()
+	
+	//Added input parameter isGoal by Suna
+	public boolean userdata_load(boolean isGoal)
 	{
 		EditText bodyfat = (EditText)findViewById(R.id.userdata_bodyfat);
 		EditText restinghr = (EditText)findViewById(R.id.userdata_restinghr);
 		EditText weight = (EditText)findViewById(R.id.userdata_weight);
 		EditText notes = (EditText)findViewById(R.id.userdata_notes);
-		
+	
+		if(isGoal){
+			bodyfat = (EditText)findViewById(R.id.goal_userdata_bodyfat);
+			restinghr = (EditText)findViewById(R.id.goal_userdata_restinghr);
+			weight = (EditText)findViewById(R.id.goal_userdata_weight);
+			notes = (EditText)findViewById(R.id.goal_userdata_notes);
+		}	
 		String SQL =  "SELECT * FROM userdata WHERE " + 
 					  "username='" + con.username() + "'" +
-					  "AND isGoal=" + false + " " + 
+					  //"AND isGoal=" + false + " " + 
+					  "AND isGoal=" + isGoal + " " +
 					  "ORDER BY datetime DESC";
 		Log.w("SQL", SQL);
 		String JSONstring = con.readQuery(SQL);
@@ -779,9 +788,14 @@ public class MainActivity extends Activity {
 				e.printStackTrace();
 			}
 
+		}else{
+			return false;
 		}
 		
 		LinearLayout changes_bar = (LinearLayout) findViewById(R.id.userdata_changesbar);
+		if(isGoal){
+			changes_bar = (LinearLayout) findViewById(R.id.goal_userdata_changesbar);
+		}
 		changes_bar.setVisibility(View.INVISIBLE);
 		
 		TextWatcher watcher = new TextWatcher() {
@@ -798,15 +812,38 @@ public class MainActivity extends Activity {
 		   public void onTextChanged(CharSequence s, int start, 
 		     int before, int count) {
 			   LinearLayout changes_bar = (LinearLayout) findViewById(R.id.userdata_changesbar);
-			   changes_bar.setVisibility(View.VISIBLE);
+			   changes_bar.setVisibility(View.VISIBLE);			   
 		   }
 		  };
 		  
+		  if(isGoal){
+			  watcher = new TextWatcher() {
+					 
+					@Override
+				   public void afterTextChanged(Editable s) {
+					   
+				   }
+				 
+				   public void beforeTextChanged(CharSequence s, int start, 
+				     int count, int after) {
+				   }
+				 
+				   public void onTextChanged(CharSequence s, int start, 
+				     int before, int count) {
+					   LinearLayout changes_bar = (LinearLayout) findViewById(R.id.goal_userdata_changesbar);
+					   changes_bar.setVisibility(View.VISIBLE);
+					   
+				   }
+				  };
+		  }		  
 		bodyfat.addTextChangedListener(watcher);
 		restinghr.addTextChangedListener(watcher);
 		weight.addTextChangedListener(watcher);
 		notes.addTextChangedListener(watcher);
-		
+		if(isGoal){
+			changes_bar.setVisibility(View.VISIBLE);
+		}
+		return true;
 	}
 	
 	public void userdata_update(View v)
@@ -836,7 +873,7 @@ public class MainActivity extends Activity {
 		}
 		else
 		{
-			userdata_load();
+			userdata_load(false);
 		}
 		LinearLayout changes_bar = (LinearLayout) findViewById(R.id.userdata_changesbar);
 		changes_bar.setVisibility(View.INVISIBLE);
@@ -979,7 +1016,18 @@ public class MainActivity extends Activity {
     	routineGenerator_load();
     }
 
-
+    
+    /***********************GOALS METHODS*******************************/
+    public void viewSetGoals(View v){
+    	gotoLayout(R.layout.goal_edit_set);
+    	if(goal != null){
+    		goal.viewSetGoals();
+    	}
+    }
+    public void viewUserDataGoals(View v){
+       	gotoLayout(R.layout.goal_userdata); 
+       	userdata_load(true);  //isGoal == true
+    }
 
 	/***************************************************************/
     /***********************OTHER METHODS***************************/
@@ -1012,7 +1060,6 @@ public class MainActivity extends Activity {
     		trd.start();
     	}
     }
-	
 	
 }
 		

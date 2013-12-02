@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include layout="@layout/header" />
+
+    <!-- Body -->
+
+    <LinearLayout
+        android:id="@+id/goal_settings_body"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.42"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="126dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="40dip"
+                android:text="Resting HR" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="40dip"
+                android:text="Weight (LBS)" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="40dip"
+                android:text="Body Fat" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="118dp"
+                android:gravity="center"
+                android:height="40dip"
+                android:text="Notes" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/goal_userdata_restinghr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:onClick="userdata_changed"
+                android:height="40dip" />
+
+            <EditText
+                android:id="@+id/goal_userdata_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:onClick="userdata_changed"
+                android:height="40dip" />
+
+            <EditText
+                android:id="@+id/goal_userdata_bodyfat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:onClick="userdata_changed"
+                android:height="40dip" />
+
+            <EditText
+                android:id="@+id/goal_userdata_notes"
+                android:layout_width="match_parent"
+                android:layout_height="173dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:onClick="userdata_changed"
+                android:height="40dip" >
+             	<!--  <requestFocus />-->
+            </EditText>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/goal_userdata_changesbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.14"
+        android:orientation="horizontal" >
+
+        
+        <Button
+            android:id="@+id/goal_update_userdata_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.30"
+            android:onClick="editUserDataGoals"
+            android:text="Edit" />
+
+        <Button
+            android:id="@+id/goal_cancel_userinfo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.15"
+            android:onClick="cancelUserDataGoals"
+            android:text="Cancel" />
+        
+        <Button
+            android:id="@+id/goal_delete_editset_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:onClick="deleteUserDataGoals"
+            android:text="Delete" />
+    </LinearLayout>
+
+    <include layout="@layout/footer" />
+
+</LinearLayout>

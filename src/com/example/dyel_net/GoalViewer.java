@@ -41,6 +41,8 @@ public class GoalViewer {
 	public static int status = 0;
 	public static String currentDayID = null;
 	public static String currentExercise = null;
+	private static String subID = null;
+	private static String type = null;
 	
 	public static void viewSummary(MainActivity app, String userID)
 	{
@@ -66,29 +68,6 @@ public class GoalViewer {
 		
 		previous_SQL.push(SQL);
 	}
-	
-	//when it is double clicked for details
-/*	public static void viewHistory_session(String datetime, String exercise, String dayID, MainActivity app)
-	{
-		status = 2;
-		
-		LinearLayout history_col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
-		ListView history_listview = (ListView)app.findViewById(R.id.workingout_listView);
-		TextView history_topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
-		
-		String SQL = "  SELECT _set.setnumber as 'Set', _set.reps As Reps, _set.weight As Weight FROM _set, exercise, session " +
-				 	 "  WHERE _set.exerciseID = exercise.exerciseID " +
-				 	 "  AND session.sessionID = _set.sessionID " + 
-		 	 		 "  AND exercise.name = '" + exercise + 
-				 	 "' AND _set.isReal=1 " + 
-		 	 		 "  AND session.dayID=" + dayID +
-		 	 		 "  AND session.datetime='" + datetime +
-				 	 "' AND session.username='" + app.con.username() + "'";
-
-		
-		app.con.readQuery(SQL, history_listview, history_col_head);
-		
-	}*/
 	
 	public static void goBack(MainActivity app)
 	{
@@ -154,17 +133,8 @@ public class GoalViewer {
         	}
         	
     		/*SimpleAdapter myAdapter = 
-    				new SimpleAdapter(app, 
-    								  tableList, 
-    								  R.layout.my_list_item,
-    								  new String[] {Columns.get(0).getText().toString(), 
-    												Columns.get(1).getText().toString(), 
-    												Columns.get(2).getText().toString(), 
-    												Columns.get(3).getText().toString(), 
-    												Columns.get(4).getText().toString(),
-    												col0}, 
-    								  new int[] {R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell0});
-    		*/
+    				new SimpleAdapter(app, */
+        	
         	SpecialAdapter myAdapter = 
     				new SpecialAdapter(app, 
     								  tableList, 
@@ -227,16 +197,28 @@ public class GoalViewer {
                 	endDateTV.setText(value);
                 }else if (key.equals(SQLnotes)) {                	
                 	notesTV.setText(value);
-                }else if (key.equals(SQLcomplete)) {                	
-                	completeTV.setText(value);
+                }else if (key.equals(SQLcomplete)) {
+                	if(value == "1"){
+                		completeTV.setText("yes");
+                	}else {
+                		completeTV.setText("no");
+                	}
                 }else if (key.equals(SQLtype)) {                	
+                	type = value;
                 	//String goalType = value;
-                }else if (key.equals(SQLsubID)) {                	
+                }else if (key.equals(SQLsubID)) { 
+                	subID = value;
                 	//String goalSubID = value;
                 }
                 
             }
     	}
+	}
+	public static String getType() {
+		return type;
+	}
+	public static String getSubID() {
+		return subID;
 	}
 }
 
