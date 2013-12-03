@@ -138,7 +138,8 @@ public class RoutineView extends Activity {
 		String query = "SELECT dayID, day, name, min(finished1) as finished FROM ( " +
 					   "(SELECT schedule_day.dayID, day, name, min(_set.finished) as finished1 FROM schedule_day " +
 					   "INNER JOIN _set on _set.dayID=schedule_day.dayID " +
-					   "WHERE routineID=" + routineID + " AND weekID=" + weekID +
+					   "WHERE routineID=" + routineID + " AND weekID=" + weekID + " AND isReal=0" +
+					   "GROUP BY schedule_day.dayID " +
 					   ") UNION " +
 					   "(SELECT schedule_day.dayID, day, name, 1 as finished1 FROM schedule_day " +
 					   "WHERE routineID=" + routineID + " AND weekID=" + weekID + 
@@ -326,10 +327,11 @@ public class RoutineView extends Activity {
 		previous_topbar.push(topbar.getText().toString());
 	}
 	
-	public void updateSet(String setnumber, String setID)
+	public void updateSet(String setnumber, String _setID)
 	{
+		setID = _setID;
 		app.gotoLayout(R.layout.edit_set);
-		new_set = new editSet(setnumber, setID);
+		new_set = new editSet(setnumber, _setID);
 		new_set.open_editSet();
 	}
 	
