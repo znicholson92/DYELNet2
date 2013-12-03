@@ -77,8 +77,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:minHeight="80dp"
-                        android:onClick="gotoRoutineGenerator"
-                        android:text="Generate Routine" />
+                        android:onClick="gotoAddRoutine_Pre"
+                        android:text="Create Routine" />
 
                     <Button
                         android:id="@+id/menu_button_6"

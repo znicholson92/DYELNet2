@@ -101,20 +101,6 @@ public class display_exercises {
 		return list_string;
 	}
 	
-	private void toggle_forearms(CheckBox temp)
-	{
-		if (temp.isChecked() == true)
-		{
-			string_append("Forearms");
-			//query_combine();
-		}
-		
-		if (temp.isChecked() == false)
-		{
-			string_remove("Forearms");
-			//query_combine();
-		}
-	}
 	
 	private void toggle_arms(CheckBox temp)
 	{
@@ -177,14 +163,12 @@ public class display_exercises {
 	{
 		Log.w("DISP EXERCISES", "LOAD");
 		CheckBox checkArms = (CheckBox)app.findViewById(R.id.CheckBox_Arms);
-		CheckBox checkForearms = (CheckBox)app.findViewById(R.id.CheckBox_Forearms);
 		CheckBox checkChest = (CheckBox)app.findViewById(R.id.CheckBox_Chest);
 		CheckBox checkShoulders = (CheckBox)app.findViewById(R.id.CheckBox_Shoulders);
 		CheckBox checkLegs = (CheckBox)app.findViewById(R.id.CheckBox_Legs);
 		CheckBox checkBack = (CheckBox)app.findViewById(R.id.CheckBox_Back);
 		
 		toggle_arms(checkArms);
-		toggle_forearms(checkForearms);
 		toggle_chest(checkChest);
 		toggle_shoulders(checkShoulders);
 		toggle_legs(checkLegs);
@@ -194,12 +178,6 @@ public class display_exercises {
 		
 		if(muscle_groups_str.length() > 0 )
 			app.cache.Query(query_final, lv, ch);
-		
-		//if(query_final != "" && app.cache.isLoaded()){
-		//app.cache.Query(query_final, lv, ch);
-		//} else {
-		//	app.loadCache();
-		//}
 	}
 
 }

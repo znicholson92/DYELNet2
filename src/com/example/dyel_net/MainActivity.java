@@ -460,6 +460,14 @@ public class MainActivity extends Activity {
 		
 	}
 	
+	public void gotoAddRoutine(View v){
+		gotoLayout(R.layout.add_routine);
+	}
+	
+	public void gotoAddRoutine_Pre(View v){
+		gotoLayout(R.layout.add_routine_pre);
+	}
+	
 	public void gotoUserData(View v)
 	{
 		gotoLayout(R.layout.userdata);

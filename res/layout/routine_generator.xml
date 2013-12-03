@@ -100,7 +100,7 @@
         <EditText
             android:id="@+id/routine_generator_dayname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="22dp"
             android:ems="10"
             android:textSize="9dp" >
 

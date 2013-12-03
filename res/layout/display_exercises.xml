@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -14,19 +13,16 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <CheckBox
-        android:id="@+id/CheckBox_Forearms"
-        android:layout_width="wrap_content"
-        android:layout_height="17dp"
-        android:onClick="exerciseViewerChanged"
-        android:text="Forearms"
-         />
-
-    <CheckBox
         android:id="@+id/CheckBox_Arms"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
         android:onClick="exerciseViewerChanged"
         android:text="Arms" />
+    
+    <LinearLayout
+        android:id="@+id/display_exercise_col_header"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
 
     <CheckBox
         android:id="@+id/CheckBox_Chest"
@@ -35,6 +31,11 @@
         android:onClick="exerciseViewerChanged"
         android:text="Chest"/>
 
+    <LinearLayout
+        android:id="@+id/display_exercise_col_header"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
+        
     <CheckBox
         android:id="@+id/CheckBox_Back"
         android:layout_width="wrap_content"
@@ -42,6 +43,11 @@
         android:onClick="exerciseViewerChanged"
         android:text="Back" />
 
+    <LinearLayout
+        android:id="@+id/display_exercise_col_header"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
+        
     <CheckBox
         android:id="@+id/CheckBox_Legs"
         android:layout_width="wrap_content"
@@ -49,6 +55,11 @@
         android:onClick="exerciseViewerChanged"
         android:text="Legs" />
 
+    <LinearLayout
+        android:id="@+id/display_exercise_col_header"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
+        
     <CheckBox
         android:id="@+id/CheckBox_Shoulders"
         android:layout_width="wrap_content"
