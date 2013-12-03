@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -60,41 +61,14 @@ public class MainActivity extends Activity {
 	  savedInstanceState.putParcelable("routineView", (Parcelable) routineView);
 	  //savedInstanceState.putParcelable("con", (Parcelable)con);
 	  savedInstanceState.putParcelable("cache", (Parcelable)cache);
-<<<<<<< HEAD
 	  savedInstanceState.putParcelable("previous_layouts", (Parcelable)previous_layouts);
 	  savedInstanceState.putInt("current_layout", (int)current_layout);
 	  // etc.
 	  
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-	
-	/**************MACRO CONSTANTS***************************/
-	public final long DBL_CLICK_THRESHOLD = 600;  //in milliseconds
-	
-	/**************GLOBAL VARIABLES**************************/
-	Stack<Integer> previous_layouts = new Stack<Integer>();
-	Integer current_layout;
-	boolean locked = false;
-	
-	/**************PROCESS CLASSES***************************/
-	public connection con;
-	public Workout workout;
-	public RoutineView routineView;
-	public display_exercises exerciseViewer;
-	public Goal goal;
-	public Cache cache;
-=======
-	  savedInstanceState.putParcelable("previous_layouts", (Parcelable)previous_layouts);
-	  savedInstanceState.putInt("current_layout", (int)current_layout);
-	  // etc.
+
 	  
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -119,7 +93,6 @@ public class MainActivity extends Activity {
 	public display_exercises exerciseViewer;
 	public Goal goal = null;
 	public Cache cache;
->>>>>>> d3442c26964ab8ccdde98556b960994347843aa9
 	public RoutineGenerator routineGenerator;
 	
 	public void login(View v)
@@ -257,15 +230,10 @@ public class MainActivity extends Activity {
 		LinearLayout LL = (LinearLayout)TV.getParent();
 		TextView TV1 = (TextView) LL.getChildAt(0); //exercise name
 		TextView TV2 = (TextView) LL.getChildAt(4); //exerciseID
-<<<<<<< HEAD
 		
 		String exercise_name = TV1.getText().toString();
 		String exerciseID = TV2.getText().toString();
-		switch(exerciseViewer.getPrevLayout()){
 		
-			case R.layout.routine_view:
-				routineView.openAddNewSet(exercise_name, exerciseID);
-=======
 		switch(exerciseViewer.getPrevLayout()){
 		
 			case R.layout.routine_view:
@@ -275,7 +243,6 @@ public class MainActivity extends Activity {
 				else{
 					routineView.openAddNewSet(TV1.getText().toString(), TV2.getText().toString());
 				}
->>>>>>> d3442c26964ab8ccdde98556b960994347843aa9
 				break;
 				
 			case R.layout.routine_generator:
@@ -1141,7 +1108,6 @@ public class MainActivity extends Activity {
     	num_weeks.setText(routineGenerator.getNumWeeks());
     	routineGenerator_load();
     }
-<<<<<<< HEAD
     
     public void routineGenerator_handleClick(View v){
     	LinearLayout LL = (LinearLayout)v.getParent();
@@ -1203,7 +1169,8 @@ public class MainActivity extends Activity {
     			}
     		});
     		trd.start();
-=======
+    	}
+	 }
 
     
     /***********************GOALS METHODS*******************************/
@@ -1211,47 +1178,10 @@ public class MainActivity extends Activity {
     	gotoLayout(R.layout.goal_edit_set);
     	if(goal != null){
     		goal.viewSetGoals();
->>>>>>> d3442c26964ab8ccdde98556b960994347843aa9
     	}
     }
     public void viewUserDataGoals(View v){
        	gotoLayout(R.layout.goal_userdata); 
        	userdata_load(true);  //isGoal == true
     }
-
-	/***************************************************************/
-    /***********************OTHER METHODS***************************/
-    /***************************************************************/
-	public void showDialog(String text)
-	{
-		AlertDialog dialog = new AlertDialog.Builder(this).create();
-        dialog.setTitle(text);
-        dialog.show();
-	}
-	
-	public void lockApp(long delay)
-	{
-		locked = true;
-		try {Thread.sleep(delay);} 
-		catch (InterruptedException e) {e.printStackTrace();}
-		locked = false;
-	}
-	
-	 public void loadCache()
-	 {
-    	if(!cache.isLoaded())
-    	{
-    		Thread trd = new Thread(new Runnable(){
-    			@Override
-    			public void run(){
-    				cache.load();
-    			}
-    		});
-    		trd.start();
-    	}
-    }
-	
 }
-		
-	
-
