@@ -153,7 +153,7 @@ public class AddRoutine {
 			}
 			app.setContentView(R.layout.add_routine_day_exercise);
 			TextView header = (TextView)app.findViewById(R.id.exercise_num);
-			header.setText("Week: "+ currWeek + "Day: " + currDay);
+			header.setText("Day: " + currDay);
 		}
 	}
 	
@@ -166,7 +166,7 @@ public class AddRoutine {
 			currDay++;
 			app.gotoLayout(R.layout.add_routine_day);
 			TextView header = (TextView)app.findViewById(R.id.day_name);
-			header.setText("Week: "+ currWeek + "Day: " + currDay);
+			header.setText("Day: " + currDay);
 		}
 	}
 	

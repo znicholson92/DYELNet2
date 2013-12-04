@@ -43,6 +43,14 @@
                 android:gravity="center"
                 android:height="47dip"
                 android:text="Weight" />
+            
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:height="47dip"
+                android:text="Weekly Increase" />
 
         </LinearLayout>
 

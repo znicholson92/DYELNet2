@@ -87,7 +87,7 @@
                     <!-- Column Header -->
 
                     <LinearLayout
-                        android:id="@+id/display_exercise_col_header"
+                        android:id="@+id/display_exercise_col_header2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#10A3A3" >
