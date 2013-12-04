@@ -23,8 +23,11 @@ public class RoutineGenerator {
 	private int weeks = 0;
 	
 	private String curDay;
+	String ex_id_global;
 	
 	private ArrayList<String> dayNames = new ArrayList<String>();
+	
+	LinReg regression = new LinReg(app, ex_id_global);
 	
 	public RoutineGenerator(MainActivity _app){
 		app = _app;
@@ -95,12 +98,9 @@ public class RoutineGenerator {
 		
 	}
 	
-	private void generateRegression(){
-		
-		/*****generate regression function************/
-		//It's gonna be pretty fkin large idk if you want it all here
-		//call LinReg::PullData()
-	
+	private void generateRegression(){  //takes exercise string as parameter
+
+		regression.pull_data(); //does regression on this exercise, stores equation in hashmaps.
 	}
 	
 	
@@ -155,6 +155,7 @@ public class RoutineGenerator {
 	private void makeJSON_Set(JSONObject jsonObject_set, int set, int day, int week) throws JSONException{
 		
 		int exerciseID = getExerciseID(day, set);
+		ex_id_global = Integer.toString(exerciseID);
 		int setnumber = getSetNumber(day, set);
 		HashMap<String, String> result = function(week, setnumber, exerciseID);
 		jsonObject_set.put("exerciseID", Integer.toString(exerciseID));
@@ -164,6 +165,16 @@ public class RoutineGenerator {
 	}
 	
 	public HashMap<String, String> function(int week, int setnumber, int exerciseID){
+		
+		/* Get equation params */
+		float b0 = regression.hm1.get(exerciseID);
+		float b1 = regression.hm2.get(exerciseID);
+		
+		/* Approx 1rm (adjusted) at given week */
+		float y = (float) (b0 + (b1 * Math.log(week)));
+		
+		/* How do I get the workout scheme ? */
+		
 		
 		/*************ADD BOX/COX HERE*********************/
 		/*example: if week=2, setnumber=3, exerciseID=10
