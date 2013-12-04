@@ -1,6 +1,7 @@
 package com.example.dyel_net;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,9 +15,14 @@ public class LinReg {
 	ArrayList<String> dayIDs;
 	MainActivity app;
 	
+	HashMap<String, Float> hm1;
+	HashMap<String, Float> hm2;
+	
 	public LinReg(MainActivity a)
 	{
-		app = a;	
+		app = a;
+		hm1 = new HashMap<String, Float>();
+		hm2 = new HashMap<String, Float>();
 	}
 
 	String name_to_ID(String exer_in)
@@ -132,7 +138,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			total += temp.adjusted;
+			total += temp.week;
 			iter++;
 		}
 		
@@ -151,7 +157,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			float hold = (temp.adjusted - xbar) * (temp.adjusted - xbar);
+			float hold = (temp.week - xbar) * (temp.week - xbar);
 			total += hold; 
 			iter++;
 		}
@@ -168,7 +174,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			total += temp.week;
+			total += temp.adjusted;
 			iter++;
 		}
 		
@@ -189,7 +195,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			float hold = (temp.adjusted - xbar) * (temp.week - ybar);
+			float hold = (temp.week - xbar) * (temp.adjusted - ybar);
 			total += hold;
 			iter++;
 		}
@@ -220,9 +226,9 @@ public class LinReg {
 		return RegEqn;
 	}
 	
+	
 	void pull_data(String exercise)
 	{
-		//Do i need to call LinReg() constructor?
 		exer_in = exercise;
 		exer_id = app.cache.getExerciseID(exercise);
 		exer_id = name_to_ID(exer_in);
@@ -230,6 +236,8 @@ public class LinReg {
 		
 		ArrayList<DataNode> nodes = grab_data(dayIDs, exer_id);
 		float RegEqn[] = calc_reg(nodes);
+		hm1.put(exer_id, RegEqn[0]);
+		hm2.put(exer_id, RegEqn[1]);
 		
 	}
 

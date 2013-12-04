@@ -26,6 +26,8 @@ public class RoutineGenerator {
 	
 	private ArrayList<String> dayNames = new ArrayList<String>();
 	
+	LinReg regression = new LinReg(app);
+	
 	public RoutineGenerator(MainActivity _app){
 		app = _app;
 		routineHash = Long.toString(System.currentTimeMillis());
@@ -81,10 +83,11 @@ public class RoutineGenerator {
 		
 		routine_name = rtName;
 		weeks = Integer.parseInt(numWeeks);
+		String temp = ""; //placeholder
 		
 		try 
 		{
-			generateRegression();
+			generateRegression(temp); //placeholder
 			JSONObject jObject = generateMainJSON();
 			addToDatabase(jObject);
 		} 
@@ -95,12 +98,9 @@ public class RoutineGenerator {
 		
 	}
 	
-	private void generateRegression(){
-		
-		/*****generate regression function************/
-		//It's gonna be pretty fkin large idk if you want it all here
-		//call LinReg::PullData()
-	
+	private void generateRegression(String exer_in){  //takes exercise string as parameter
+
+		regression.pull_data(exer_in); //does regression on this exercise, stores equation in hashmaps.
 	}
 	
 	
