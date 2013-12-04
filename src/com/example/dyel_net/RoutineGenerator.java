@@ -166,6 +166,16 @@ public class RoutineGenerator {
 	
 	public HashMap<String, String> function(int week, int setnumber, int exerciseID){
 		
+		/* Get equation params */
+		float b0 = regression.hm1.get(exerciseID);
+		float b1 = regression.hm2.get(exerciseID);
+		
+		/* Approx 1rm (adjusted) at given week */
+		float y = (float) (b0 + (b1 * Math.log(week)));
+		
+		/* How do I get the workout scheme ? */
+		
+		
 		/*************ADD BOX/COX HERE*********************/
 		/*example: if week=2, setnumber=3, exerciseID=10
 		 * then find the number of reps and weight for the exercise corresponding to
