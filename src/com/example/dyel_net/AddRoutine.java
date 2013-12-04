@@ -198,25 +198,29 @@ public class AddRoutine {
 	public void addSet(){
 		TextView repsTV = (TextView)app.findViewById(R.id.set_reps);
 		TextView weightTV = (TextView)app.findViewById(R.id.set_weight);
-
+		TextView increaseTV = (TextView)app.findViewById(R.id.weight_increase);
+		
 		String reps = repsTV.getText().toString();
 		String weight = weightTV.getText().toString();
+		int increase = Integer.parseInt(increaseTV.getText().toString());
 		if(reps.equals("") || weight.equals("")){
 			app.showDialog("Missing Fields");
 		}
 		else{
+			int currWeight = Integer.parseInt(weight);
 			for(int dayID : dayIDs){
 				String SQL = "INSERT INTO _set(dayID, exerciseID, reps, weight, setnumber, isReal, isGoal, finished) " +
 				  	 "VALUES(" + dayID + ", " + 
 				  			  exerciseID + ", " +
 				  			  reps + ", " +
-				  			  weight + ", " + 
+				  			  currWeight + ", " + 
 				  			  currSet + ", " +
 				  			  0 + ", " +
 				  			  0 + ", " +
 				  			  0 +
 				  			  ")";
 				app.con.writeQuery(SQL);
+				currWeight+=increase;
 			}
 			if(currSet >= numSets){
 				currExercise++;
