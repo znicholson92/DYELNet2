@@ -21,6 +21,7 @@
     
     <LinearLayout
         android:id="@+id/display_exercise_col_header"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="5dp" />
 
