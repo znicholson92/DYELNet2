@@ -23,10 +23,11 @@ public class RoutineGenerator {
 	private int weeks = 0;
 	
 	private String curDay;
+	String ex_id_global;
 	
 	private ArrayList<String> dayNames = new ArrayList<String>();
 	
-	LinReg regression = new LinReg(app);
+	LinReg regression = new LinReg(app, ex_id_global);
 	
 	public RoutineGenerator(MainActivity _app){
 		app = _app;
@@ -83,11 +84,10 @@ public class RoutineGenerator {
 		
 		routine_name = rtName;
 		weeks = Integer.parseInt(numWeeks);
-		String temp = ""; //placeholder
 		
 		try 
 		{
-			generateRegression(temp); //placeholder
+			generateRegression();
 			JSONObject jObject = generateMainJSON();
 			addToDatabase(jObject);
 		} 
@@ -98,9 +98,9 @@ public class RoutineGenerator {
 		
 	}
 	
-	private void generateRegression(String exer_in){  //takes exercise string as parameter
+	private void generateRegression(){  //takes exercise string as parameter
 
-		regression.pull_data(exer_in); //does regression on this exercise, stores equation in hashmaps.
+		regression.pull_data(); //does regression on this exercise, stores equation in hashmaps.
 	}
 	
 	
@@ -155,6 +155,7 @@ public class RoutineGenerator {
 	private void makeJSON_Set(JSONObject jsonObject_set, int set, int day, int week) throws JSONException{
 		
 		int exerciseID = getExerciseID(day, set);
+		ex_id_global = Integer.toString(exerciseID);
 		int setnumber = getSetNumber(day, set);
 		HashMap<String, String> result = function(week, setnumber, exerciseID);
 		jsonObject_set.put("exerciseID", Integer.toString(exerciseID));

@@ -18,28 +18,12 @@ public class LinReg {
 	HashMap<String, Float> hm1;
 	HashMap<String, Float> hm2;
 	
-	public LinReg(MainActivity a)
+	public LinReg(MainActivity a, String ex_id_global)
 	{
 		app = a;
+		exer_id = ex_id_global; 
 		hm1 = new HashMap<String, Float>();
 		hm2 = new HashMap<String, Float>();
-	}
-
-	String name_to_ID(String exer_in)
-	{
-		String temp = "SELECT exerciseID FROM exercise WHERE name = '" + exer_in + "';";
-		
-		String jString = app.con.readQuery(temp);
-		String ID = "";
-		
-		try {
-			JSONObject jsonObject = new JSONObject(jString);
-			JSONArray jArray = jsonObject.getJSONArray("data");
-			JSONObject j = jArray.getJSONObject(0);
-			ID = (String) j.get("exerciseID");
-		} catch (JSONException e) {e.printStackTrace();}
-		
-		return ID;
 	}
 	
 	@SuppressWarnings("null")
@@ -227,11 +211,8 @@ public class LinReg {
 	}
 	
 	
-	void pull_data(String exercise)
+	void pull_data()
 	{
-		exer_in = exercise;
-		exer_id = app.cache.getExerciseID(exercise);
-		exer_id = name_to_ID(exer_in);
 		dayIDs = pull_days(exer_id);
 		
 		ArrayList<DataNode> nodes = grab_data(dayIDs, exer_id);
