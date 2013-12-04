@@ -284,11 +284,13 @@ public class MainActivity extends Activity {
 	@SuppressLint("UseValueOf")
 	private void cli_workingout_exercise(TextView TV)
 	{
+		Log.w("SETID", "GOT HERE");
 		LinearLayout L = (LinearLayout)TV.getParent();
 		ListView LV = (ListView)L.getParent();
 		int sn = LV.indexOfChild((View)L) + 1;
 		TV = (TextView)L.getChildAt(4);
 		String setID = TV.getText().toString();
+		Log.w("SETID=", setID);
 		workout.addRealSet(new Integer(sn).toString(), setID);
 	}
 	

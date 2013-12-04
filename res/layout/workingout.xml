@@ -44,7 +44,7 @@
             android:layout_height="334dp"
             android:orientation="horizontal" >
             
-        <LinearLayout
+        <HorizontalScrollView
       
             android:id="@+id/horizontalScrollView1"
             android:layout_width="262dp"
@@ -134,7 +134,7 @@
                     android:orientation="horizontal" >
                 </ListView>
             </LinearLayout>
-            </LinearLayout>
+            </HorizontalScrollView>
 
 
         <LinearLayout

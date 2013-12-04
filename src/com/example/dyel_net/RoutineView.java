@@ -138,7 +138,7 @@ public class RoutineView extends Activity {
 		String query = "SELECT dayID, day, name, min(finished1) as finished FROM ( " +
 					   "(SELECT schedule_day.dayID, day, name, min(_set.finished) as finished1 FROM schedule_day " +
 					   "INNER JOIN _set on _set.dayID=schedule_day.dayID " +
-					   "WHERE routineID=" + routineID + " AND weekID=" + weekID + " AND isReal=0" +
+					   "WHERE routineID=" + routineID + " AND weekID=" + weekID + " AND isReal=0 " +
 					   "GROUP BY schedule_day.dayID " +
 					   ") UNION " +
 					   "(SELECT schedule_day.dayID, day, name, 1 as finished1 FROM schedule_day " +
@@ -172,7 +172,7 @@ public class RoutineView extends Activity {
 	public void viewSets(String exercise)
 	{
 		
-		String SQL = "SELECT setnumber, reps, weight, finished FROM _set " +
+		String SQL = "SELECT setnumber, reps, weight, setID, finished FROM _set " +
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " +
 					 " WHERE dayID = " + dayID + 
 					 " AND exercise.name='" + exercise + "'" +
