@@ -406,8 +406,9 @@ public class MainActivity extends Activity {
 		
 	private void cli_routineView_exercises(TextView TV){
 		LinearLayout ll = (LinearLayout)TV.getParent();
-		TV = (TextView)ll.getChildAt(1);
-		routineView.viewSets(TV.getText().toString());
+		TV = (TextView)ll.getChildAt(0);
+		String exercise_name = TV.getText().toString();
+		routineView.viewSets(exercise_name);
 		workoutSliderShowStart();
 	}
 	

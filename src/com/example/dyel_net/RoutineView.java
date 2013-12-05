@@ -102,7 +102,7 @@ public class RoutineView extends Activity {
 	}
 	
 	public void viewRoutines(){
-		String query = "SELECT routineID, name " +
+		String query = "SELECT routineID, name As 'Name' " +
 				" FROM routine" +
 				" WHERE username='" + app.con.username() + "'" +
 				" ORDER BY lastedited DESC";
