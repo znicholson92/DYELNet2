@@ -42,12 +42,12 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.login);
 		if(savedInstanceState != null)
 		{
-			workout = (Workout)savedInstanceState.get("workout");
-			routineView = (RoutineView)savedInstanceState.get("routineView");
+			//workout = (Workout)savedInstanceState.get("workout");
+			//routineView = (RoutineView)savedInstanceState.get("routineView");
 			//con = (connection)savedInstanceState.get("con");
-			cache = (Cache)savedInstanceState.get("cache");
-			previous_layouts = (Stack<Integer>)savedInstanceState.get("previous_layouts");
-			current_layout = (Integer)savedInstanceState.getInt("current_layout");
+			//cache = (Cache)savedInstanceState.get("cache");
+			//previous_layouts = (Stack<Integer>)savedInstanceState.get("previous_layouts");
+			//current_layout = (Integer)savedInstanceState.getInt("current_layout");
 		}
 	}
 	
@@ -57,12 +57,12 @@ public class MainActivity extends Activity {
 	  // Save UI state changes to the savedInstanceState.
 	  // This bundle will be passed to onCreate if the process is
 	  // killed and restarted.
-	  savedInstanceState.putParcelable("workout", (Parcelable) workout);
-	  savedInstanceState.putParcelable("routineView", (Parcelable) routineView);
+	  //savedInstanceState.putParcelable("workout", (Parcelable) workout);
+	  //savedInstanceState.putParcelable("routineView", (Parcelable) routineView);
 	  //savedInstanceState.putParcelable("con", (Parcelable)con);
-	  savedInstanceState.putParcelable("cache", (Parcelable)cache);
-	  savedInstanceState.putParcelable("previous_layouts", (Parcelable)previous_layouts);
-	  savedInstanceState.putInt("current_layout", (int)current_layout);
+	  //savedInstanceState.putParcelable("cache", (Parcelable)cache);
+	  //savedInstanceState.putParcelable("previous_layouts", (Parcelable)previous_layouts);
+	  //savedInstanceState.putInt("current_layout", (int)current_layout);
 	  // etc.
 	  
 	}
