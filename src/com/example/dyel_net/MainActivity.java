@@ -42,12 +42,12 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.login);
 		if(savedInstanceState != null)
 		{
-			workout = (Workout)savedInstanceState.get("workout");
-			routineView = (RoutineView)savedInstanceState.get("routineView");
+			//workout = (Workout)savedInstanceState.get("workout");
+			//routineView = (RoutineView)savedInstanceState.get("routineView");
 			//con = (connection)savedInstanceState.get("con");
-			cache = (Cache)savedInstanceState.get("cache");
-			previous_layouts = (Stack<Integer>)savedInstanceState.get("previous_layouts");
-			current_layout = (Integer)savedInstanceState.getInt("current_layout");
+			//cache = (Cache)savedInstanceState.get("cache");
+			//previous_layouts = (Stack<Integer>)savedInstanceState.get("previous_layouts");
+			//current_layout = (Integer)savedInstanceState.getInt("current_layout");
 		}
 	}
 	
@@ -57,12 +57,12 @@ public class MainActivity extends Activity {
 	  // Save UI state changes to the savedInstanceState.
 	  // This bundle will be passed to onCreate if the process is
 	  // killed and restarted.
-	  savedInstanceState.putParcelable("workout", (Parcelable) workout);
-	  savedInstanceState.putParcelable("routineView", (Parcelable) routineView);
+	  //savedInstanceState.putParcelable("workout", (Parcelable) workout);
+	  //savedInstanceState.putParcelable("routineView", (Parcelable) routineView);
 	  //savedInstanceState.putParcelable("con", (Parcelable)con);
-	  savedInstanceState.putParcelable("cache", (Parcelable)cache);
-	  savedInstanceState.putParcelable("previous_layouts", (Parcelable)previous_layouts);
-	  savedInstanceState.putInt("current_layout", (int)current_layout);
+	  //savedInstanceState.putParcelable("cache", (Parcelable)cache);
+	  //savedInstanceState.putParcelable("previous_layouts", (Parcelable)previous_layouts);
+	  //savedInstanceState.putInt("current_layout", (int)current_layout);
 	  // etc.
 	  
 	}
@@ -284,11 +284,13 @@ public class MainActivity extends Activity {
 	@SuppressLint("UseValueOf")
 	private void cli_workingout_exercise(TextView TV)
 	{
+		Log.w("SETID", "GOT HERE");
 		LinearLayout L = (LinearLayout)TV.getParent();
 		ListView LV = (ListView)L.getParent();
 		int sn = LV.indexOfChild((View)L) + 1;
 		TV = (TextView)L.getChildAt(4);
 		String setID = TV.getText().toString();
+		Log.w("SETID=", setID);
 		workout.addRealSet(new Integer(sn).toString(), setID);
 	}
 	
@@ -367,14 +369,14 @@ public class MainActivity extends Activity {
 		TV = (TextView)LL.getChildAt(0);
 		String name = TV.getText().toString();
 		routineView.viewExercises(dID, name);
-		//workoutSliderShowStart();
+		workoutSliderShowStart();
 	}
 
 	private void cli_routineView_weeks(TextView TV) {
 		LinearLayout LL = (LinearLayout)TV.getParent();
 		TV = (TextView)LL.getChildAt(4);
 		routineView.viewDays(TV.getText().toString());
-		//workoutSliderHideAll();
+		workoutSliderHideAll();
 	}
 
 	private void cli_routineView_routines(TextView TV){
@@ -385,7 +387,7 @@ public class MainActivity extends Activity {
 		String name = TV.getText().toString();
 		Log.w("ROUTINE ID", routineID);
 		routineView.viewWeeks(name, routineID);
-		//workoutSliderHideAll();
+		workoutSliderHideAll();
 	}
 
 	private void cli_display_goal(TextView TV) {
@@ -406,7 +408,7 @@ public class MainActivity extends Activity {
 		LinearLayout ll = (LinearLayout)TV.getParent();
 		TV = (TextView)ll.getChildAt(1);
 		routineView.viewSets(TV.getText().toString());
-		//workoutSliderShowStart();
+		workoutSliderShowStart();
 	}
 	
 	private void cli_routineView_sets(TextView TV){
