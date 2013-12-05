@@ -25,7 +25,7 @@ public class display_exercises {
 		app = a;	
 		app.gotoLayout(R.layout.display_exercises);
 		lv = (ListView) app.findViewById(R.id.display_exercises_listview);
-		ch = (LinearLayout) app.findViewById(R.id.display_exercise_col_header);
+		ch = (LinearLayout) app.findViewById(R.id.display_exercise_col_header2);
 		prev_layout = previousLayout;
 	}
 	

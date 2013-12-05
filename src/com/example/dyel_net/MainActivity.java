@@ -562,9 +562,9 @@ public class MainActivity extends Activity {
 		} else {
 			if(buttontext.equals("Update") ){
 				routineView.submitUpdateSet();
-			} else if (buttontext.equals("Delete")){
+			} else if (buttontext.equals("Delete")){Log.w("DELETING", "DELETING");
 				routineView.deleteSet();
-	}
+			}
 			setContentView(R.layout.routine_view);
 			routineView.goBack();
 			workoutSliderShowStart();

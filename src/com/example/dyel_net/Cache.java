@@ -279,7 +279,7 @@ public class Cache {
 		String sql2 = " SELECT routine.day, max(routine.setnumber), exercise.name FROM routine " +
 					  " INNER JOIN exercise ON exercise.exerciseID = routine.exerciseID " +
 					  " WHERE routineHash='" + routineHash + "' " +
-					  " GROUP BY exercise.name " +
+					  " GROUP BY exercise.name, routine.day " +
 					  " ORDER BY routine.day ASC ";
 		
 		List<String> listDataHeader = new ArrayList<String>();

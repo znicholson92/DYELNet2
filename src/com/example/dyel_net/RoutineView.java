@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 
 import android.app.Activity;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -116,7 +117,7 @@ public class RoutineView extends Activity {
 		
 		routineID = _routineID;
 		
-		String query = "SELECT weekID, week, min(C.finished1) as finished FROM ( ( " +
+		String query = "SELECT weekID, week As 'Week', min(C.finished1) as finished FROM ( ( " +
 					   "SELECT schedule_week.weekID, week, min(_set.finished) as finished1 FROM schedule_week " + 
 					   "LEFT JOIN schedule_day on schedule_day.weekID=schedule_week.weekID  " +
 					   "LEFT JOIN _set on _set.dayID=schedule_day.dayID  " +
@@ -135,7 +136,7 @@ public class RoutineView extends Activity {
 	public void viewDays(String _weekID){
 		weekID = _weekID;
 		
-		String query = "SELECT dayID, day, name, min(finished1) as finished FROM ( " +
+		String query = "SELECT dayID, day As 'Day', name As 'Name', min(finished1) as finished FROM ( " +
 					   "(SELECT schedule_day.dayID, day, name, min(_set.finished) as finished1 FROM schedule_day " +
 					   "INNER JOIN _set on _set.dayID=schedule_day.dayID " +
 					   "WHERE routineID=" + routineID + " AND weekID=" + weekID + " AND isReal=0 " +
@@ -155,7 +156,7 @@ public class RoutineView extends Activity {
 		
 		dayID = dID;
 		
-		String SQL = " SELECT exercise.name, count(*) As 'Sets', _set.exerciseID FROM _set " + 
+		String SQL = " SELECT exercise.name As 'Name', count(*) As 'Sets', _set.exerciseID FROM _set " + 
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " + 
 					 " WHERE _set.dayID = " + dayID + " AND isReal=0 AND isGoal=0 " + 
 					 " GROUP BY _set.exerciseID";
@@ -172,7 +173,7 @@ public class RoutineView extends Activity {
 	public void viewSets(String exercise)
 	{
 		
-		String SQL = "SELECT setnumber, reps, weight, setID, finished FROM _set " +
+		String SQL = "SELECT setnumber As 'Set', reps As 'Reps', weight As 'Weight', setID, finished FROM _set " +
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " +
 					 " WHERE dayID = " + dayID + 
 					 " AND exercise.name='" + exercise + "'" +
@@ -192,7 +193,7 @@ public class RoutineView extends Activity {
 	public void openAddNewSet(String...strings)
 	{
 		app.gotoLayout(R.layout.add_set);
-		
+		current_SQL = "BLAH";
 		if(strings.length > 0){
 			String exercise = strings[0];
 			String exerciseID = strings[1];
@@ -253,8 +254,8 @@ public class RoutineView extends Activity {
 	}
 	
 	public void viewHistory()
-	{	
-		if(status == "exercise"){
+	{	Log.w("STATUS", status);
+		if(status == "exercise" || status == "sets"){
 			String current_exercise = topbar.getText().toString();
 			HistoryViewer.viewHistory(current_exercise, dayID, app);
 		}
@@ -298,7 +299,7 @@ public class RoutineView extends Activity {
 		{
 			if(current_SQL.equals((String)previous_SQL.peek()))
 				pops = 2;
-			
+			Log.w("POPS", Integer.toString(pops));
 			String SQL = null;
 			String tbar_text = null;
 			for(int i = 0; i < pops && !previous_SQL.isEmpty(); ++i){
@@ -417,7 +418,7 @@ public class RoutineView extends Activity {
 	}
 
 	public void deleteSet() {
-		String SQL = "DELETE _set WHERE setID=" + setID;		  	
+		String SQL = "DELETE FROM _set WHERE setID=" + setID;		  	
 		app.con.writeQuery(SQL);
 	}
 	
