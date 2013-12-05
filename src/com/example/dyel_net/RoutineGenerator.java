@@ -164,6 +164,51 @@ public class RoutineGenerator {
 		jsonObject_set.put("weight", result.get("weight"));
 	}
 	
+	public HashMap<Integer, int[]> get_scheme()
+	{
+		HashMap<Integer, int[]> ret_map = new HashMap<Integer, int[]>();
+		int iter = 1;
+		int rem;
+		
+		while (iter < (weeks + 1))
+		{
+			rem = iter % 4; 
+			int set_rep[] = new int[2];
+			
+			if (rem == 1)
+			{
+				set_rep[0] = 4;
+				set_rep[1] = 12; 
+				ret_map.put(iter, set_rep);
+			}
+			
+			if (rem == 2)
+			{
+				set_rep[0] = 4;
+				set_rep[1] = 8;
+				ret_map.put(iter, set_rep);
+			}
+			
+			if (rem == 3)
+			{
+				set_rep[0] = 4;
+				set_rep[1] = 5;
+				ret_map.put(iter, set_rep);
+			}
+			
+			if (rem == 0)
+			{
+				set_rep[0] = 4; 
+				set_rep[1] = -1; //designates 10, 8, 5, 3, 1 week
+				ret_map.put(iter, set_rep);
+			}
+			
+			iter++;
+		}
+		
+		return ret_map;
+	}
+	
 	public HashMap<String, String> function(int week, int setnumber, int exerciseID){
 		
 		/* Get equation params */
@@ -173,15 +218,78 @@ public class RoutineGenerator {
 		/* Approx 1rm (adjusted) at given week */
 		float y = (float) (b0 + (b1 * Math.log(week)));
 		
-		/* How do I get the workout scheme ? */
+		HashMap<Integer, int[]> scheme = get_scheme();
 		
+		int[] set_rep = scheme.get(week);
+		double weight = 0; 
+		int num_reps = set_rep[1];
 		
-		/*************ADD BOX/COX HERE*********************/
-		/*example: if week=2, setnumber=3, exerciseID=10
-		 * then find the number of reps and weight for the exercise corresponding to
-		 * exerciseID=10 for the 3rd set of such exercise on week 2 of the routine
-		*/
-		return new HashMap<String, String>();
+		if (set_rep[1] == 12)
+		{
+			if (setnumber == 1)
+				weight = (.55 * y);
+			if (setnumber == 2)
+				weight = (.60 * y);
+			if (setnumber == 3 || setnumber == 4)
+				weight = (.65 * y);
+		}
+		
+		if (set_rep[1] == 8)
+		{
+			if (setnumber == 1)
+				weight = (.60 * y);
+			if (setnumber == 2)
+				weight = (.65 * y);
+			if (setnumber == 3)
+				weight = (.70 * y);
+			if (setnumber == 4)
+				weight = (.75 * y);
+		}
+		
+		if (set_rep[1] == 5)
+		{
+			if (setnumber == 1)
+				weight = (.55 * y);
+			if (setnumber == 2)
+				weight = (.65 * y);
+			if (setnumber == 3)
+				weight = (.75 * y);
+			if (setnumber == 4)
+				weight = (.85 * y);
+		}
+		
+		if (set_rep[1] == -1)
+		{
+			if (setnumber == 1)
+			{
+				weight = (.5 * y);
+				num_reps = 8;
+			}
+			if (setnumber == 2)
+			{
+				weight = (.7 * y);
+				num_reps = 5;
+			}
+			if (setnumber == 3)
+			{
+				weight = (.85 * y);
+				num_reps = 3;
+			}
+			if (setnumber == 4)
+			{
+				weight = (1.025 * y);
+				num_reps = 1;
+			}
+		}
+		
+		String weight_str = Double.toString(weight);
+		String reps_str = Integer.toString(num_reps);
+		
+		HashMap<String, String> ret = new HashMap<String, String>();
+		ret.put("reps", reps_str);
+		ret.put("weight", weight_str);
+		
+		return ret;
 	}
 	
 	private int getNumberOfSets(int day){
