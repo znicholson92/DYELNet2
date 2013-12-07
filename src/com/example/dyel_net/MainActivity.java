@@ -1198,4 +1198,14 @@ public class MainActivity extends Activity {
        	gotoLayout(R.layout.goal_userdata); 
        	userdata_load(true);  //isGoal == true
     }
+    /**
+     * Create a goal summary for the specific user.
+     * @param v
+     */
+    public void createGoal(View v){
+    	if(goal.isRunning()){
+    		goal.createGoal();
+    	}
+    	goal.viewGoal();
+    }
 }

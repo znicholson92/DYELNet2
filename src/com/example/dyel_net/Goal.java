@@ -36,7 +36,7 @@ public class Goal {
 	public void createGoal(){
 		//col_head = (LinearLayout) app.findViewById(R.id.working_out_col_header);
 		
-				EditText userNameET =  (EditText) app.findViewById(R.id.creategoal_goal_name);
+				EditText goalNameET =  (EditText) app.findViewById(R.id.creategoal_goal_name);
 		        EditText noteET =	   (EditText) app.findViewById(R.id.creategoal_notes);
 		        EditText startDateTy = (EditText) app.findViewById(R.id.creategoal_dateofbirth_year);
 		        EditText startDateTm = (EditText) app.findViewById(R.id.creategoal_dateofbirth_month);
@@ -47,7 +47,7 @@ public class Goal {
 		        //category
 		        //completed?
 		        
-		        String userName = userNameET.getText().toString();
+		        String goalName = goalNameET.getText().toString();
 		        String note = noteET.getText().toString();
 		        String startDate = startDateTy.getText().toString()+"-"+startDateTm.getText().toString()+"-"+startDateTd.getText().toString();
 		        String endDate = endDateTy.getText().toString()+"-"+endDateTm.getText().toString()+"-"+endDateTd.getText().toString();
@@ -56,13 +56,16 @@ public class Goal {
 		        
 		        
 		        String SQL = "INSERT INTO  `dyel-net_main`.`goals` "
-		                        +"(`username` , `note`, `start_date` , `end_date`)"
-		                        +"VALUES ( "
-		                        +"'"+userName+"', "
+		                        +"(`username` ,`name` , `notes`, `start_date` , `goal_date`)"
+		                        +" VALUES ( "
+		                        +"'"+userID+"', "
+		                        +"'"+goalName+"', "
 		                        +"'"+note+"', "
 		                        +"'"+startDate+"', "
 		                        +"'"+endDate+"');";
 		     
+		        
+		        System.out.println(SQL);
 		        
 		        connection con = new connection("dyel-net_admin", "teamturtle", app);
 		        
@@ -88,25 +91,6 @@ public class Goal {
 
 	public boolean isRunning() {
 		return running;
-	}
-
-	public void viewGoal2(String name) {
-		
-		/***TODO***/
-		/***Just copied from Workout.java ***/
-		String SQL = "SELECT exercise.name, count(*) As 'Sets' FROM _set "
-				+ " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID WHERE _set.dayID = "
-				+ dayID + " GROUP BY _set.exerciseID";
-
-		ListView l = (ListView) app.findViewById(R.id.workingout_listView);
-		app.con.readQuery(SQL, l, col_head);
-
-		TextView t = (TextView) app.findViewById(R.id.working_out_topbar_text);
-		t.setText(name);
-
-		pushBack(SQL);
-		status = "session";
-
 	}
 	
 	public void viewGoal()

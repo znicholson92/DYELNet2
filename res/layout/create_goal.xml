@@ -80,7 +80,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:ems="10"
-                android:onClick=""
                 android:height="40dp" >            
                 <requestFocus />
                 </EditText>
@@ -112,9 +111,8 @@
                 <EditText
                     android:id="@+id/creategoal_dateofbirth_month"
                     style="@style/NormalFont"
-                    android:layout_width="wrap_content"
+                    android:layout_width="45dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.20"
                     android:text="" />
 
                 <TextView
@@ -127,9 +125,8 @@
                 <EditText
                     android:id="@+id/creategoal_dateofbirth_day"
                     style="@style/NormalFont"
-                    android:layout_width="wrap_content"
+                    android:layout_width="45dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.18"
                     android:text="" />
 
                 <TextView
@@ -142,9 +139,8 @@
                 <EditText
                     android:id="@+id/creategoal_dateofbirth_year"
                     style="@style/NormalFont"
-                    android:layout_width="wrap_content"
+					android:layout_width="70dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.32"
                     android:text="" />
             </LinearLayout>
 
@@ -158,9 +154,8 @@
                 <EditText
                     android:id="@+id/creategoal_dateofbirth_month2"
                     style="@style/NormalFont"
-                    android:layout_width="wrap_content"
+                    android:layout_width="45dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.20"
                     android:text="" />
 
                 <TextView
@@ -173,9 +168,8 @@
                 <EditText
                     android:id="@+id/creategoal_dateofbirth_day2"
                     style="@style/NormalFont"
-                    android:layout_width="wrap_content"
+					android:layout_width="45dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.18"
                     android:text="" />
 
                 <TextView
@@ -188,9 +182,8 @@
                 <EditText
                     android:id="@+id/creategoal_dateofbirth_year2"
                     style="@style/NormalFont"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.32"
                     android:text="" />
             </LinearLayout>
             
@@ -207,14 +200,7 @@
          	       android:layout_marginTop="0dp"
          	       android:minHeight="60dp"
           	       android:text="Set Goals" />
-                <Button
-                	android:id="@+id/creategoal_routinegoal_button"
-                	style="@style/SmallFont"
-         	       android:layout_width="60dp"
-         	       android:layout_height="60dp"
-         	       android:layout_marginTop="0dp"
-         	       android:minHeight="60dp"
-          	       android:text="Routine Goals" />
+
                 <Button
                 	android:id="@+id/creategoal_usergoal_button"
          	       android:layout_width="60dp"
@@ -260,7 +246,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.73"
             android:gravity="center"
-            android:onClick="gotoCreateGoal"
+            android:onClick="createGoal"
             android:text="Create/Update" />
 
         <Button
