@@ -23,8 +23,6 @@ public class SpecialAdapter extends SimpleAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
       View view = super.getView(position, convertView, parent);
-      //int colorPos = position % colors.length;
-      //view.setBackgroundColor(colors[colorPos]);
       view.setBackgroundColor(colors[0]);
       Object item = getItem(position);
       String row = item.toString();
@@ -61,8 +59,6 @@ public class SpecialAdapter extends SimpleAdapter {
             int color = Color.argb( 200, 255, 64, 64 );
             //eachText.setBackgroundColor( color );
             eachText.setPaintFlags(eachText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            
-    	}
-    	    	
+    	}    	    	
     }
 }

@@ -115,13 +115,17 @@
                 </ListView>
             </LinearLayout>
         </HorizontalScrollView>
+        <Button
+            android:id="@+id/goal_view_create_goal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.73"
+            android:gravity="center"
+            android:onClick="gotoCreateGoal"
+            android:text="Create a New Goal" />
     </LinearLayout>
-
-
-
-
 </RelativeLayout>
-
 <include
     android:layout_height="24dp"
     android:layout_alignParentLeft="true"

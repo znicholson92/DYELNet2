@@ -514,6 +514,10 @@ public class MainActivity extends Activity {
 
 	}
 	
+	public void gotoCreateGoal(View v)
+	{
+		gotoLayout(R.layout.create_goal);
+	}	
 	
 	/****************TESTING METHODS*************************/
 	public void connectToDatabase(View v)
