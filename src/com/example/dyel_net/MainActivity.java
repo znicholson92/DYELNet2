@@ -1208,4 +1208,19 @@ public class MainActivity extends Activity {
     	}
     	goal.viewGoal();
     }
+    
+    /**
+     * Delete the chosen goal for the specific user.
+     * @param v
+     */
+    public void deleteGoal(View v){
+    	String currentGoalName;
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 2){
+    			currentGoalName = GoalViewer.getCurrentGoalName();    			
+    			goal.deleteGoal(currentGoalName);
+    		}
+    	}
+    	goal.viewGoal();
+    }
 }

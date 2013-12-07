@@ -39,8 +39,7 @@ public class GoalViewer {
 	
 	public static final String complete = "'Completed?'"; 
 	public static int status = 0;
-	public static String currentDayID = null;
-	public static String currentExercise = null;
+	private static String currentGoalName = null;
 	private static String subID = null;
 	private static String type = null;
 	
@@ -51,8 +50,7 @@ public class GoalViewer {
 	 */
 	public static void viewSummary(MainActivity app, String userID)
 	{
-		status = 1;
-		
+		status = 1;		
 		app.gotoLayout(R.layout.goal_view);
 		LinearLayout goal_view_col_head = (LinearLayout)app.findViewById(R.id.goal_view_col_header);
 		ListView goal_view_listview = (ListView)app.findViewById(R.id.goal_view_listView);
@@ -70,9 +68,9 @@ public class GoalViewer {
 		//Expired goals
 		String queryResult = app.con.readQuery(SQL);		
 		//System.out.println(queryResult);
+		
 		writeQueryResult(app, queryResult, goal_view_col_head, goal_view_listview);
 		goal_view_topbar.setText("Goal View");	
-		
 		previous_SQL.push(SQL);
 	}
 	
@@ -87,6 +85,7 @@ public class GoalViewer {
 	public static void viewDetail(MainActivity app, String userID,
 			String goalName) throws JSONException {
 		status = 2;
+		setCurrentGoalName(goalName);
 		app.gotoLayout(R.layout.goal_view_detail);
 		TextView goalNameTV = (TextView)app.findViewById(R.id.goal_view_detail_goalName);
 		TextView categoryTV = (TextView)app.findViewById(R.id.goal_view_detail_category);
@@ -126,10 +125,10 @@ public class GoalViewer {
                 }else if (key.equals(SQLnotes)) {                	
                 	notesTV.setText(value);
                 }else if (key.equals(SQLcomplete)) {
-                	if(value == "1"){
-                		completeTV.setText("yes");
+                	if(value == "v"){
+                		completeTV.setText("Yes");
                 	}else {
-                		completeTV.setText("no");
+                		completeTV.setText("No");
                 	}
                 }else if (key.equals(SQLtype)) {                	
                 	type = value;
@@ -261,6 +260,14 @@ public class GoalViewer {
 	}
 	public static String getSubID() {
 		return subID;
+	}
+
+	public static String getCurrentGoalName() {
+		return currentGoalName;
+	}
+
+	public static void setCurrentGoalName(String currentGoalName) {
+		GoalViewer.currentGoalName = currentGoalName;
 	}
 }
 

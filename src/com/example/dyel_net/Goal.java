@@ -70,7 +70,7 @@ public class Goal {
 		        connection con = new connection("dyel-net_admin", "teamturtle", app);
 		        
 		        ProgressDialog pd;
-		        pd = ProgressDialog.show(app, "Loading", "Creating account...");
+		        pd = ProgressDialog.show(app, "Loading", "Creating a goal...");
 		        
 		        try {
 		        	con.writeQuery(SQL);
@@ -83,6 +83,25 @@ public class Goal {
 		        pd.cancel();        
 		        con.logout();        
 		        app.setContentView(R.layout.main_menu); 
+	}
+	public void deleteGoal(String goalName){		
+		String deleteSQL = "DELETE FROM goals WHERE username = '" +
+				userID +
+				"' and name = '" +
+				goalName +
+				"';";
+		connection con = new connection("dyel-net_admin", "teamturtle", app);
+		ProgressDialog pd;
+		pd = ProgressDialog.show(app, "Loading", "Deleting a goal...");
+
+		try {
+			con.writeQuery(deleteSQL);
+			Thread.sleep(2500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		pd.cancel();
+		con.logout();
 	}
 
 	public void cancel() {
