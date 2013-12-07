@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.30"
-            android:onClick="editSetGoals"
+            android:onClick="updateSetGoal"
             android:text="Update" />
 
         <Button
@@ -136,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.15"
-            android:onClick="cancelSetGoals"
+            android:onClick="cancelSetGoal"
             android:text="Cancel" />
         
         <Button
@@ -144,7 +144,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.15"
-            android:onClick="deleteSetGoals"
+            android:onClick="deleteSetGoal"
             android:text="Delete" />
         
     </LinearLayout>

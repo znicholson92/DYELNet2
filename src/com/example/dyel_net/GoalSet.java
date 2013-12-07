@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -43,15 +44,15 @@ public class GoalSet {
 			
 			TV1.setText("Reps");
 			TV2.setText("Weight");
-			ET1.setHint(j.get("reps").toString());
-			ET2.setHint(j.get("weight").toString());
+			ET1.setText(j.get("reps").toString());
+			ET2.setText(j.get("weight").toString());
 			
 		} catch (JSONException e) {e.printStackTrace();}
 	}
 
 	
 	
-	public static void update_editSet(final MainActivity app, String exerciseID, final String setID)
+	public static void updateSetGoal(final MainActivity app, final String setID)
 	{
 		EditText ET1 = (EditText)app.findViewById(R.id.goal_editset_et1);
 		EditText ET2 = (EditText)app.findViewById(R.id.goal_editset_et2);
@@ -60,14 +61,78 @@ public class GoalSet {
 		String reps, weight;
 		if(setID != null) //exerciseID -> setID
 		{
-			Thread trd = new Thread(new Runnable(){
+			/*Thread trd = new Thread(new Runnable(){
     			@Override
     			public void run(){
     				connection con2 = new connection(app);
     				con2.writeQuery("UPDATE _set SET finished = 1 WHERE setID ='" + setID + "'");
     			}
     		});
-    		trd.start();
+    		trd.start();*/
+			
+			reps = ET1.getText().toString();
+			weight = ET2.getText().toString();
+			
+			String note;
+			if(notes.getText().toString().length() < 1)
+				note = "NULL";
+			else
+				note = notes.getText().toString();
+			String updateSQL = 
+					"UPDATE _set SET " +
+					"reps='" +
+					reps +
+					"', weight='" +
+					weight +
+					"', notes='" +
+					note +
+					"', isReal='" +
+					"0" +  //hard coded
+					"', isGoal='" +
+					"1' " + //hard coded
+					"WHERE setID ='"+
+					setID+
+					"';";
+			app.con.writeQuery(updateSQL);
+					
+		}
+	}
+	
+	public static void deleteSetGoal(MainActivity app, String setID){		
+		String deleteSQL = "DELETE FROM _set WHERE setID = '" +
+				setID +
+				"';";
+		connection con = new connection("dyel-net_admin", "teamturtle", app);
+		ProgressDialog pd;
+		pd = ProgressDialog.show(app, "Loading", "Deleting a set goal...");
+
+		try {
+			con.writeQuery(deleteSQL);
+			Thread.sleep(2500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		pd.cancel();
+		con.logout();
+	}
+
+	public static void createSetGoal(final MainActivity app, String exerciseID, final String setID)
+	{
+		EditText ET1 = (EditText)app.findViewById(R.id.goal_editset_et1);
+		EditText ET2 = (EditText)app.findViewById(R.id.goal_editset_et2);
+		EditText notes = (EditText)app.findViewById(R.id.goal_editset_notes);
+		
+		String reps, weight;
+		if(setID != null) //exerciseID -> setID
+		{
+			/*Thread trd = new Thread(new Runnable(){
+    			@Override
+    			public void run(){
+    				connection con2 = new connection(app);
+    				con2.writeQuery("UPDATE _set SET finished = 1 WHERE setID ='" + setID + "'");
+    			}
+    		});
+    		trd.start();*/
 			
 			reps = ET1.getText().toString();
 			weight = ET2.getText().toString();
@@ -97,5 +162,4 @@ public class GoalSet {
 		}
 		//editing_set = false;
 	}
-
 }

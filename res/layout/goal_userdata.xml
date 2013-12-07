@@ -105,8 +105,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.30"
-            android:onClick="editUserDataGoals"
-            android:text="Edit" />
+            android:onClick="updateUserDataGoal"
+            android:text="Update" />
 
         <Button
             android:id="@+id/goal_cancel_userinfo_button"
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.15"
-            android:onClick="cancelUserDataGoals"
+            android:onClick="cancelUserDataGoal"
             android:text="Cancel" />
         
         <Button
@@ -122,7 +122,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.15"
-            android:onClick="deleteUserDataGoals"
+            android:onClick="deleteUserDataGoal"
             android:text="Delete" />
     </LinearLayout>
 

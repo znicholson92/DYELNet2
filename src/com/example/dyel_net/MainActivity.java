@@ -1188,11 +1188,15 @@ public class MainActivity extends Activity {
 
     
     /***********************GOALS METHODS*******************************/
-    public void viewSetGoals(View v){
+    
+	 public void viewSetGoals(View v) throws JSONException{
     	gotoLayout(R.layout.goal_edit_set);
-    	if(goal != null){
+    	if(goal != null || GoalViewer.getType().equals("set")){
     		goal.viewSetGoals();
+    	}else{
+    		goal.viewGoalDetail(GoalViewer.getCurrentGoalName());
     	}
+    		
     }
     public void viewUserDataGoals(View v){
        	gotoLayout(R.layout.goal_userdata); 
@@ -1235,6 +1239,7 @@ public class MainActivity extends Activity {
     		}
     	}
     }
+    
     public void updateGoal(View v) throws JSONException{
     	if(goal.isRunning()){
     		if(GoalViewer.status == 3){
@@ -1244,4 +1249,57 @@ public class MainActivity extends Activity {
     		   }    		
     	}
     }
+    
+    
+    public void cancelUserDataGoal(View v) throws JSONException{
+    	if(goal.isRunning()){
+    		String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    		if(GoalViewer.status == 2){
+    			goal.viewGoalDetail(currentGoalName);
+    		}else if(GoalViewer.status == 3){
+    			goal.viewDetailWithEdit(currentGoalName);    			
+    		}
+    	}
+    }
+    public void deleteUserDataGoal (View v){
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 2 || GoalViewer.status == 3){
+    			//TODO
+    		}
+    	}
+    }
+    public void updateUserDataGoal(View v) {
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 2 || GoalViewer.status == 3){
+    			//TODO
+    		}
+    	}
+    }
+    public void cancelSetGoal(View v) throws JSONException{
+    	if(goal.isRunning()){
+    		String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    		if(GoalViewer.status == 2){
+    			goal.viewGoalDetail(currentGoalName);
+    		}else if(GoalViewer.status == 3){
+    			goal.viewDetailWithEdit(currentGoalName);    			
+    		}
+    	}
+    }
+    public void deleteSetGoal(View v) throws JSONException{
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 2 || GoalViewer.status == 3){
+    			GoalSet.deleteSetGoal(this, GoalViewer.getSubID());
+    			goal.viewGoalDetail(GoalViewer.getCurrentGoalName());
+    		}
+    	}
+    }
+    public void updateSetGoal(View v) throws JSONException {
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 2 || GoalViewer.status == 3){
+    			GoalSet.updateSetGoal(this, GoalViewer.getSubID());
+    			goal.viewGoalDetail(GoalViewer.getCurrentGoalName());
+    		}
+    	}
+    }
+    
 }

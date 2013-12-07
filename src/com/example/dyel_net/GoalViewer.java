@@ -126,7 +126,7 @@ public class GoalViewer {
                 }else if (key.equals(SQLnotes)) {                	
                 	notesTV.setText(value);
                 }else if (key.equals(SQLcomplete)) {
-                	if(value == "1"){
+                	if(value.equals("1")){
                 		completeTV.setText("Yes");
                 	}else {
                 		completeTV.setText("No");
