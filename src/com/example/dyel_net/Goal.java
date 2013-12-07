@@ -84,6 +84,58 @@ public class Goal {
 		        con.logout();        
 		        app.setContentView(R.layout.main_menu); 
 	}
+	public void updateGoal(String originalGoalName){
+		//col_head = (LinearLayout) app.findViewById(R.id.working_out_col_header);
+    			//app.gotoLayout(R.layout.goal_update);
+				EditText goalNameET =  (EditText) app.findViewById(R.id.goal_update_goal_name);
+		        EditText noteET =	   (EditText) app.findViewById(R.id.goal_update_notes);
+		        EditText startDateTy = (EditText) app.findViewById(R.id.goal_update_dateofbirth_year);
+		        EditText startDateTm = (EditText) app.findViewById(R.id.goal_update_dateofbirth_month);
+		        EditText startDateTd = (EditText) app.findViewById(R.id.goal_update_dateofbirth_day);
+		        EditText endDateTy =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_year2);
+		        EditText endDateTm =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_month2);
+		        EditText endDateTd =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_day2);
+		        //category
+		        //completed?
+		        
+		        String goalName = goalNameET.getText().toString();
+		        String notes = noteET.getText().toString();
+		        String startDate = startDateTy.getText().toString()+"-"+startDateTm.getText().toString()+"-"+startDateTd.getText().toString();
+		        String endDate = endDateTy.getText().toString()+"-"+endDateTm.getText().toString()+"-"+endDateTd.getText().toString();
+		        //category
+		        //completed?
+		        		          
+		        String updateSQL = "UPDATE goals SET `name`='" +
+		        		goalName +
+		        		"', `notes`='" +
+		        		notes +
+		        		"', `start_date`='" +
+		        		startDate +
+		        		"', `goal_date`='" +
+		        		endDate +
+		        		"' WHERE `username` = '"+
+		        		userID +
+		        		"' and `name` = '" +
+		        		originalGoalName +
+		        		"';";
+		        System.out.println(updateSQL);
+		        
+		        connection con = new connection("dyel-net_admin", "teamturtle", app);
+		        
+		        ProgressDialog pd;
+		        pd = ProgressDialog.show(app, "Loading", "Updating a goal...");
+		        
+		        try {
+		        	con.writeQuery(updateSQL);
+					Thread.sleep(2500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();				}
+		        
+		        pd.cancel();        
+		        con.logout();        
+		        app.setContentView(R.layout.main_menu); 
+	}
 	public void deleteGoal(String goalName){		
 		String deleteSQL = "DELETE FROM goals WHERE username = '" +
 				userID +
@@ -142,5 +194,10 @@ public class Goal {
 	public void viewSetGoals() {
 		//GoalSet gs = new GoalSet(this.app, subID);
 		GoalSet.open_editSet(app, subID);
+	}
+	public void viewDetailWithEdit(String goalName) {
+		// TODO Auto-generated method stub
+		GoalViewer.viewDetailWithEdit(app, userID, goalName);
+		subID = GoalViewer.getSubID();
 	}
 }

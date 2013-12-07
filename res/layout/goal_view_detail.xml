@@ -183,7 +183,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:onClick="EditGoal"
+            android:onClick="editGoal"
             android:text="Edit" />
 
         <Button

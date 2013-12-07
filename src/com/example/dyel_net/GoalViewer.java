@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -125,7 +126,7 @@ public class GoalViewer {
                 }else if (key.equals(SQLnotes)) {                	
                 	notesTV.setText(value);
                 }else if (key.equals(SQLcomplete)) {
-                	if(value == "v"){
+                	if(value == "1"){
                 		completeTV.setText("Yes");
                 	}else {
                 		completeTV.setText("No");
@@ -140,6 +141,52 @@ public class GoalViewer {
                 
             }
     	}
+	}
+	public static void viewDetailWithEdit(MainActivity app, String userID,
+			String goalName) {
+		status = 3;
+		//TODO
+    	app.gotoLayout(R.layout.goal_update);
+    	
+		EditText goalNameET =  (EditText) app.findViewById(R.id.goal_update_goal_name);
+        EditText noteET =	   (EditText) app.findViewById(R.id.goal_update_notes);
+        EditText startDateTy = (EditText) app.findViewById(R.id.goal_update_dateofbirth_year);
+        EditText startDateTm = (EditText) app.findViewById(R.id.goal_update_dateofbirth_month);
+        EditText startDateTd = (EditText) app.findViewById(R.id.goal_update_dateofbirth_day);
+        EditText endDateTy =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_year2);
+        EditText endDateTm =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_month2);
+        EditText endDateTd =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_day2);
+        //category
+        //completed?
+		
+		String SQL = "SELECT * FROM goals " +
+				"WHERE username = '" +
+				userID+
+				"' AND name = '" +
+				goalName+
+				"';";	
+	String jString = app.con.readQuery(SQL);
+	
+	try {
+		JSONObject jsonObject = new JSONObject(jString);
+		JSONArray jArray = jsonObject.getJSONArray("data");
+		JSONObject j = jArray.getJSONObject(0);
+				
+		goalNameET.setText(j.get(SQLgoalName).toString());
+		noteET.setText(j.get(SQLnotes).toString());
+		String startDate = j.get(SQLstartDate).toString();
+		startDateTy.setText(startDate.substring(0,4));
+		startDateTm.setText(startDate.substring(5,7));
+		startDateTd.setText(startDate.substring(8,10));
+		
+		String endDate = j.get(SQLendDate).toString();
+		endDateTy.setText(endDate.substring(0,4));
+		endDateTm.setText(endDate.substring(5,7));
+		endDateTd.setText(endDate.substring(8,10));
+		
+		String isCompleted = j.get(SQLcomplete).toString();
+		
+	}catch (JSONException e) {e.printStackTrace();}
 	}
 	
 	/**
@@ -205,9 +252,6 @@ public class GoalViewer {
             	tableList.add(map);
         	}
         	
-    		/*SimpleAdapter myAdapter = 
-    				new SimpleAdapter(app, */
-        	
         	SpecialAdapter myAdapter = 
     				new SpecialAdapter(app, 
     								  tableList, 
@@ -269,5 +313,7 @@ public class GoalViewer {
 	public static void setCurrentGoalName(String currentGoalName) {
 		GoalViewer.currentGoalName = currentGoalName;
 	}
+
+	
 }
 

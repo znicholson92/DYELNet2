@@ -1223,4 +1223,25 @@ public class MainActivity extends Activity {
     	}
     	goal.viewGoal();
     }
+    /**
+     * Delete the chosen goal for the specific user.
+     * @param v
+     */
+    public void editGoal(View v){
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 2){
+    			String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    			goal.viewDetailWithEdit(currentGoalName);
+    		}
+    	}
+    }
+    public void updateGoal(View v) throws JSONException{
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 3){
+    			String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    			goal.updateGoal(currentGoalName);
+    			goal.viewGoal();
+    		   }    		
+    	}
+    }
 }
