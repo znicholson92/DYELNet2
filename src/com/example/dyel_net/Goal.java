@@ -155,6 +155,30 @@ public class Goal {
 		pd.cancel();
 		con.logout();
 	}
+	public void updateDeletedSubID(String goalName){
+		        String updateSQL = "UPDATE goals SET `type`='none', " +
+		        		"`subclassID`='' " +
+		        		"WHERE `username` = '"+
+		        		userID +
+		        		"' and `name` = '" +
+		        		goalName +
+		        		"';";
+		        System.out.println(updateSQL);
+		        
+		        connection con = new connection("dyel-net_admin", "teamturtle", app);
+		        ProgressDialog pd;
+		        pd = ProgressDialog.show(app, "Loading", "Updating the goal with delete userdata/set information...");
+		        
+		        try {
+		        	con.writeQuery(updateSQL);
+					Thread.sleep(2500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();				}
+		        
+		        pd.cancel();        
+		        con.logout();        
+	}
 
 	public void cancel() {
 		running = false;
@@ -192,8 +216,8 @@ public class Goal {
 		previous_SQL.push(SQL);
 	}
 	public void viewSetGoals() {
-		//GoalSet gs = new GoalSet(this.app, subID);
 		GoalSet.open_editSet(app, subID);
+		//GoalSet.viewSetGoal(app, subID);
 	}
 	public void viewDetailWithEdit(String goalName) {
 		// TODO Auto-generated method stub

@@ -1191,16 +1191,21 @@ public class MainActivity extends Activity {
     
 	 public void viewSetGoals(View v) throws JSONException{
     	gotoLayout(R.layout.goal_edit_set);
-    	if(goal != null || GoalViewer.getType().equals("set")){
+    	if(goal.isRunning() && GoalViewer.getType().equals("set")){
     		goal.viewSetGoals();
     	}else{
     		goal.viewGoalDetail(GoalViewer.getCurrentGoalName());
     	}
     		
     }
-    public void viewUserDataGoals(View v){
-       	gotoLayout(R.layout.goal_userdata); 
-       	userdata_load(true);  //isGoal == true
+    public void viewUserDataGoals(View v) throws JSONException{
+       	gotoLayout(R.layout.goal_userdata);
+       	if(goal.isRunning() && GoalViewer.getType().equals("userdata"))
+       		//userdata_load(true);  //isGoal == true
+       		GoalUserData.viewUserDataGoal(this, GoalViewer.getSubID());
+       	else 
+       		goal.viewGoalDetail(GoalViewer.getCurrentGoalName()); 
+       	//TODO :pop up?
     }
     /**
      * Create a goal summary for the specific user.
@@ -1211,6 +1216,15 @@ public class MainActivity extends Activity {
     		goal.createGoal();
     	}
     	goal.viewGoal();
+    }
+    /**
+     * Go back to a goal list view by canceling from a goal create page.
+     * @param v
+     */
+    public void cancelCreateGoal(View v){
+    	if(goal.isRunning()){
+    		goal.viewGoal();
+    	}
     }
     
     /**
@@ -1249,8 +1263,6 @@ public class MainActivity extends Activity {
     		   }    		
     	}
     }
-    
-    
     public void cancelUserDataGoal(View v) throws JSONException{
     	if(goal.isRunning()){
     		String currentGoalName = GoalViewer.getCurrentGoalName();  	
@@ -1261,19 +1273,36 @@ public class MainActivity extends Activity {
     		}
     	}
     }
-    public void deleteUserDataGoal (View v){
+    public void deleteUserDataGoal (View v) throws JSONException{
     	if(goal.isRunning()){
+    		String currentGoalName = GoalViewer.getCurrentGoalName();  	
     		if(GoalViewer.status == 2 || GoalViewer.status == 3){
-    			//TODO
+    			GoalUserData.deleteUserDataGoal(this, GoalViewer.getSubID());
+    			goal.updateDeletedSubID(currentGoalName);
+    		}
+    		
+    		if(GoalViewer.status == 2){
+    			goal.viewGoalDetail(currentGoalName);
+    		}else if(GoalViewer.status == 3){
+    			goal.viewDetailWithEdit(currentGoalName);    			
     		}
     	}
     }
-    public void updateUserDataGoal(View v) {
+    public void updateUserDataGoal(View v) throws JSONException {
     	if(goal.isRunning()){
+    		String currentGoalName = GoalViewer.getCurrentGoalName();  	
     		if(GoalViewer.status == 2 || GoalViewer.status == 3){
-    			//TODO
+    			GoalUserData.updateUserDataGoal(this, GoalViewer.getSubID());
+    		}
+    		if(GoalViewer.status == 2){
+    			goal.viewGoalDetail(currentGoalName);
+    		}else if(GoalViewer.status == 3){
+    			goal.viewDetailWithEdit(currentGoalName);    			
     		}
     	}
+    }
+    public void createUserDataGoal(View v){
+    	
     }
     public void cancelSetGoal(View v) throws JSONException{
     	if(goal.isRunning()){
@@ -1287,9 +1316,15 @@ public class MainActivity extends Activity {
     }
     public void deleteSetGoal(View v) throws JSONException{
     	if(goal.isRunning()){
+    		String currentGoalName = GoalViewer.getCurrentGoalName();
     		if(GoalViewer.status == 2 || GoalViewer.status == 3){
     			GoalSet.deleteSetGoal(this, GoalViewer.getSubID());
-    			goal.viewGoalDetail(GoalViewer.getCurrentGoalName());
+    			goal.updateDeletedSubID(currentGoalName);
+    		}
+    		if(GoalViewer.status == 2){
+    			goal.viewGoalDetail(currentGoalName);
+    		}else if(GoalViewer.status == 3){
+    			goal.viewDetailWithEdit(currentGoalName);    			
     		}
     	}
     }
@@ -1301,5 +1336,7 @@ public class MainActivity extends Activity {
     		}
     	}
     }
-    
+    public void createSetGoal(View v){
+    	GoalSet.createSetGoal(this);
+    }
 }

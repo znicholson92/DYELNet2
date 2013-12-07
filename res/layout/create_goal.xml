@@ -199,6 +199,7 @@
          	       android:layout_height="60dp"
          	       android:layout_marginTop="0dp"
          	       android:minHeight="60dp"
+         	       android:onClick="createSetGoal"
           	       android:text="Set Goals" />
 
                 <Button
@@ -207,6 +208,7 @@
          	       android:layout_height="60dp"
          	       android:layout_marginTop="0dp"
          	       android:minHeight="60dp"
+         	       android:onClick="createUserDataGoal"
           	       android:text="User Goals" />
             </LinearLayout>
 
@@ -255,7 +257,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:onClick=""
+            android:onClick="cancelCreateGoal"
             android:text="Cancel" />
     </LinearLayout>
 

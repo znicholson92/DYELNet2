@@ -296,16 +296,12 @@ public class GoalViewer {
 		}		
 	}
 	
-	
-
-	
 	public static String getType() {
 		return type;
 	}
 	public static String getSubID() {
 		return subID;
 	}
-
 	public static String getCurrentGoalName() {
 		return currentGoalName;
 	}
