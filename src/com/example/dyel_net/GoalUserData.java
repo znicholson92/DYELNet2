@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 public class GoalUserData {
 
@@ -125,6 +126,77 @@ public class GoalUserData {
 		pd.cancel();
 		con.logout();
 	}
+	
+	public static String createUserDataGoalWithHash(MainActivity app) {
+		
+		String userdataID = "";
+		EditText bodyfat = (EditText) app.findViewById(R.id.goal_userdata_edit_bodyfat);
+		EditText restinghr = (EditText) app.findViewById(R.id.goal_userdata_edit_restinghr);
+		EditText weight = (EditText) app.findViewById(R.id.goal_userdata_edit_weight);
+		EditText notes = (EditText) app.findViewById(R.id.goal_userdata_edit_notes);
+		Spinner bodyfatSP = (Spinner)app.findViewById(R.id.goal_userdata_edit_bodyfat_spinner);
+		Spinner restinghrSP = (Spinner)app.findViewById(R.id.goal_userdata_edit_restinghr_spinner);
+		Spinner weightSP = (Spinner)app.findViewById(R.id.goal_userdata_edit_weight_spinner);
+
+		//[Weight][RestingHR][BodyFat]
+		Integer weight_hash = weightSP.getSelectedItemPosition(); 
+		Integer restinghr_hash = restinghrSP.getSelectedItemPosition(); 
+		Integer bodyfat_hash = bodyfatSP.getSelectedItemPosition(); 
+		String category = weight_hash.toString() + restinghr_hash.toString() + bodyfat_hash.toString(); 
+		
+		
+		String SQL = "INSERT INTO userdata (username, bodyfat, restingHR, weight, category, notes, isGoal) "
+				+ "VALUES("
+				+ "'"
+				+ app.con.username()
+				+ "',"
+				+ "'"
+				+ bodyfat.getText().toString()
+				+ "',"
+				+ "'"
+				+ restinghr.getText().toString()
+				+ "',"
+				+ "'"
+				+ weight.getText().toString()
+				+ "',"
+				+ "'"
+				+ category 
+				+ "',"
+				+ "'"
+				+ notes.getText().toString() + "'," + true + ")";
+		// userdataID?
+		app.con.writeQuery(SQL);
+		
+		String readSQL = "SELECT userdataID FROM userdata WHERE username='"
+				+ app.con.username() + 
+				"' AND bodyfat='"+
+				bodyfat.getText().toString()+
+				"' AND restingHR='"+
+				restinghr.getText().toString()+
+				"' AND weight='"+
+				weight.getText().toString()+
+				"' AND notes='"+
+				notes.getText().toString()+
+				"' AND isGoal=true";
+		Log.w("SQL", readSQL);
+		String JSONstring = app.con.readQuery(readSQL);
+		JSONObject jsonObject;
+
+		if (JSONstring.length() > 10) {
+			try {
+				jsonObject = new JSONObject(JSONstring);
+				JSONArray jArray = jsonObject.getJSONArray("data");
+				JSONObject j = jArray.getJSONObject(0);
+				userdataID = j.get("userdataID").toString();
+
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else {
+			return "";
+		}
+		return userdataID;
+	}
 
 	public static String createUserDataGoal(MainActivity app) {
 		
@@ -133,6 +205,7 @@ public class GoalUserData {
 		EditText restinghr = (EditText) app.findViewById(R.id.goal_userdata_restinghr);
 		EditText weight = (EditText) app.findViewById(R.id.goal_userdata_weight);
 		EditText notes = (EditText) app.findViewById(R.id.goal_userdata_notes);
+		
 
 		String SQL = "INSERT INTO userdata (username, bodyfat, restingHR, weight, notes, isGoal) "
 				+ "VALUES("

@@ -1300,7 +1300,8 @@ public class MainActivity extends Activity {
     public void updateUserDataGoal(View v) throws JSONException {
     	if(goal.isRunning()){ //create
     		if(goal.status.equals("create")){
-        		String subID = GoalUserData.createUserDataGoal(this);
+        		//String subID = GoalUserData.createUserDataGoal(this);
+        		String subID = GoalUserData.createUserDataGoalWithHash(this);
         		goal.setCreatedSubID(subID);
         		goal.setCreatedType("userdata");
         		gotoLayout(R.layout.create_goal);
@@ -1319,7 +1320,8 @@ public class MainActivity extends Activity {
     	}
     }
     public void gotoCreateUserDataGoal(View v){
-    	gotoLayout(R.layout.goal_userdata);
+    	//gotoLayout(R.layout.goal_userdata);
+    	gotoLayout(R.layout.goal_userdata_edit);
     	goal.status = "create";
     }
     public void cancelSetGoal(View v) throws JSONException{

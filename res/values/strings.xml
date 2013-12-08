@@ -22,5 +22,10 @@
         <item>Stay Healthy</item>
         <item>Enhance Cardio</item>
     </string-array>
+    <string-array name="category_hash_arrays">
+        <item>Same As</item>
+        <item>Less Than</item>
+        <item>More Than</item>
+    </string-array>
 
 </resources>
