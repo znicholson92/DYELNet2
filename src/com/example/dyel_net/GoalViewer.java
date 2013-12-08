@@ -136,6 +136,7 @@ public class GoalViewer {
                 	//String goalType = value;
                 }else if (key.equals(SQLsubID)) { 
                 	subID = value;
+                	System.out.println("this is subID"+subID);
                 	//String goalSubID = value;
                 }
                 

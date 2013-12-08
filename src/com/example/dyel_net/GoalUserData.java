@@ -21,16 +21,16 @@ public class GoalUserData {
 	public static void viewUserDataGoal(final MainActivity app,
 			String userdataID) {
 		Boolean isGoal = true;
-		EditText bodyfat = (EditText) app
-				.findViewById(R.id.goal_userdata_bodyfat);
-		EditText restinghr = (EditText) app
-				.findViewById(R.id.goal_userdata_restinghr);
-		EditText weight = (EditText) app
-				.findViewById(R.id.goal_userdata_weight);
+		EditText bodyfat = (EditText) app.findViewById(R.id.goal_userdata_bodyfat);
+		EditText restinghr = (EditText) app.findViewById(R.id.goal_userdata_restinghr);
+		EditText weight = (EditText) app.findViewById(R.id.goal_userdata_weight);
 		EditText notes = (EditText) app.findViewById(R.id.goal_userdata_notes);
 
 		String SQL = "SELECT * FROM userdata WHERE " + "username='"
-				+ app.con.username() + "'" + "AND isGoal=" + isGoal + " "
+				+ app.con.username() + "'" 
+				+ "AND userdataID='"+
+				userdataID + "' "
+				+ "AND isGoal=" + isGoal + " "
 				+ "ORDER BY datetime DESC";
 		Log.w("SQL", SQL);
 		String JSONstring = app.con.readQuery(SQL);
@@ -126,8 +126,9 @@ public class GoalUserData {
 		con.logout();
 	}
 
-	public static void createUserDataGoal(MainActivity app, String userdataID) {
-
+	public static String createUserDataGoal(MainActivity app) {
+		
+		String userdataID = "";
 		EditText bodyfat = (EditText) app.findViewById(R.id.goal_userdata_bodyfat);
 		EditText restinghr = (EditText) app.findViewById(R.id.goal_userdata_restinghr);
 		EditText weight = (EditText) app.findViewById(R.id.goal_userdata_weight);
@@ -150,10 +151,36 @@ public class GoalUserData {
 				+ "'"
 				+ notes.getText().toString() + "'," + true + ")";
 		// userdataID?
-
 		app.con.writeQuery(SQL);
-		LinearLayout changes_bar = (LinearLayout) app
-				.findViewById(R.id.userdata_changesbar);
-		changes_bar.setVisibility(View.INVISIBLE);
+		
+		String readSQL = "SELECT userdataID FROM userdata WHERE username='"
+				+ app.con.username() + 
+				"' AND bodyfat='"+
+				bodyfat.getText().toString()+
+				"' AND restingHR='"+
+				restinghr.getText().toString()+
+				"' AND weight='"+
+				weight.getText().toString()+
+				"' AND notes='"+
+				notes.getText().toString()+
+				"' AND isGoal=true";
+		Log.w("SQL", readSQL);
+		String JSONstring = app.con.readQuery(readSQL);
+		JSONObject jsonObject;
+
+		if (JSONstring.length() > 10) {
+			try {
+				jsonObject = new JSONObject(JSONstring);
+				JSONArray jArray = jsonObject.getJSONArray("data");
+				JSONObject j = jArray.getJSONObject(0);
+				userdataID = j.get("userdataID").toString();
+
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else {
+			return "";
+		}
+		return userdataID;
 	}
 }

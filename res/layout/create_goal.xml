@@ -199,7 +199,7 @@
          	       android:layout_height="60dp"
          	       android:layout_marginTop="0dp"
          	       android:minHeight="60dp"
-         	       android:onClick="createSetGoal"
+         	       android:onClick="gotoCreateSetGoal"
           	       android:text="Set Goals" />
 
                 <Button
@@ -208,7 +208,7 @@
          	       android:layout_height="60dp"
          	       android:layout_marginTop="0dp"
          	       android:minHeight="60dp"
-         	       android:onClick="createUserDataGoal"
+         	       android:onClick="gotoCreateUserDataGoal"
           	       android:text="User Goals" />
             </LinearLayout>
 

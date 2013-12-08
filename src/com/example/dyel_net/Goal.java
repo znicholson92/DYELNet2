@@ -17,7 +17,7 @@ public class Goal {
 	/************* PRIVATE MEMBER VARIABLES ******************/
 	private MainActivity app;
 	private Stack<String> previous_SQL = new Stack<String>();
-	private String status;
+	String status = "";
 	private String userID;
 	private boolean running = false;
 
@@ -27,6 +27,9 @@ public class Goal {
 	private String type;
 	private String subID;
 	private GoalViewer gv = null;
+	private String createdSubID = null;
+	private String createdType = null;
+	
 	
 	public Goal(MainActivity a, String userID) {
 		app = a;
@@ -35,54 +38,64 @@ public class Goal {
 	}
 	public void createGoal(){
 		//col_head = (LinearLayout) app.findViewById(R.id.working_out_col_header);
-		
-				EditText goalNameET =  (EditText) app.findViewById(R.id.creategoal_goal_name);
-		        EditText noteET =	   (EditText) app.findViewById(R.id.creategoal_notes);
-		        EditText startDateTy = (EditText) app.findViewById(R.id.creategoal_dateofbirth_year);
-		        EditText startDateTm = (EditText) app.findViewById(R.id.creategoal_dateofbirth_month);
-		        EditText startDateTd = (EditText) app.findViewById(R.id.creategoal_dateofbirth_day);
-		        EditText endDateTy =   (EditText) app.findViewById(R.id.creategoal_dateofbirth_year2);
-		        EditText endDateTm =   (EditText) app.findViewById(R.id.creategoal_dateofbirth_month2);
-		        EditText endDateTd =   (EditText) app.findViewById(R.id.creategoal_dateofbirth_day2);
-		        //category
-		        //completed?
-		        
-		        String goalName = goalNameET.getText().toString();
-		        String note = noteET.getText().toString();
-		        String startDate = startDateTy.getText().toString()+"-"+startDateTm.getText().toString()+"-"+startDateTd.getText().toString();
-		        String endDate = endDateTy.getText().toString()+"-"+endDateTm.getText().toString()+"-"+endDateTd.getText().toString();
-		        //category
-		        //completed?
-		        
-		        
-		        String SQL = "INSERT INTO  `dyel-net_main`.`goals` "
-		                        +"(`username` ,`name` , `notes`, `start_date` , `goal_date`)"
-		                        +" VALUES ( "
-		                        +"'"+userID+"', "
-		                        +"'"+goalName+"', "
-		                        +"'"+note+"', "
-		                        +"'"+startDate+"', "
-		                        +"'"+endDate+"');";
-		     
-		        
-		        System.out.println(SQL);
-		        
-		        connection con = new connection("dyel-net_admin", "teamturtle", app);
-		        
-		        ProgressDialog pd;
-		        pd = ProgressDialog.show(app, "Loading", "Creating a goal...");
-		        
-		        try {
-		        	con.writeQuery(SQL);
-					Thread.sleep(2500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		        
-		        pd.cancel();        
-		        con.logout();        
-		        app.setContentView(R.layout.main_menu); 
+
+		EditText goalNameET = (EditText) app
+				.findViewById(R.id.creategoal_goal_name);
+		EditText noteET = (EditText) app.findViewById(R.id.creategoal_notes);
+		EditText startDateTy = (EditText) app
+				.findViewById(R.id.creategoal_dateofbirth_year);
+		EditText startDateTm = (EditText) app
+				.findViewById(R.id.creategoal_dateofbirth_month);
+		EditText startDateTd = (EditText) app
+				.findViewById(R.id.creategoal_dateofbirth_day);
+		EditText endDateTy = (EditText) app
+				.findViewById(R.id.creategoal_dateofbirth_year2);
+		EditText endDateTm = (EditText) app
+				.findViewById(R.id.creategoal_dateofbirth_month2);
+		EditText endDateTd = (EditText) app
+				.findViewById(R.id.creategoal_dateofbirth_day2);
+		// category
+		// completed?
+
+		String goalName = goalNameET.getText().toString();
+		String note = noteET.getText().toString();
+		String startDate = startDateTy.getText().toString() + "-"
+				+ startDateTm.getText().toString() + "-"
+				+ startDateTd.getText().toString();
+		String endDate = endDateTy.getText().toString() + "-"
+				+ endDateTm.getText().toString() + "-"
+				+ endDateTd.getText().toString();
+		// category
+		// completed?
+
+		String SQL = "INSERT INTO  `dyel-net_main`.`goals` "
+				+ "(`username` ,`name` , `notes`, `start_date` , `goal_date`, `type`, `subclassID`)"
+				+ " VALUES ( " + "'" + userID + "', " + "'" + goalName + "', "
+				+ "'" + note + "', " + "'" + startDate + "', " + "'" + endDate
+				+ "', " + "'" + createdType + "', " + "'" + createdSubID + "'"
+				+ ");";
+
+		System.out.println(SQL);
+
+		connection con = new connection("dyel-net_admin", "teamturtle", app);
+
+		ProgressDialog pd;
+		pd = ProgressDialog.show(app, "Loading", "Creating a goal...");
+
+		try {
+			con.writeQuery(SQL);
+			Thread.sleep(2500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		pd.cancel();
+		con.logout();
+		app.setContentView(R.layout.main_menu);
+		if (status.equals("create")) {
+			status = "";
+		}
 	}
 	public void updateGoal(String originalGoalName){
 		//col_head = (LinearLayout) app.findViewById(R.id.working_out_col_header);
@@ -179,6 +192,33 @@ public class Goal {
 		        pd.cancel();        
 		        con.logout();        
 	}
+	public void updateCreatedSubID(String goalName, String type, String subID){
+        String updateSQL = "UPDATE goals SET `type`='" +
+        		type +
+        		"', " +
+        		"`subclassID`='" +
+        		"subID" +
+        		"' " +
+        		"WHERE `username` = '"+
+        		userID +
+        		"' and `name` = '" +
+        		goalName +
+        		"';";
+        System.out.println(updateSQL);
+        
+        connection con = new connection("dyel-net_admin", "teamturtle", app);
+        ProgressDialog pd;
+        pd = ProgressDialog.show(app, "Loading", "Updating the goal with created userdata/set information...");
+        
+        try {
+        	con.writeQuery(updateSQL);
+			Thread.sleep(2500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();				}
+        
+        pd.cancel();        
+        con.logout();        
+}
 
 	public void cancel() {
 		running = false;
@@ -223,5 +263,17 @@ public class Goal {
 		// TODO Auto-generated method stub
 		GoalViewer.viewDetailWithEdit(app, userID, goalName);
 		subID = GoalViewer.getSubID();
+	}
+	public String getCreatedSubID(){
+		return createdSubID;
+	}
+	public void setCreatedSubID(String subID){
+		this.createdSubID = subID;
+	}
+	public String getCreatedType(){
+		return createdType;
+	}
+	public void setCreatedType(String type){
+		this.createdType = type;
 	}
 }
