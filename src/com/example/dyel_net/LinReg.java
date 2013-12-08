@@ -30,10 +30,9 @@ public class LinReg {
 	@SuppressWarnings("null")
 	private ArrayList<String> pull_days(String exer_id)
 	{
-		String temp = "SELECT session.dayID FROM _set INNER JOIN session ON session.sessionID = _set.sessionID " +
+		String temp = "SELECT DISTINCT session.dayID FROM _set INNER JOIN session ON session.sessionID = _set.sessionID " +
 					  "WHERE _set.exerciseID = " + exer_id + " AND _set.isReal=1 AND session.isGoal=0 AND " + 
-					  "session.username = '" + app.con.username() + "' " +
-					  "LIMIT 15 ";
+					  "session.username = '" + app.con.username() + "'";
 		Log.w("PULL DAYS", temp);
 		String jString = app.con.readQuery(temp);
 		Log.w("PULL DAYS", "result= " + jString);
