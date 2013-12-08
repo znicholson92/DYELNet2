@@ -90,6 +90,104 @@ public class GoalUserData {
 		return;
 	}
 
+	public static void viewUserDataGoalWithHash(final MainActivity app,
+			String userdataID) {
+		Boolean isGoal = true;
+		EditText bodyfat = (EditText) app.findViewById(R.id.goal_userdata_edit_bodyfat);
+		EditText restinghr = (EditText) app.findViewById(R.id.goal_userdata_edit_restinghr);
+		EditText weight = (EditText) app.findViewById(R.id.goal_userdata_edit_weight);
+		EditText notes = (EditText) app.findViewById(R.id.goal_userdata_edit_notes);
+		Spinner bodyfatSP = (Spinner)app.findViewById(R.id.goal_userdata_edit_bodyfat_spinner);
+		Spinner restinghrSP = (Spinner)app.findViewById(R.id.goal_userdata_edit_restinghr_spinner);
+		Spinner weightSP = (Spinner)app.findViewById(R.id.goal_userdata_edit_weight_spinner);
+
+		String SQL = "SELECT * FROM userdata WHERE " + "username='"
+				+ app.con.username() + "'" 
+				+ "AND userdataID='"+
+				userdataID + "' "
+				+ "AND isGoal=" + isGoal + " "
+				+ "ORDER BY datetime DESC";
+		Log.w("SQL", SQL);
+		String JSONstring = app.con.readQuery(SQL);
+		JSONObject jsonObject;
+
+		if (JSONstring.length() > 10) {
+			try {
+				jsonObject = new JSONObject(JSONstring);
+				JSONArray jArray = jsonObject.getJSONArray("data");
+				JSONObject j = jArray.getJSONObject(0);
+
+				bodyfat.setText(j.get("bodyfat").toString());
+				restinghr.setText(j.get("restingHR").toString());
+				weight.setText(j.get("weight").toString());
+				notes.setText(j.get("notes").toString());
+				String category = j.get("category").toString();
+				
+				if (category.charAt(0) == '0'){
+					weightSP.setSelection(0);
+				}else if (category.charAt(0) == '1'){
+					weightSP.setSelection(1);
+				}else {
+					weightSP.setSelection(2);
+				}
+				if (category.charAt(1) == '0'){
+					restinghrSP.setSelection(0);
+				}else if (category.charAt(1) == '1'){
+					restinghrSP.setSelection(1);
+				}else {
+					restinghrSP.setSelection(2);
+				}
+				if (category.charAt(2) == '0'){
+					bodyfatSP.setSelection(0);
+				}else if (category.charAt(2) == '1'){
+					bodyfatSP.setSelection(1);
+				}else {
+					bodyfatSP.setSelection(2);
+				}
+
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else {
+			return;
+		}
+
+		LinearLayout changes_bar = (LinearLayout) app
+				.findViewById(R.id.goal_userdata_changesbar);
+		changes_bar.setVisibility(View.INVISIBLE);
+
+		TextWatcher watcher = new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				LinearLayout changes_bar = (LinearLayout) app
+						.findViewById(R.id.goal_userdata_changesbar);
+				changes_bar.setVisibility(View.VISIBLE);
+			}
+		};
+
+		bodyfat.addTextChangedListener(watcher);
+		restinghr.addTextChangedListener(watcher);
+		weight.addTextChangedListener(watcher);
+		notes.addTextChangedListener(watcher);
+		if (isGoal) {
+			changes_bar.setVisibility(View.VISIBLE);
+		}
+		return;
+	}
+
+	
 	public static void updateUserDataGoal(final MainActivity app, String userdataID) {
 		EditText bodyfat = (EditText) app.findViewById(R.id.goal_userdata_bodyfat);
 		EditText restinghr = (EditText) app.findViewById(R.id.goal_userdata_restinghr);

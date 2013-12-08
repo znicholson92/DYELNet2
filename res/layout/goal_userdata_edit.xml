@@ -73,7 +73,7 @@
 	                android:layout_height="wrap_content"
 	                android:ems="10"
 	                android:onClick="userdata_changed"
-	                android:height="40dip" />
+	                android:height="40dip" android:inputType=""/>
             </LinearLayout>
 
             <LinearLayout
@@ -89,13 +89,14 @@
 	                android:drawSelectorOnTop="true"
 	                android:entries="@array/category_hash_arrays"
 	                 />
+	            
 	            <EditText
 	                android:id="@+id/goal_userdata_edit_weight"
 	                android:layout_width="match_parent"
 	                android:layout_height="wrap_content"
 	                android:ems="10"
 	                android:onClick="userdata_changed"
-	                android:height="40dip" />
+	                android:height="40dip" android:inputType=""/>
 	            </LinearLayout>
 
             <LinearLayout

@@ -1212,6 +1212,7 @@ public class MainActivity extends Activity {
        	if(goal.isRunning() && GoalViewer.getType().equals("userdata"))
        		//userdata_load(true);  //isGoal == true
        		GoalUserData.viewUserDataGoal(this, GoalViewer.getSubID());
+       		//GoalUserData.viewUserDataGoalWithHash(this, GoalViewer.getSubID());
        	else 
        		goal.viewGoalDetail(GoalViewer.getCurrentGoalName()); 
        	//TODO :pop up?
@@ -1300,7 +1301,6 @@ public class MainActivity extends Activity {
     public void updateUserDataGoal(View v) throws JSONException {
     	if(goal.isRunning()){ //create
     		if(goal.status.equals("create")){
-        		//String subID = GoalUserData.createUserDataGoal(this);
         		String subID = GoalUserData.createUserDataGoalWithHash(this);
         		goal.setCreatedSubID(subID);
         		goal.setCreatedType("userdata");
