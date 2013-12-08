@@ -33,7 +33,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class MainActivity extends Activity {
 
 	MainActivity app;
@@ -1212,16 +1211,189 @@ public class MainActivity extends Activity {
     	}
 	 }
 
+ 
     
     /***********************GOALS METHODS*******************************/
-    public void viewSetGoals(View v){
+    
+	 public void viewSetGoals(View v) throws JSONException{
     	gotoLayout(R.layout.goal_edit_set);
-    	if(goal != null){
+    	if(goal.isRunning() && GoalViewer.getType().equals("set")){
     		goal.viewSetGoals();
+    	}else{
+    		goal.viewGoalDetail(GoalViewer.getCurrentGoalName());
+    	}
+    		
+    }
+    public void viewUserDataGoals(View v) throws JSONException{
+       	gotoLayout(R.layout.goal_userdata);
+       	if(goal.isRunning() && GoalViewer.getType().equals("userdata"))
+       		//userdata_load(true);  //isGoal == true
+       		GoalUserData.viewUserDataGoal(this, GoalViewer.getSubID());
+       		//GoalUserData.viewUserDataGoalWithHash(this, GoalViewer.getSubID());
+       	else 
+       		goal.viewGoalDetail(GoalViewer.getCurrentGoalName()); 
+       	//TODO :pop up?
+    }
+    /**
+     * Create a goal summary for the specific user.
+     * @param v
+     */
+    public void createGoal(View v){
+    	if(goal.isRunning()){
+    		goal.createGoal();
+    	}
+    	goal.viewGoal();
+    }
+    /**
+     * Go back to a goal list view by canceling from a goal create page.
+     * @param v
+     */
+    public void cancelCreateGoal(View v){
+    	if(goal.isRunning()){
+    		goal.viewGoal();
     	}
     }
-    public void viewUserDataGoals(View v){
-       	gotoLayout(R.layout.goal_userdata); 
-       	userdata_load(true);  //isGoal == true
+    
+    /**
+     * Delete the chosen goal for the specific user.
+     * @param v
+     */
+    public void deleteGoal(View v){
+    	String currentGoalName;
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 2){
+    			currentGoalName = GoalViewer.getCurrentGoalName();    			
+    			goal.deleteGoal(currentGoalName);
+    		}
+    	}
+    	goal.viewGoal();
     }
+    /**
+     * Delete the chosen goal for the specific user.
+     * @param v
+     */
+    public void editGoal(View v){
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 2){
+    			String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    			goal.viewDetailWithEdit(currentGoalName);
+    		}
+    	}
+    }
+    
+    public void updateGoal(View v) throws JSONException{
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 3){
+    			String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    			goal.updateGoal(currentGoalName);
+    			goal.viewGoal();
+    		   }    		
+    	}
+    }
+    public void cancelUserDataGoal(View v) throws JSONException{
+    	if(goal.isRunning()){
+    		String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    		if(GoalViewer.status == 2){
+    			goal.viewGoalDetail(currentGoalName);
+    		}else if(GoalViewer.status == 3){
+    			goal.viewDetailWithEdit(currentGoalName);    			
+    		}
+    	}
+    }
+    public void deleteUserDataGoal (View v) throws JSONException{
+    	if(goal.isRunning()){
+    		String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    		if(GoalViewer.status == 2 || GoalViewer.status == 3){
+    			GoalUserData.deleteUserDataGoal(this, GoalViewer.getSubID());
+    			goal.updateDeletedSubID(currentGoalName);
+    		}
+    		
+    		if(GoalViewer.status == 2){
+    			goal.viewGoalDetail(currentGoalName);
+    		}else if(GoalViewer.status == 3){
+    			goal.viewDetailWithEdit(currentGoalName);    			
+    		}
+    	}
+    }
+    public void updateUserDataGoal(View v) throws JSONException {
+    	if(goal.isRunning()){ //create
+    		if(goal.status.equals("create")){
+        		String subID = GoalUserData.createUserDataGoalWithHash(this);
+        		goal.setCreatedSubID(subID);
+        		goal.setCreatedType("userdata");
+        		gotoLayout(R.layout.create_goal);
+    		}else { //update
+				String currentGoalName = GoalViewer.getCurrentGoalName();
+				if (GoalViewer.status == 2 || GoalViewer.status == 3) {
+					GoalUserData
+							.updateUserDataGoal(this, GoalViewer.getSubID());
+				}
+				if (GoalViewer.status == 2) {
+					goal.viewGoalDetail(currentGoalName);
+				} else if (GoalViewer.status == 3) {
+					goal.viewDetailWithEdit(currentGoalName);
+				}
+    		}
+    	}
+    }
+    public void gotoCreateUserDataGoal(View v){
+    	//gotoLayout(R.layout.goal_userdata);
+    	gotoLayout(R.layout.goal_userdata_edit);
+    	goal.status = "create";
+    }
+    public void cancelSetGoal(View v) throws JSONException{
+    	if(goal.isRunning()){
+    		String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    		if(GoalViewer.status == 2){
+    			goal.viewGoalDetail(currentGoalName);
+    		}else if(GoalViewer.status == 3){
+    			goal.viewDetailWithEdit(currentGoalName);    			
+    		}
+    	}
+    }
+    public void deleteSetGoal(View v) throws JSONException{
+    	if(goal.isRunning()){
+    		String currentGoalName = GoalViewer.getCurrentGoalName();
+    		if(GoalViewer.status == 2 || GoalViewer.status == 3){
+    			GoalSet.deleteSetGoal(this, GoalViewer.getSubID());
+    			goal.updateDeletedSubID(currentGoalName);
+    		}
+    		if(GoalViewer.status == 2){
+    			goal.viewGoalDetail(currentGoalName);
+    		}else if(GoalViewer.status == 3){
+    			goal.viewDetailWithEdit(currentGoalName);    			
+    		}
+    	}
+    }
+    public void updateSetGoal(View v) throws JSONException {
+    	if(goal.isRunning()){
+    		if(GoalViewer.status == 2 || GoalViewer.status == 3){
+    			GoalSet.updateSetGoal(this, GoalViewer.getSubID());
+    			goal.viewGoalDetail(GoalViewer.getCurrentGoalName());
+    		}
+    	}
+    }
+    public void gotoCreateSetGoal(View v){
+       	gotoLayout(R.layout.goal_set_create);
+    	goal.status = "create";
+    }
+	public void createSetGoal(View v) {
+		if (goal.isRunning() && goal.status.equals("create")) {
+			String subID = GoalSet.createSetGoal2(this);
+			goal.setCreatedSubID(subID);
+			goal.setCreatedType("set");
+			gotoLayout(R.layout.create_goal);
+		}
+	}
+	public void cancelCreateSetGoal(View v){
+		if(goal.isRunning()){
+			//TODO it should remember previous data
+			gotoLayout(R.layout.create_goal);
+		}
+	}
+	public void cancelUpdateGoal(View v) throws JSONException{
+		if (goal.isRunning())
+			goal.viewGoalDetail(GoalViewer.getCurrentGoalName());
+	}
+    
 }

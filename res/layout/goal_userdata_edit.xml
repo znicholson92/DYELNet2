@@ -53,33 +53,75 @@
             android:layout_width="185dp"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
+            <LinearLayout
+ 	       		android:id="@+id/goal_userdata_edit_restinghr_spinner_text"
+   	     		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:orientation="horizontal" >
+	            <Spinner
+	                android:id="@+id/goal_userdata_edit_restinghr_spinner"
+	                style="@style/NormalFont"
+	                android:layout_width="120dip"
+	                android:layout_height="match_parent"
+	                android:drawSelectorOnTop="true"
+	                android:entries="@array/category_hash_arrays"
+	                 />
+	
+	            <EditText
+	                android:id="@+id/goal_userdata_edit_restinghr"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:ems="10"
+	                android:onClick="userdata_changed"
+	                android:height="40dip" android:inputType=""/>
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/goal_userdata_restinghr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:onClick="userdata_changed"
-                android:height="40dip" />
+            <LinearLayout
+ 	       		android:id="@+id/goal_userdata_edit_weight_spinner_text"
+   	     		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:orientation="horizontal" >
+	            <Spinner
+	                android:id="@+id/goal_userdata_edit_weight_spinner"
+	                style="@style/NormalFont"
+	                android:layout_width="120dip"
+	                android:layout_height="match_parent"
+	                android:drawSelectorOnTop="true"
+	                android:entries="@array/category_hash_arrays"
+	                 />
+	            
+	            <EditText
+	                android:id="@+id/goal_userdata_edit_weight"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:ems="10"
+	                android:onClick="userdata_changed"
+	                android:height="40dip" android:inputType=""/>
+	            </LinearLayout>
 
+            <LinearLayout
+ 	       		android:id="@+id/goal_userdata_edit_bodyfat_spinner_text"
+   	     		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:orientation="horizontal" >
+	            <Spinner
+	                android:id="@+id/goal_userdata_edit_bodyfat_spinner"
+	                style="@style/NormalFont"
+	                android:layout_width="120dip"
+	                android:layout_height="match_parent"
+	                android:drawSelectorOnTop="true"
+	                android:entries="@array/category_hash_arrays"
+	                 />
+	            <EditText
+	                android:id="@+id/goal_userdata_edit_bodyfat"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:ems="10"
+	                android:onClick="userdata_changed"
+	                android:height="40dip" />
+	            </LinearLayout>
             <EditText
-                android:id="@+id/goal_userdata_weight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:onClick="userdata_changed"
-                android:height="40dip" />
-
-            <EditText
-                android:id="@+id/goal_userdata_bodyfat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:onClick="userdata_changed"
-                android:height="40dip" />
-
-            <EditText
-                android:id="@+id/goal_userdata_notes"
+                android:id="@+id/goal_userdata_edit_notes"
                 android:layout_width="match_parent"
                 android:layout_height="173dp"
                 android:ems="10"
@@ -92,7 +134,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/goal_userdata_changesbar"
+        android:id="@+id/goal_userdata_edit_changesbar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.14"

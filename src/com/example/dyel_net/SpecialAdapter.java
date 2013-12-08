@@ -23,8 +23,6 @@ public class SpecialAdapter extends SimpleAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
       View view = super.getView(position, convertView, parent);
-      //int colorPos = position % colors.length;
-      //view.setBackgroundColor(colors[colorPos]);
       view.setBackgroundColor(colors[0]);
       Object item = getItem(position);
       String row = item.toString();
@@ -33,14 +31,16 @@ public class SpecialAdapter extends SimpleAdapter {
     	  System.out.println("contains true");
     	  int startIndex = row.indexOf(complete);
     	  startIndex = startIndex + complete.length() + 1;
-    	  System.out.println(row.substring(startIndex, startIndex+1));
-    	  if (row.substring(startIndex, startIndex+1).contentEquals("1")){
+    	  System.out.println(row.substring(startIndex, startIndex+1));    	  
+    	  System.out.println(row);    	  
+    	  
+    	  if (row.substring(startIndex, startIndex+1).contentEquals("v")){
     		  view.setBackgroundColor(colors[1]); 
     		  lineThroughText(view);
+    	  }else {
+    		  
     	  }
-    	  
-      }
-      
+      }      
       return view;
     }
     
@@ -52,16 +52,13 @@ public class SpecialAdapter extends SimpleAdapter {
     	text.add((TextView) view.findViewById(R.id.cell3));
     	text.add((TextView) view.findViewById(R.id.cell4));
     	text.add((TextView) view.findViewById(R.id.cell5));
-    	text.add((TextView) view.findViewById(R.id.cell0));
-    	
+    	text.add((TextView) view.findViewById(R.id.cell0));    	
     	for (TextView eachText : text){
         	eachText.setTextColor(Color.WHITE);
             //text.setBackgroundColor(Color.RED); 
             int color = Color.argb( 200, 255, 64, 64 );
-            eachText.setBackgroundColor( color );
+            //eachText.setBackgroundColor( color );
             eachText.setPaintFlags(eachText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            
-    	}
-    	    	
+    	}    	    	
     }
 }

@@ -9,7 +9,7 @@
     <!-- Body -->
 
     <LinearLayout
-        android:id="@+id/goal_settings_body"
+        android:id="@+id/add_exercise_body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.42"
@@ -17,113 +17,130 @@
 
         <LinearLayout
             android:layout_width="126dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:height="40dip"
-                android:text="Resting HR" />
+                android:height="47dip"
+                android:ems="10"
+                android:text="Exercise" />
+
+            
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:height="47dip"
+                android:text="Weight" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:height="40dip"
-                android:text="Weight (LBS)" />
-
+                android:height="47dip"
+                android:text="Reps" />
+            
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:height="40dip"
-                android:text="Body Fat" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="118dp"
-                android:gravity="center"
-                android:height="40dip"
+                android:height="47dip"
                 android:text="Notes" />
+            
+            
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="185dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
+            <LinearLayout
+	            android:layout_width="185dp"
+	            android:layout_height="47dip"
+	            android:orientation="horizontal" >
+	            <Button
+		            android:id="@+id/goal_set_create_exercise_button"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_gravity="center_horizontal"
+		            android:layout_weight="0.73"
+		            android:gravity="center"
+		            android:onClick="browse_exercises"
+		            android:text="Browse" />
+
+	            <TextView
+	                android:id="@+id/goal_set_create_exercise_name"
+	                android:layout_width="98dp"
+	                android:layout_height="match_parent"
+	                android:layout_weight="0.51"
+	                android:gravity="center"
+	                android:text="Exercise" />
+
+	            <TextView
+	                android:id="@+id/goal_set_create_exercise_id"
+	                android:layout_width="18dp"
+	                android:layout_height="match_parent"
+	                android:gravity="center" />
+            
+            </LinearLayout>
+            
+
             <EditText
-                android:id="@+id/goal_userdata_restinghr"
+                android:id="@+id/goal_set_create_weight"
+                android:inputType="numberDecimal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:onClick="userdata_changed"
                 android:height="40dip" />
 
             <EditText
-                android:id="@+id/goal_userdata_weight"
+                android:id="@+id/goal_set_create_reps"
+                android:inputType="numberSigned"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:onClick="userdata_changed"
                 android:height="40dip" />
-
+            
             <EditText
-                android:id="@+id/goal_userdata_bodyfat"
+                android:id="@+id/goal_set_create_notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:onClick="userdata_changed"
+                android:gravity="center"
                 android:height="40dip" />
-
-            <EditText
-                android:id="@+id/goal_userdata_notes"
-                android:layout_width="match_parent"
-                android:layout_height="173dp"
-                android:ems="10"
-                android:inputType="textMultiLine"
-                android:onClick="userdata_changed"
-                android:height="40dip" >
-             	<!--  <requestFocus />-->
-            </EditText>
+         
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/goal_userdata_changesbar"
+        android:id="@+id/goal_set_create_changesbar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.14"
         android:orientation="horizontal" >
 
-        
         <Button
-            android:id="@+id/goal_update_userdata_button"
+            android:id="@+id/add_goal_set_create_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.30"
-            android:onClick="updateUserDataGoal"
-            android:text="Update" />
+            android:layout_weight="0.73"
+            android:gravity="center"
+            android:onClick="createSetGoal"
+            android:text="Add" />
 
         <Button
-            android:id="@+id/goal_cancel_userinfo_button"
+            android:id="@+id/cancel_goal_set_create_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.15"
-            android:onClick="cancelUserDataGoal"
+            android:gravity="center"
+            android:onClick="cancelCreateSetGoal"
             android:text="Cancel" />
-        
-        <Button
-            android:id="@+id/goal_delete_editset_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.15"
-            android:onClick="deleteUserDataGoal"
-            android:text="Delete" />
     </LinearLayout>
 
     <include layout="@layout/footer" />
