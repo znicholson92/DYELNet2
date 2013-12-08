@@ -1163,10 +1163,16 @@ public class MainActivity extends Activity {
     	if(strRtName != "" && strNumWeeks != ""){
     		
     		_pd = ProgressDialog.show(app, "Loading", "Creating routine...");
+    		
+    		//runGenerator task = new runGenerator();
+	    	//task.execute(strRtName, strNumWeeks);
+    		
     		routineGenerator.go(strRtName, strNumWeeks);
     		_pd.cancel();
     		gotoRoutineView(null);
 	    	routineView.viewRoutine(strRtName);
+	    	
+	    	
 	    	
     	}
     	

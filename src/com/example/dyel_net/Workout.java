@@ -377,6 +377,7 @@ public class Workout
 		if(!previous_SQL.isEmpty())
 		{
 			app.setContentView(R.layout.workingout);
+			app.current_layout = R.layout.workingout;
 			
 			col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
 			listview = (ListView)app.findViewById(R.id.workingout_listView);
