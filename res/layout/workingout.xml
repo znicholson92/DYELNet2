@@ -183,8 +183,6 @@
 
 <include
     android:layout_height="24dp"
-    android:layout_alignParentLeft="true"
-    android:layout_below="@+id/horizontalScrollView1"
     layout="@layout/footer" />
 
 </LinearLayout>

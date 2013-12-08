@@ -7,10 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class LinReg {
 
 	String exer_in;
-	String exer_id; 
+
 	String data_string; 
 	ArrayList<String> dayIDs;
 	MainActivity app;
@@ -18,10 +20,9 @@ public class LinReg {
 	HashMap<String, Float> hm1;
 	HashMap<String, Float> hm2;
 	
-	public LinReg(MainActivity a, String ex_id_global)
+	public LinReg(MainActivity a)
 	{
 		app = a;
-		exer_id = ex_id_global; 
 		hm1 = new HashMap<String, Float>();
 		hm2 = new HashMap<String, Float>();
 	}
@@ -29,10 +30,13 @@ public class LinReg {
 	@SuppressWarnings("null")
 	private ArrayList<String> pull_days(String exer_id)
 	{
-		String temp = "SELECT dayID FROM session WHERE exerciseID = '" + exer_id + "' AND username " +
-				"= '" + app.con.username() + "';";
+		String temp = "SELECT session.dayID FROM _set INNER JOIN session ON session.sessionID = _set.sessionID " +
+					  "WHERE _set.exerciseID = " + exer_id + " AND _set.isReal=1 AND session.isGoal=0 AND " + 
+					  "session.username = '" + app.con.username() + "' " +
+					  "LIMIT 15 ";
+		Log.w("PULL DAYS", temp);
 		String jString = app.con.readQuery(temp);
-		
+		Log.w("PULL DAYS", "result= " + jString);
 		ArrayList<String> dayIDs = new ArrayList<String>();
 		
 		try {
@@ -58,7 +62,7 @@ public class LinReg {
 		return adj;
 	}
 	
-	ArrayList<DataNode> grab_data(ArrayList<String> dayIDs, String exer_id)
+	ArrayList<DataNode> grab_data(ArrayList<String> setIDs, String exer_id)
 	{
 		ArrayList<DataNode> nodes = new ArrayList<DataNode>();
 		
@@ -66,11 +70,13 @@ public class LinReg {
 		int day_len = dayIDs.size();
 		while (iter < day_len)
 		{
+			Log.w("DAY LEN", "iter=" + Integer.toString(iter));
+			Log.w("DAY LEN", "day_len=" + Integer.toString(day_len));
 			DataNode temp = new DataNode();
 			temp.dayID = dayIDs.get(iter);
 			
-			String query_for_week = "SELECT week FROM schedule_week INNER JOIN schedule_day" +
-					" ON schedule_week.weekID = schedule_day.weekID WHERE dayID = '" + temp.dayID + "';"; 
+			String query_for_week = " SELECT week FROM schedule_week INNER JOIN schedule_day" +
+									" ON schedule_week.weekID = schedule_day.weekID WHERE dayID = '" + temp.dayID + "';"; 
 
 			String jString = app.con.readQuery(query_for_week);
 
@@ -85,8 +91,8 @@ public class LinReg {
 			int week = Integer.parseInt(week_s);
 			temp.week = week;
 			
-			String get_max = "SELECT MAX(weight) AS Max, reps FROM _set WHERE dayID = '" + temp.dayID
-					+ "' exerciseID = '" + exer_id + "';";
+			String get_max = "SELECT MAX(weight) AS Max, reps FROM _set WHERE dayID = " + temp.dayID
+					+ " AND exerciseID = " + exer_id;
 
 			String jString1 = app.con.readQuery(get_max);
 
@@ -211,15 +217,16 @@ public class LinReg {
 	}
 	
 	
-	void pull_data()
+	void pull_data(String exer_id)
 	{
-		dayIDs = pull_days(exer_id);
-		
-		ArrayList<DataNode> nodes = grab_data(dayIDs, exer_id);
-		float RegEqn[] = calc_reg(nodes);
-		hm1.put(exer_id, RegEqn[0]);
-		hm2.put(exer_id, RegEqn[1]);
-		
+		if(!hm1.containsKey(exer_id))
+		{
+			dayIDs = pull_days(exer_id);
+			ArrayList<DataNode> nodes = grab_data(dayIDs, exer_id);
+			float RegEqn[] = calc_reg(nodes);
+			hm1.put(exer_id, RegEqn[0]);
+			hm2.put(exer_id, RegEqn[1]);
+		}
 	}
 
 }

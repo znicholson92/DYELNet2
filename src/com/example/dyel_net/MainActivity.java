@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Stack;
 
 import android.R.layout;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.annotation.SuppressLint;
@@ -35,11 +36,13 @@ import org.json.JSONObject;
 
 public class MainActivity extends Activity {
 
+	MainActivity app;
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
+		app = this;
 		if(savedInstanceState != null)
 		{
 			//workout = (Workout)savedInstanceState.get("workout");
@@ -429,7 +432,11 @@ public class MainActivity extends Activity {
 		{
 			workout.goBack();
 		}
-		else if(current_layout == R.layout.workout_history && workout.getStatus() == "history")
+		else if(current_layout == R.layout.routine_view)
+		{
+			routineView.goBack();
+		}
+		else if(current_layout == R.layout.workout_history)
 		{
 			HistoryViewer.goBack(this);
 		}
@@ -555,11 +562,10 @@ public class MainActivity extends Activity {
 				workout.cancelInsertSet();
 			} else if (buttontext.equals("Delete")){
 				workout.cancelInsertSet();
-		}
+			}
+			workout.goBack();
+			workoutSliderShowFinish();
 		
-		workout.goBack();
-		
-		workoutSliderShowFinish();
 		} else {
 			if(buttontext.equals("Update") ){
 				routineView.submitUpdateSet();
@@ -690,14 +696,14 @@ public class MainActivity extends Activity {
 	{
 		workout.finish();
 		workoutSliderHideAll();
-		gotoLayout(R.layout.routine_view);
+		gotoLayout(R.layout.main_menu);
 	}
 	
 	public void deleteWorkout(View v)
 	{
 		workout.cancel();
 		workoutSliderHideAll();
-		gotoLayout(R.layout.routine_view);
+		gotoLayout(R.layout.main_menu);
 	}
 
 	public void workout_addNewSet(View v)
@@ -1133,6 +1139,7 @@ public class MainActivity extends Activity {
     		parent.expandGroup(index);
     }
     
+    ProgressDialog _pd;
     
     public void routineGenerator_generate(View v){
     	
@@ -1142,13 +1149,35 @@ public class MainActivity extends Activity {
     	String strNumWeeks = num_weeks.getText().toString();
     			
     	if(strRtName != "" && strNumWeeks != ""){
-	    	ProgressDialog pd;
-	        pd = ProgressDialog.show(this, "Loading", "Creating account...");
-	    	routineGenerator.go(strRtName, strNumWeeks);	    	
-	    	pd.cancel();
+    		
+    		_pd = ProgressDialog.show(app, "Loading", "Creating routine...");
+	    	
+    		runGenerator task = new runGenerator();
+    		
+    		task.execute(strRtName, strNumWeeks);
+    		
     	}
     	
     }
+    
+    class runGenerator extends AsyncTask<String, Void, String>
+	{
+    	String arg1;
+		@Override
+		protected String doInBackground(String... arg0) {
+			arg1 = arg0[1];
+			return arg0[0];
+		}
+		
+		@Override
+		protected void onPostExecute(String result){
+			routineGenerator.go(result, arg1);
+			_pd.cancel();
+	    	gotoRoutineView(null);
+	    	routineView.viewRoutine(result);
+		}
+		
+	}
 
 
 	/***************************************************************/

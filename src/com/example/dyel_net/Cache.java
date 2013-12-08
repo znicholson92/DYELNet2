@@ -53,11 +53,12 @@ public class Cache {
 		Log.w("Exercise Name", exercise_name);
 		Log.w("DAY", day);
 		String exerciseID = getExerciseID(exercise_name);
-		String set = Integer.toString(getSetCount(routineHash) + 1);
-		for(int s=0; s < sets; s++){
+		int set = getSetCount(routineHash) + 1;
+		for(int s=1; s <= sets; s++){
 			String sql = "INSERT INTO routine(routineHash, day, _set, setnumber, exerciseID) " +
-					 	 "VALUES('" + routineHash + "'," + day + "," + set + "," + Integer.toString(s) + "," + exerciseID + ")";
+					 	 "VALUES('" + routineHash + "'," + day + "," + Integer.toString(set+s-1) + "," + Integer.toString(s) + "," + exerciseID + ")";
 			db.execSQL(sql);
+			Log.w("CACHE SQL", sql);
 		}
 	}
 	
@@ -83,27 +84,30 @@ public class Cache {
 		cursor.moveToNext();
 		int result = cursor.getInt(0);
 		String exerciseID = Integer.toString(result);
+		Log.w("CACHE", "exerciseID=" + exerciseID);
 		cursor.close();
 		return exerciseID;
 	}
 	
 	public int getExerciseID(String routineHash, int day, int set){
-		String sql = "SELECT exerciseID FROM routine " + "" +
-				     "WHERE routineHash='" + routineHash + "'" +
-				     "AND day=" + day +
-				     "AND _set=" + set;
+		String sql = " SELECT exerciseID FROM routine " + "" +
+				     " WHERE routineHash='" + routineHash + "'" +
+				     " AND day=" + day +
+				     " AND _set=" + set;
+		Log.w("CACHE SQL", sql);
 		Cursor cursor = db.rawQuery(sql, null);
 		cursor.moveToNext();
 		int result = cursor.getInt(0);
+		Log.w("CACHE", "exerciseID=" + Integer.toString(result));
 		cursor.close();
 		return result;
 	}
 
 	public int getSetNumber(String routineHash, int day, int set){
-		String sql = "SELECT setnumber FROM routine " + "" +
-				     "WHERE routineHash='" + routineHash + "'" +
-				     "AND day=" + day +
-				     "AND _set=" + set;
+		String sql = " SELECT setnumber FROM routine " + "" +
+				     " WHERE routineHash='" + routineHash + "'" +
+				     " AND day=" + day +
+				     " AND _set=" + set;
 		Cursor cursor = db.rawQuery(sql, null);
 		cursor.moveToNext();
 		int result = cursor.getInt(0);
@@ -112,9 +116,9 @@ public class Cache {
 	}
 	
 	public int getNumberOfSets(String routineHash, int day){
-		String sql = "SELECT count(*) FROM routin " +
-					 "WHERE routineHash='" + routineHash + "'" +
-					 "AND day=" + day;
+		String sql = " SELECT count(*) FROM routine " +
+					 " WHERE routineHash='" + routineHash + "'" +
+					 " AND day=" + day;
 		Cursor cursor = db.rawQuery(sql, null);
 		cursor.moveToNext();
 		int result = cursor.getInt(0);
@@ -125,14 +129,14 @@ public class Cache {
 	/*******************CREATE TABLE METHODS***************************/
 	private void createTable_set(){
 		
-		String SQL = "CREATE TABLE _set( " +
-					 "setID INT PRIMARY KEY, " +
-					 "sessionID INT, " +
-					 "dayID INT, " +
-					 "exerciseID INT, " +
-					 "reps INT, " + 
-					 "weight DOUBLE, " +
-					 "setnumber INT, " +
+		String SQL = " CREATE TABLE _set( " +
+					 " setID INT PRIMARY KEY, " +
+					 " sessionID INT, " +
+					 " dayID INT, " +
+					 " exerciseID INT, " +
+					 " reps INT, " + 
+					 " weight DOUBLE, " +
+					 " setnumber INT, " +
 					 "notes TEXT, " +
 					 "isReal INT, " +
 					 "isGoal INT)";

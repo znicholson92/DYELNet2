@@ -108,6 +108,7 @@ public class connection
 	public String readQuery(String SQL)
 	{
 		result = "NULL";
+		Log.w("CONNECTION", SQL);
 		_connection task = new _connection();
 		task.execute("read", SQL, "NO");
 		try {Thread.sleep(1000);} 
@@ -119,6 +120,7 @@ public class connection
 		while(result.length() < 5 && timer < (long)20000){
 			timer = System.currentTimeMillis() - ti;
 		}
+		Log.w("CONNECTION", "result=" + result);
 		return result;
 	}
 	
@@ -269,7 +271,8 @@ public class connection
 		        			done_list.setAdapter(myAdapter2);
 		        		}
 	        		} else {
-	        			done_list.setAdapter(null);
+	        			if(done_list != null)
+	        				done_list.setAdapter(null);
 	        		}
 	            	
 	        	} catch (JSONException e) {

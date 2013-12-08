@@ -27,12 +27,13 @@ public class RoutineGenerator {
 	
 	private ArrayList<String> dayNames = new ArrayList<String>();
 	
-	LinReg regression = new LinReg(app, ex_id_global);
+	LinReg regression;
 	
 	public RoutineGenerator(MainActivity _app){
 		app = _app;
 		routineHash = Long.toString(System.currentTimeMillis());
 		dayNames.add("dummy");
+		regression = new LinReg(app);
 	}
 	
 	private String getDayName(int day){
@@ -87,7 +88,7 @@ public class RoutineGenerator {
 		
 		try 
 		{
-			generateRegression();
+
 			JSONObject jObject = generateMainJSON();
 			addToDatabase(jObject);
 		} 
@@ -98,10 +99,7 @@ public class RoutineGenerator {
 		
 	}
 	
-	private void generateRegression(){  //takes exercise string as parameter
 
-		regression.pull_data(); //does regression on this exercise, stores equation in hashmaps.
-	}
 	
 	
 	
@@ -112,7 +110,7 @@ public class RoutineGenerator {
 		
 		/*************ADDING WEEKS*******************/
 		JSONArray jArray_week = new JSONArray();
-		for(int week=0; week < weeks; week++){
+		for(int week=1; week < weeks; week++){
 			JSONObject jsonObject_week = new JSONObject();
 			makeJSON_week(jsonObject_week, week);
 			jArray_week.put(week, jsonObject_week);
@@ -127,7 +125,7 @@ public class RoutineGenerator {
 		jsonObject_week.put("week", Integer.toString(week));
 		/*************ADDING DAYS*******************/
 		JSONArray jArray_day = new JSONArray();
-		for(int day=0; day < 7; day++){
+		for(int day=1; day < dayNames.size(); day++){
 			JSONObject jsonObject_day = new JSONObject();
 			makeJSON_day(jsonObject_day, day, week);
 			jArray_day.put(day, jsonObject_day);
@@ -144,7 +142,7 @@ public class RoutineGenerator {
 		/*************ADDING SETS*******************/
 		int numberOfSets = getNumberOfSets(day);
 		JSONArray jArray_set = new JSONArray();
-		for(int set=0; set < numberOfSets; set++){
+		for(int set=1; set <= numberOfSets; set++){
 			JSONObject jsonObject_set = new JSONObject();
 			makeJSON_Set(jsonObject_set, set, day, week);
 			jArray_set.put(set, jsonObject_set);
@@ -176,31 +174,24 @@ public class RoutineGenerator {
 			int set_rep[] = new int[2];
 			
 			if (rem == 1)
-			{
-				set_rep[0] = 4;
-				set_rep[1] = 12; 
-				ret_map.put(iter, set_rep);
+			{ 
+				ret_map.put(iter, new int[]{4, 12});
 			}
 			
 			if (rem == 2)
 			{
-				set_rep[0] = 4;
-				set_rep[1] = 8;
-				ret_map.put(iter, set_rep);
+				ret_map.put(iter, new int[]{4, 8});
 			}
 			
 			if (rem == 3)
 			{
-				set_rep[0] = 4;
-				set_rep[1] = 5;
-				ret_map.put(iter, set_rep);
+				ret_map.put(iter, new int[]{4, 5});
 			}
 			
 			if (rem == 0)
 			{
-				set_rep[0] = 4; 
-				set_rep[1] = -1; //designates 10, 8, 5, 3, 1 week
-				ret_map.put(iter, set_rep);
+				//designates 10, 8, 5, 3, 1 week
+				ret_map.put(iter, new int[]{4, -1});
 			}
 			
 			iter++;
@@ -212,8 +203,10 @@ public class RoutineGenerator {
 	public HashMap<String, String> function(int week, int setnumber, int exerciseID){
 		
 		/* Get equation params */
-		float b0 = regression.hm1.get(exerciseID);
-		float b1 = regression.hm2.get(exerciseID);
+		String strExID = Integer.toString(exerciseID);
+		regression.pull_data(strExID);
+		float b0 = regression.hm1.get(strExID);
+		float b1 = regression.hm2.get(strExID);
 		
 		/* Approx 1rm (adjusted) at given week */
 		float y = (float) (b0 + (b1 * Math.log(week)));
@@ -314,7 +307,7 @@ public class RoutineGenerator {
 			
 			SQL = "INSERT INTO routine(name, username, lastedited) VALUES('" + 
 					routine_name + "','" +
-					app.con.username() + ',' +
+					app.con.username() + "','" +
 					timeStamp + "')";
 			
 			app.con.writeQuery(SQL);		
@@ -330,8 +323,8 @@ public class RoutineGenerator {
 				
 				String week = jObject_week.getString("week");
 				
-				SQL = "INSERT INTO week(week, routineID, finished) VALUES (" +
-					  week + "," + routineID + ",0)";
+				SQL = "INSERT INTO week(week, routineID) VALUES (" +
+					  week + "," + routineID + ")";
 				
 				app.con.writeQuery(SQL);
 				
@@ -348,8 +341,8 @@ public class RoutineGenerator {
 					
 					String dayname = jObject_day.getString("name");
 					
-					SQL = "INSERT INTO day(weekID, day, name, finished) VALUES(" +
-						  weekID + "," + day + "," + dayname + ",0)";
+					SQL = "INSERT INTO day(weekID, day, name) VALUES(" +
+						  weekID + "," + day + "," + dayname + ")";
 					
 					app.con.writeQuery(SQL);
 					

@@ -190,6 +190,18 @@ public class RoutineView extends Activity {
 		
 	}
 	
+	public void viewRoutine(String routineName){
+		String query = "SELECT routineID, name As 'Name' " +
+				" FROM routine" +
+				" WHERE username='" + app.con.username() + "'" +
+				" AND name='" + routineName + "'";
+		
+		app.con.readQuery(query, listView, col_head);
+		
+		pushBack(query);
+		status = "routines";
+	}
+	
 	public void openAddNewSet(String...strings)
 	{
 		app.gotoLayout(R.layout.add_set);
@@ -297,6 +309,9 @@ public class RoutineView extends Activity {
 		
 		if(pops > 0 && !previous_SQL.isEmpty())
 		{
+			Log.w("ROUTINE VIEW", "GOING BACK");
+			app.current_layout = R.layout.routine_view;
+			
 			if(current_SQL.equals((String)previous_SQL.peek()))
 				pops = 2;
 			Log.w("POPS", Integer.toString(pops));
@@ -307,12 +322,12 @@ public class RoutineView extends Activity {
 				tbar_text = previous_topbar.pop();
 			}
 			
+			listView = (ListView)app.findViewById(R.id.routineview_listView);
+			
 			app.con.readQuery(SQL, listView, col_head);
 			
 			if(tbar_text != null)
 				topbar.setText(tbar_text);
-			
-			app.current_layout = R.layout.routine_view;
 			
 			return true;
 		} else {
@@ -365,6 +380,8 @@ public class RoutineView extends Activity {
 			TextView TV2 = (TextView)app.findViewById(R.id.editset_tv2);
 			
 			setnumTV.setText(setnumber);
+			
+			current_SQL = "BLAH";
 			
 			String SQL = "SELECT exercise.name, reps, weight " + 
 						 "FROM _set INNER JOIN exercise ON _set.exerciseID = exercise.exerciseID " +

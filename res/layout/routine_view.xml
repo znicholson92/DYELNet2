@@ -182,8 +182,6 @@
 
 <include
     android:layout_height="24dp"
-    android:layout_alignParentLeft="true"
-    android:layout_below="@+id/routineview_horizontalScrollView1"
     layout="@layout/footer" />
 
 </LinearLayout>
