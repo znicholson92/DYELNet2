@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -158,7 +159,7 @@ public class GoalViewer {
         EditText endDateTm =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_month2);
         EditText endDateTd =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_day2);
         //category
-        //completed?
+        CheckBox completedCB = (CheckBox)app.findViewById(R.id.goal_update_checkBox1);
 		
 		String SQL = "SELECT * FROM goals " +
 				"WHERE username = '" +
@@ -186,6 +187,9 @@ public class GoalViewer {
 		endDateTd.setText(endDate.substring(8,10));
 		
 		String isCompleted = j.get(SQLcomplete).toString();
+		if(isCompleted.equals("1")){
+			completedCB.setChecked(true);
+		}
 		
 	}catch (JSONException e) {e.printStackTrace();}
 	}

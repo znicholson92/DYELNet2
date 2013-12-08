@@ -1371,4 +1371,8 @@ public class MainActivity extends Activity {
 			gotoLayout(R.layout.create_goal);
 		}
 	}
+	public void cancelUpdateGoal(View v) throws JSONException{
+		if (goal.isRunning())
+			goal.viewGoalDetail(GoalViewer.getCurrentGoalName());
+	}
 }

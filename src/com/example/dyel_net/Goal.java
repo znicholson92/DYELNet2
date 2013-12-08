@@ -6,6 +6,7 @@ import org.json.JSONException;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -54,6 +55,9 @@ public class Goal {
 				.findViewById(R.id.creategoal_dateofbirth_month2);
 		EditText endDateTd = (EditText) app
 				.findViewById(R.id.creategoal_dateofbirth_day2);
+		CheckBox completedCB = (CheckBox)app.findViewById(R.id.creategoal_checkBox1);
+		
+		
 		// category
 		// completed?
 
@@ -65,15 +69,20 @@ public class Goal {
 		String endDate = endDateTy.getText().toString() + "-"
 				+ endDateTm.getText().toString() + "-"
 				+ endDateTd.getText().toString();
+		String completed;
+		if (completedCB.isChecked()){
+			completed = "1";
+		} else {
+			completed = "0";
+		}
 		// category
-		// completed?
 
 		String SQL = "INSERT INTO  `dyel-net_main`.`goals` "
-				+ "(`username` ,`name` , `notes`, `start_date` , `goal_date`, `type`, `subclassID`)"
+				+ "(`username` ,`name` , `notes`, `start_date` , `goal_date`, `type`, `subclassID`, `completed`)"
 				+ " VALUES ( " + "'" + userID + "', " + "'" + goalName + "', "
 				+ "'" + note + "', " + "'" + startDate + "', " + "'" + endDate
 				+ "', " + "'" + createdType + "', " + "'" + createdSubID + "'"
-				+ ");";
+				+ ", '" + completed +"');";
 
 		System.out.println(SQL);
 

@@ -46,7 +46,7 @@ public class GoalSet {
 	public static void viewSetGoal(MainActivity app, String setID)
 	{		
 		TextView exercise = (TextView)app.findViewById(R.id.goal_set_create_exercise_name);
-		EditText setnumET = (EditText)app.findViewById(R.id.goal_set_create_setnumber);
+		//EditText setnumET = (EditText)app.findViewById(R.id.goal_set_create_setnumber);
 		EditText ET1 = (EditText)app.findViewById(R.id.goal_set_create_reps);
 		EditText ET2 = (EditText)app.findViewById(R.id.goal_set_create_weight);
 		//TextView TV1 = (TextView)app.findViewById(R.id.goal_set_create_tv1);
@@ -67,7 +67,7 @@ public class GoalSet {
 			//TV1.setText("Reps");
 			//TV2.setText("Weight");
 			//setnumET.setText(j.get("setnumber").toString());
-			setnumET.setText("N/A");
+			//setnumET.setText("N/A");
 			ET1.setText(j.get("reps").toString());
 			ET2.setText(j.get("weight").toString());
 			
@@ -142,18 +142,22 @@ public class GoalSet {
 		TextView exerciseID_TV = (TextView)app.findViewById(R.id.goal_set_create_exercise_id);
 		TextView repsTV = (TextView)app.findViewById(R.id.goal_set_create_reps);
 		TextView weightTV = (TextView)app.findViewById(R.id.goal_set_create_weight);
+		TextView notesTV = (TextView)app.findViewById(R.id.goal_set_create_notes);
+		
 		
 		String exerciseID = exerciseID_TV.getText().toString();
 		String reps = repsTV.getText().toString();
 		String weight = weightTV.getText().toString();
+		String notes = notesTV.getText().toString();
 		
 		if(exerciseID == "" || reps == "" || weight == ""){
 			app.showDialog("Missing Fields");
 		} else {
-			String SQL = "INSERT INTO _set(exerciseID, reps, weight, isReal, isGoal) " +
+			String SQL = "INSERT INTO _set(exerciseID, reps, weight, notes, isReal, isGoal ) " +
 	 				  	 "VALUES("+ exerciseID + "," + 
 	 				  			  reps + "," +
-	 				  			  weight + "," + 
+	 				  			  weight + "," +
+	 				  			  notes + "," +
 	 				  			  "0,1)";			
 			app.con.writeQuery(SQL);
 		}
@@ -164,6 +168,8 @@ public class GoalSet {
 				reps+
 				"' AND weight='"+
 				weight+
+				"' AND notes='"+
+				notes+
 				"' AND isGoal=true";
 		
 		Log.w("SQL", readSQL);
