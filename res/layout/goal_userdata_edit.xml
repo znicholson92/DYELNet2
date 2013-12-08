@@ -148,7 +148,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.30"
             android:onClick="updateUserDataGoal"
-            android:text="Update" />
+            android:text="Create" />
 
         <Button
             android:id="@+id/goal_cancel_userinfo_button"
