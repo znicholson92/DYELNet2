@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -136,6 +137,54 @@ public class GoalSet {
 		con.logout();
 	}
 
+	public static String createSetGoal2(MainActivity app){
+		String setID = "";
+		TextView exerciseID_TV = (TextView)app.findViewById(R.id.goal_set_create_exercise_id);
+		TextView repsTV = (TextView)app.findViewById(R.id.goal_set_create_reps);
+		TextView weightTV = (TextView)app.findViewById(R.id.goal_set_create_weight);
+		
+		String exerciseID = exerciseID_TV.getText().toString();
+		String reps = repsTV.getText().toString();
+		String weight = weightTV.getText().toString();
+		
+		if(exerciseID == "" || reps == "" || weight == ""){
+			app.showDialog("Missing Fields");
+		} else {
+			String SQL = "INSERT INTO _set(exerciseID, reps, weight, isReal, isGoal) " +
+	 				  	 "VALUES("+ exerciseID + "," + 
+	 				  			  reps + "," +
+	 				  			  weight + "," + 
+	 				  			  "0,1)";			
+			app.con.writeQuery(SQL);
+		}
+		//then receive setID from here
+		String readSQL = "SELECT setID FROM _set WHERE exerciseID='"
+				+ exerciseID + 
+				"' AND reps='"+
+				reps+
+				"' AND weight='"+
+				weight+
+				"' AND isGoal=true";
+		
+		Log.w("SQL", readSQL);
+		String JSONstring = app.con.readQuery(readSQL);
+		JSONObject jsonObject;
+
+		if (JSONstring.length() > 10) {
+			try {
+				jsonObject = new JSONObject(JSONstring);
+				JSONArray jArray = jsonObject.getJSONArray("data");
+				JSONObject j = jArray.getJSONObject(0);
+				setID = j.get("setID").toString();
+
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else {
+			return "";
+		}
+		return setID;
+	}
 	//public static void createSetGoal(final MainActivity app, String exerciseID, final String setID)
 	public static void createSetGoal(final MainActivity app)
 	{
@@ -174,6 +223,18 @@ public class GoalSet {
 	  	
 			app.con.writeQuery(SQL);
 					
+		}
+	}
+
+	public static void setBrowseResult(MainActivity app, String...strings) {
+		app.gotoLayout(R.layout.goal_set_create);		
+		if(strings.length > 0){
+			String exercise = strings[0];
+			String exerciseID = strings[1];
+			TextView exerciseTV = (TextView)app.findViewById(R.id.goal_set_create_exercise_name);
+			TextView exerciseID_TV = (TextView)app.findViewById(R.id.goal_set_create_exercise_id);
+			exerciseTV.setText(exercise);
+			exerciseID_TV.setText(exerciseID);
 		}
 	}
 }

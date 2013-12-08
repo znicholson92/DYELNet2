@@ -240,7 +240,11 @@ public class MainActivity extends Activity {
 				if(addRoutine != null && addRoutine.running){
 					addRoutine.openAddRoutineDay(TV1.getText().toString(), TV2.getText().toString());
 				}
-				else{
+				//Added By Suna
+				else if(goal.isRunning() && goal.status.equals("create")){
+					GoalSet.setBrowseResult(this, TV1.getText().toString(), TV2.getText().toString());
+				}
+				else {
 					routineView.openAddNewSet(TV1.getText().toString(), TV2.getText().toString());
 				}
 				break;
@@ -250,6 +254,9 @@ public class MainActivity extends Activity {
 				Log.w("DAY", day);
 				routineGenerator.addSet(day, exercise_name);
 				restore_routine_generator();
+				break;
+			case R.layout.create_goal:
+				System.out.println("Suna Debug");
 				break;
 		
 		}
@@ -593,6 +600,7 @@ public class MainActivity extends Activity {
 			setContentView(R.layout.routine_view);
 			routineView.goBack();
 		}
+		
 		
 		workoutSliderShowFinish();
 		
@@ -1313,11 +1321,6 @@ public class MainActivity extends Activity {
     	gotoLayout(R.layout.goal_userdata);
     	goal.status = "create";
     }
-    public void createUserDataGoal(View v) throws JSONException{
-    	if(goal.isRunning()){
-    		 //Actual work will be done at updateUserDataGoal
-    	}
-    }
     public void cancelSetGoal(View v) throws JSONException{
     	if(goal.isRunning()){
     		String currentGoalName = GoalViewer.getCurrentGoalName();  	
@@ -1350,7 +1353,22 @@ public class MainActivity extends Activity {
     		}
     	}
     }
-    public void createSetGoal(View v){
-    	GoalSet.createSetGoal(this);
+    public void gotoCreateSetGoal(View v){
+       	gotoLayout(R.layout.goal_set_create);
+    	goal.status = "create";
     }
+	public void createSetGoal(View v) {
+		if (goal.isRunning() && goal.status.equals("create")) {
+			String subID = GoalSet.createSetGoal2(this);
+			goal.setCreatedSubID(subID);
+			goal.setCreatedType("set");
+			gotoLayout(R.layout.create_goal);
+		}
+	}
+	public void cancelCreateSetGoal(View v){
+		if(goal.isRunning()){
+			//TODO it should remember previous data
+			gotoLayout(R.layout.create_goal);
+		}
+	}
 }

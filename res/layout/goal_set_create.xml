@@ -128,7 +128,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.73"
             android:gravity="center"
-            android:onClick="addSetGoal"
+            android:onClick="createSetGoal"
             android:text="Add" />
 
         <Button
@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:onClick="set_add"
+            android:onClick="cancelCreateSetGoal"
             android:text="Cancel" />
     </LinearLayout>
 
