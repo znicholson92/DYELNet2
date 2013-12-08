@@ -242,7 +242,11 @@ public class MainActivity extends Activity {
 				if(addRoutine != null && addRoutine.running){
 					addRoutine.openAddRoutineDay(TV1.getText().toString(), TV2.getText().toString());
 				}
-				else{
+				//Added By Suna
+				else if(goal.isRunning() && goal.status.equals("create")){
+					GoalSet.setBrowseResult(this, TV1.getText().toString(), TV2.getText().toString());
+				}
+				else {
 					routineView.openAddNewSet(TV1.getText().toString(), TV2.getText().toString());
 				}
 				break;
@@ -253,6 +257,11 @@ public class MainActivity extends Activity {
 				routineGenerator.addSet(day, exercise_name);
 				restore_routine_generator();
 				break;
+				
+				case R.layout.create_goal:
+				System.out.println("Suna Debug");
+				break;
+
 		
 		}
 	}
@@ -521,6 +530,10 @@ public class MainActivity extends Activity {
 
 	}
 	
+	public void gotoCreateGoal(View v)
+	{	
+		gotoLayout(R.layout.create_goal);
+	}	
 	
 	/****************TESTING METHODS*************************/
 	public void connectToDatabase(View v)
