@@ -9,17 +9,17 @@
         android:orientation = "horizontal"
         android:background="#1483D9">
 
-
-        <TextView android:id="@+id/status_bar"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/status_bar"
             android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dip"
             android:layout_marginRight="4dip"
-        	android:layout_marginLeft="4dip"
-            android:text="hello"
-            android:gravity="center"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="horizontal"
-        />
+            android:text="Time to get swole" />
+
         <TextView android:id="@+id/username"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
