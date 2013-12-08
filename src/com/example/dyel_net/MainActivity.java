@@ -48,6 +48,7 @@ public class MainActivity extends Activity {
 			//cache = (Cache)savedInstanceState.get("cache");
 			//previous_layouts = (Stack<Integer>)savedInstanceState.get("previous_layouts");
 			//current_layout = (Integer)savedInstanceState.getInt("current_layout");
+			
 		}
 	}
 	

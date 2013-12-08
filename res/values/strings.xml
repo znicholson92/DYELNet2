@@ -16,5 +16,11 @@
     <string name="pick_date">Click to Pick DOB</string>
     <string name="location">Location</string>
     <string name="creategoal_category">Select Goal Category</string>
+    <string-array name="category_arrays">
+        <item>Loose Weight</item>
+        <item>Loose Fat</item>
+        <item>Stay Healthy</item>
+        <item>Enhance Cardio</item>
+    </string-array>
 
 </resources>

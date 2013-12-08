@@ -20,13 +20,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
 public class GoalViewer {
 	
 	/**SQL attribute names **/
-	private static final String SQLcategory = "goal_category";
+	private static final String SQLcategory = "category";
 	private static final String SQLgoalName = "name";
 	private static final String SQLstartDate = "start_date";
 	private static final String SQLendDate = "goal_date";
@@ -158,7 +159,7 @@ public class GoalViewer {
         EditText endDateTy =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_year2);
         EditText endDateTm =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_month2);
         EditText endDateTd =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_day2);
-        //category
+        Spinner categorySP = (Spinner)app.findViewById(R.id.goal_update_spinner1);
         CheckBox completedCB = (CheckBox)app.findViewById(R.id.goal_update_checkBox1);
 		
 		String SQL = "SELECT * FROM goals " +
@@ -190,6 +191,8 @@ public class GoalViewer {
 		if(isCompleted.equals("1")){
 			completedCB.setChecked(true);
 		}
+		String category = j.getString(SQLcategory).toString();
+		//category..
 		
 	}catch (JSONException e) {e.printStackTrace();}
 	}

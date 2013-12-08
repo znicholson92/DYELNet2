@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 @SuppressLint("CutPasteId")
@@ -57,9 +58,8 @@ public class Goal {
 				.findViewById(R.id.creategoal_dateofbirth_day2);
 		CheckBox completedCB = (CheckBox)app.findViewById(R.id.creategoal_checkBox1);
 		
-		
+		Spinner categorySP = (Spinner)app.findViewById(R.id.creategoal_spinner1);
 		// category
-		// completed?
 
 		String goalName = goalNameET.getText().toString();
 		String note = noteET.getText().toString();
@@ -75,14 +75,14 @@ public class Goal {
 		} else {
 			completed = "0";
 		}
-		// category
+		String category = categorySP.getSelectedItem().toString();
 
 		String SQL = "INSERT INTO  `dyel-net_main`.`goals` "
-				+ "(`username` ,`name` , `notes`, `start_date` , `goal_date`, `type`, `subclassID`, `completed`)"
+				+ "(`username` ,`name` , `notes`, `start_date` , `goal_date`, `type`, `subclassID`, `completed`, `category`)"
 				+ " VALUES ( " + "'" + userID + "', " + "'" + goalName + "', "
 				+ "'" + note + "', " + "'" + startDate + "', " + "'" + endDate
 				+ "', " + "'" + createdType + "', " + "'" + createdSubID + "'"
-				+ ", '" + completed +"');";
+				+ ", '" + completed +"', '" + category + "');";
 
 		System.out.println(SQL);
 
@@ -117,6 +117,8 @@ public class Goal {
 		        EditText endDateTy =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_year2);
 		        EditText endDateTm =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_month2);
 		        EditText endDateTd =   (EditText) app.findViewById(R.id.goal_update_dateofbirth_day2);
+		        CheckBox completedCB = (CheckBox)app.findViewById(R.id.goal_update_checkBox1);
+				Spinner categorySP = (Spinner)app.findViewById(R.id.goal_update_spinner1);
 		        //category
 		        //completed?
 		        
@@ -124,6 +126,13 @@ public class Goal {
 		        String notes = noteET.getText().toString();
 		        String startDate = startDateTy.getText().toString()+"-"+startDateTm.getText().toString()+"-"+startDateTd.getText().toString();
 		        String endDate = endDateTy.getText().toString()+"-"+endDateTm.getText().toString()+"-"+endDateTd.getText().toString();
+		        String completed;
+				if (completedCB.isChecked()){
+					completed = "1";
+				} else {
+					completed = "0";
+				}
+		        String category = categorySP.getSelectedItem().toString();
 		        //category
 		        //completed?
 		        		          
@@ -135,6 +144,10 @@ public class Goal {
 		        		startDate +
 		        		"', `goal_date`='" +
 		        		endDate +
+		        		"', `completed`='" +
+		        		completed +
+		        		"', `category`='" +
+		        		category +
 		        		"' WHERE `username` = '"+
 		        		userID +
 		        		"' and `name` = '" +

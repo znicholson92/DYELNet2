@@ -118,7 +118,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:drawSelectorOnTop="true"
-                android:prompt="@string/creategoal_category" />
+                android:prompt="@string/creategoal_category"
+                android:entries="@array/category_arrays"
+                 />
             
 <!-- <EditText
                 android:id="@+id/creategoal_category"
