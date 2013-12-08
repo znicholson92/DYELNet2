@@ -1150,33 +1150,15 @@ public class MainActivity extends Activity {
     	if(strRtName != "" && strNumWeeks != ""){
     		
     		_pd = ProgressDialog.show(app, "Loading", "Creating routine...");
+    		routineGenerator.go(strRtName, strNumWeeks);
+    		_pd.cancel();
+    		gotoRoutineView(null);
+	    	routineView.viewRoutine(strRtName);
 	    	
-    		runGenerator task = new runGenerator();
-    		
-    		task.execute(strRtName, strNumWeeks);
-    		
     	}
     	
     }
-    
-    class runGenerator extends AsyncTask<String, Void, String>
-	{
-    	String arg1;
-		@Override
-		protected String doInBackground(String... arg0) {
-			arg1 = arg0[1];
-			return arg0[0];
-		}
-		
-		@Override
-		protected void onPostExecute(String result){
-			routineGenerator.go(result, arg1);
-			_pd.cancel();
-	    	gotoRoutineView(null);
-	    	routineView.viewRoutine(result);
-		}
-		
-	}
+
 
 
 	/***************************************************************/

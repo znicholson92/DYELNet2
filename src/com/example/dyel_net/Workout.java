@@ -385,6 +385,7 @@ public class Workout
 			String SQL;
 			if(app.current_layout == R.layout.edit_set || app.current_layout == R.layout.add_set){
 				SQL = previous_SQL.pop();
+				Log.w("PREVIOUS SQL", SQL);
 				app.con.readQuery(SQL, listview, col_head);
 				topbar.setText(previous_topbar.pop());
 				status = "exercise";
