@@ -401,7 +401,10 @@ public class RoutineGenerator {
 	public String getWeekID(String rtID, String week) throws JSONException
 	{
 		String SQL = " SELECT weekID FROM schedule_week WHERE routineID=" + rtID + " AND week=" + week;
-		String jString = app.con.readQuery(SQL);
+		String jString = "NULL";
+		while(jString == "NULL"){
+			jString = app.con.readQuery(SQL);	
+		}
 		JSONObject jObject = new JSONObject(jString);
 		JSONArray jArray = jObject.getJSONArray("data");
 		JSONObject j = jArray.getJSONObject(0);
