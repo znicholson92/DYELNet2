@@ -275,10 +275,13 @@ public class RoutineGenerator {
 			}
 		}
 		
-		String weight_str = Double.toString(weight);
+
 		String reps_str = Integer.toString(num_reps);
+		long lweight = Math.round(weight);
+		String weight_str = Long.toString(lweight);
 		
 		HashMap<String, String> ret = new HashMap<String, String>();
+		
 		ret.put("reps", reps_str);
 		ret.put("weight", weight_str);
 		
