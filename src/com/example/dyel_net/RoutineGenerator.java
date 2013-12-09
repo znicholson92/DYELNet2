@@ -318,7 +318,7 @@ public class RoutineGenerator {
 			
 			JSONArray jArray_week = MainJSON.getJSONArray("schedule_week");
 			
-			for(int k=0; k < jArray_week.length(); k++){
+			for(int k=1; k < jArray_week.length(); k++){
 				
 				JSONObject jObject_week = jArray_week.getJSONObject(k);
 				
@@ -327,7 +327,7 @@ public class RoutineGenerator {
 				
 				String week = jObject_week.getString("week");
 				
-				SQL = "INSERT INTO week(week, routineID) VALUES (" +
+				SQL = "INSERT INTO schedule_week(week, routineID) VALUES (" +
 					  week + "," + routineID + ")";
 				
 				app.con.writeQuery(SQL);
@@ -337,7 +337,7 @@ public class RoutineGenerator {
 				
 				JSONArray jArray_day = jObject_week.getJSONArray("schedule_day");
 				
-				for(int j=0; j < jArray_day.length(); j++){
+				for(int j=1; j < jArray_day.length(); j++){
 					
 					JSONObject jObject_day = jArray_day.getJSONObject(j);
 					
@@ -348,31 +348,31 @@ public class RoutineGenerator {
 					
 					String dayname = jObject_day.getString("name");
 					
-					SQL = "INSERT INTO day(weekID, day, name) VALUES(" +
-						  weekID + "," + day + "," + dayname + ")";
+					SQL = "INSERT INTO schedule_day(routineID, weekID, day, name) VALUES(" +
+						  routineID + "," + weekID + "," + day + ",'" + dayname + "')";
 					
 					app.con.writeQuery(SQL);
 					
 					//get dayID
-					String dayID = "TODO";
+					String dayID = getDayID(weekID, day);
 					
 					JSONArray jArray_set = jObject_day.getJSONArray("_set");
 					
-					for(int i=0; i < jArray_set.length(); i++){
+					for(int i=1; i < jArray_set.length(); i++){
 					
 						JSONObject jObject_set = jArray_set.getJSONObject(i);
 						
 						if(jObject_set == null)
 							continue;
 						
-						SQL = " INSERT INTO _set(dayID, exerciseID, reps, weight, setnumber, isReal, isGoal) " +
+						SQL = " INSERT INTO _set(dayID, exerciseID, reps, weight, setnumber, isReal, isGoal, finished) " +
 							   " VALUES(" +
 								  	 dayID + "," + 
 								  	 jObject_set.getString("exerciseID") + "," + 
 								  	 jObject_set.getString("reps") + "," +
 								  	 jObject_set.getString("weight") + "," + 
 								  	 jObject_set.getString("setnumber") + "," + 
-								  	 "0,0)";
+								  	 "0,0,0)";
 						
 						app.con.writeQuery(SQL);
 					}
@@ -389,7 +389,7 @@ public class RoutineGenerator {
 	
 	public String getRoutineID(String rtName, String timeStamp) throws JSONException
 	{
-		String SQL = " SELECT routineID FROM routine WHERE name='" + rtName + "', AND lastedited='" + timeStamp + "'";
+		String SQL = " SELECT routineID FROM routine WHERE name='" + rtName + "' AND lastedited='" + timeStamp + "'";
 		String jString = app.con.readQuery(SQL);
 		JSONObject jObject = new JSONObject(jString);
 		JSONArray jArray = jObject.getJSONArray("data");
@@ -400,12 +400,26 @@ public class RoutineGenerator {
 	
 	public String getWeekID(String rtID, String week) throws JSONException
 	{
-		String SQL = " SELECT weekID FROM week WHERE routineID=" + rtID + ", AND week=" + week;
+		String SQL = " SELECT weekID FROM schedule_week WHERE routineID=" + rtID + " AND week=" + week;
 		String jString = app.con.readQuery(SQL);
 		JSONObject jObject = new JSONObject(jString);
 		JSONArray jArray = jObject.getJSONArray("data");
 		JSONObject j = jArray.getJSONObject(0);
 		String result = j.get("weekID").toString();
+		return result;
+	}
+	
+	public String getDayID(String weekID, String day) throws JSONException
+	{
+		String jString = "NULL";
+		while(jString == "NULL"){
+			String SQL = " SELECT dayID FROM schedule_day WHERE weekID=" + weekID + " AND day=" + day;
+			jString = app.con.readQuery(SQL);
+		}
+		JSONObject jObject = new JSONObject(jString);
+		JSONArray jArray = jObject.getJSONArray("data");
+		JSONObject j = jArray.getJSONObject(0);
+		String result = j.get("dayID").toString();
 		return result;
 	}
 	

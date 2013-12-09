@@ -93,7 +93,7 @@ public class Cache {
 		String sql = " SELECT exerciseID FROM routine " + "" +
 				     " WHERE routineHash='" + routineHash + "'" +
 				     " AND day=" + day +
-				     " AND _set=" + set;
+				     " AND setnumber=" + set;
 		Log.w("CACHE SQL", sql);
 		Cursor cursor = db.rawQuery(sql, null);
 		cursor.moveToNext();
@@ -107,7 +107,7 @@ public class Cache {
 		String sql = " SELECT setnumber FROM routine " + "" +
 				     " WHERE routineHash='" + routineHash + "'" +
 				     " AND day=" + day +
-				     " AND _set=" + set;
+				     " AND setnumber=" + set;
 		Cursor cursor = db.rawQuery(sql, null);
 		cursor.moveToNext();
 		int result = cursor.getInt(0);
