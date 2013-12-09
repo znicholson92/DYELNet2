@@ -127,7 +127,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			total += temp.week;
+			total += temp.adjusted;
 			iter++;
 		}
 		
@@ -146,7 +146,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			float hold = (temp.week - xbar) * (temp.week - xbar);
+			float hold = (temp.adjusted - xbar) * (temp.adjusted - xbar);
 			total += hold; 
 			iter++;
 		}
@@ -163,7 +163,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			total += temp.adjusted;
+			total += temp.week;
 			iter++;
 		}
 		
@@ -184,7 +184,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			float hold = (temp.week - xbar) * (temp.adjusted - ybar);
+			float hold = (temp.adjusted - xbar) * (temp.week - ybar);
 			total += hold;
 			iter++;
 		}
