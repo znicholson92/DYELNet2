@@ -87,8 +87,8 @@ public class LinReg {
 				week_s = (String) j.get("week");
 			} catch (JSONException e) {e.printStackTrace();}
 			
-			int week = Integer.parseInt(week_s);
-			temp.week = week;
+			float week = Float.parseFloat(week_s);
+			temp.week = (float) (Math.log(week)/Math.log(2.718));
 			
 			String get_max = "SELECT MAX(weight) AS Max, reps FROM _set WHERE dayID = " + temp.dayID
 					+ " AND exerciseID = " + exer_id;
@@ -110,7 +110,7 @@ public class LinReg {
 			
 			float adjusted = get_adjusted(max, reps);
 			
-			temp.adjusted = (float) Math.log(adjusted);
+			temp.adjusted = adjusted;
 			nodes.add(iter, temp);
 			iter++;
 		}
@@ -127,7 +127,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			total += temp.adjusted;
+			total += temp.week;
 			iter++;
 		}
 		
@@ -146,7 +146,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			float hold = (temp.adjusted - xbar) * (temp.adjusted - xbar);
+			float hold = (temp.week - xbar) * (temp.week - xbar);
 			total += hold; 
 			iter++;
 		}
@@ -163,7 +163,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			total += temp.week;
+			total += temp.adjusted;
 			iter++;
 		}
 		
@@ -184,7 +184,7 @@ public class LinReg {
 		while (iter < len)
 		{
 			DataNode temp = nodes.get(iter);
-			float hold = (temp.adjusted - xbar) * (temp.week - ybar);
+			float hold = (temp.week - xbar) * (temp.adjusted - ybar);
 			total += hold;
 			iter++;
 		}
