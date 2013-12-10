@@ -181,7 +181,8 @@
 </RelativeLayout>
 
 <include
-    android:layout_height="24dp"
+    android:layout_height="fill_parent"
+    android:layout_gravity="bottom"
     layout="@layout/footer" />
 
 </LinearLayout>

@@ -30,10 +30,9 @@ public class LinReg {
 	@SuppressWarnings("null")
 	private ArrayList<String> pull_days(String exer_id)
 	{
-		String temp = "SELECT session.dayID FROM _set INNER JOIN session ON session.sessionID = _set.sessionID " +
+		String temp = "SELECT DISTINCT session.dayID FROM _set INNER JOIN session ON session.sessionID = _set.sessionID " +
 					  "WHERE _set.exerciseID = " + exer_id + " AND _set.isReal=1 AND session.isGoal=0 AND " + 
-					  "session.username = '" + app.con.username() + "' " +
-					  "LIMIT 15 ";
+					  "session.username = '" + app.con.username() + "'";
 		Log.w("PULL DAYS", temp);
 		String jString = app.con.readQuery(temp);
 		Log.w("PULL DAYS", "result= " + jString);
@@ -88,8 +87,8 @@ public class LinReg {
 				week_s = (String) j.get("week");
 			} catch (JSONException e) {e.printStackTrace();}
 			
-			int week = Integer.parseInt(week_s);
-			temp.week = week;
+			float week = Float.parseFloat(week_s);
+			temp.week = (float) (Math.log(week)/Math.log(2.718));
 			
 			String get_max = "SELECT MAX(weight) AS Max, reps FROM _set WHERE dayID = " + temp.dayID
 					+ " AND exerciseID = " + exer_id;
@@ -111,7 +110,7 @@ public class LinReg {
 			
 			float adjusted = get_adjusted(max, reps);
 			
-			temp.adjusted = (float) Math.log(adjusted);
+			temp.adjusted = adjusted;
 			nodes.add(iter, temp);
 			iter++;
 		}

@@ -177,7 +177,7 @@ public class Workout
 		current_exercise = exercise_name;
 		current_exerciseID = exerciseID;
 		
-		String SQL = " SELECT setnumber, reps, weight, setID, finished FROM _set " +
+		String SQL = " SELECT setnumber As 'Set', reps As 'Reps', weight As 'Weight', setID, finished FROM _set " +
 					 " INNER JOIN exercise ON exercise.exerciseID = _set.exerciseID " +
 					 " WHERE dayID = " + dayID + 
 					 " AND exercise.name='" + exercise_name + "'" +
@@ -378,6 +378,7 @@ public class Workout
 		{
 			app.setContentView(R.layout.workingout);
 			
+			
 			col_head = (LinearLayout)app.findViewById(R.id.working_out_col_header);
 			listview = (ListView)app.findViewById(R.id.workingout_listView);
 			topbar = (TextView)app.findViewById(R.id.working_out_topbar_text);
@@ -386,6 +387,7 @@ public class Workout
 			if(app.current_layout == R.layout.edit_set || app.current_layout == R.layout.add_set){
 				SQL = previous_SQL.pop();
 				Log.w("PREVIOUS SQL", SQL);
+				app.current_layout = R.layout.workingout;
 				app.con.readQuery(SQL, listview, col_head);
 				topbar.setText(previous_topbar.pop());
 				status = "exercise";

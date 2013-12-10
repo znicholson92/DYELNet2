@@ -310,6 +310,18 @@ public class RoutineView extends Activity {
 		if(pops > 0 && !previous_SQL.isEmpty())
 		{
 			Log.w("ROUTINE VIEW", "GOING BACK");
+			Log.w("going back", "status=" + status);
+			if(app.current_layout != R.layout.routine_view){
+				status = "sets";
+			} else {
+				if(status == "exercises")
+					status = "days";
+				if (status == "days")
+					status = "weeks";
+				if (status == "weeks")
+					status = "routines";
+			}
+			
 			app.current_layout = R.layout.routine_view;
 			
 			if(current_SQL.equals((String)previous_SQL.peek()))

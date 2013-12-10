@@ -51,7 +51,7 @@
 
             <LinearLayout
                 android:id="@+id/linear_scroll"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical" >
 
@@ -183,6 +183,7 @@
 
 <include
     android:layout_height="24dp"
+    android:layout_gravity="bottom"
     layout="@layout/footer" />
 
 </LinearLayout>
