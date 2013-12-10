@@ -1333,10 +1333,15 @@ public class MainActivity extends Activity {
     public void cancelUserDataGoal(View v) throws JSONException{
     	if(goal.isRunning()){
     		String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    		if(current_layout == R.layout.goal_userdata_edit){
+    			gotoLayout(R.layout.create_goal);
+    			return;
+    		}
     		if(GoalViewer.status == 2){
     			goal.viewGoalDetail(currentGoalName);
     		}else if(GoalViewer.status == 3){
     			goal.viewDetailWithEdit(currentGoalName);    			
+    	
     		}
     	}
     }
@@ -1384,6 +1389,10 @@ public class MainActivity extends Activity {
     public void cancelSetGoal(View v) throws JSONException{
     	if(goal.isRunning()){
     		String currentGoalName = GoalViewer.getCurrentGoalName();  	
+    		if (current_layout == R.layout.goal_set_create){
+    			gotoLayout(R.layout.create_goal);
+    			return;
+    		}
     		if(GoalViewer.status == 2){
     			goal.viewGoalDetail(currentGoalName);
     		}else if(GoalViewer.status == 3){
