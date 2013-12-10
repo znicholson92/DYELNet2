@@ -66,12 +66,8 @@ public class GoalViewer {
 						userID +
 						"' ORDER BY completed ASC";
 		
-		//app.con.readQuery(SQL, goal_view_listview, goal_view_col_head);		
-		
 		//Expired goals
 		String queryResult = app.con.readQuery(SQL);		
-		//System.out.println(queryResult);
-		
 		writeQueryResult(app, queryResult, goal_view_col_head, goal_view_listview);
 		goal_view_topbar.setText("Goal View");	
 		previous_SQL.push(SQL);

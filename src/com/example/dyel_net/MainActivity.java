@@ -448,11 +448,32 @@ public class MainActivity extends Activity {
 		{
 			HistoryViewer.goBack(this);
 		}
+		// Added by Suna for goal part
+		else if (current_layout == R.layout.goal_view_detail
+				|| current_layout == R.layout.create_goal) {
+			goal.viewGoal();
+		}
+		else if (current_layout == R.layout.goal_edit_set 
+				|| current_layout == R.layout.goal_userdata) {
+			try {
+				goal.viewGoalDetail(GoalViewer.getCurrentGoalName());
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		else if (current_layout == R.layout.goal_set_create 
+				|| current_layout == R.layout.goal_userdata_edit) {
+			gotoLayout(R.layout.create_goal);
+		}
+		else if (current_layout == R.layout.goal_view) {
+			gotoLayout(R.layout.main_menu);
+		}		
 		else if(!previous_layouts.isEmpty())
 		{
 			current_layout = previous_layouts.pop();
 			setContentView((int)current_layout);
 		}
+		
 	}
 
 	public void gotoLayout(int layout)
