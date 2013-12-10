@@ -19,10 +19,11 @@ public class GoalSet {
 		EditText ET2 = (EditText)app.findViewById(R.id.goal_editset_et2);
 		TextView TV1 = (TextView)app.findViewById(R.id.goal_editset_tv1);
 		TextView TV2 = (TextView)app.findViewById(R.id.goal_editset_tv2);
+		EditText ET3 = (EditText)app.findViewById(R.id.goal_editset_notes);
 		
 		setnumTV.setText("N/A");
 		
-		String SQL = "SELECT exercise.name, reps, weight " + 
+		String SQL = "SELECT exercise.name, reps, weight, _set.notes " + 
 					 "FROM _set INNER JOIN exercise ON _set.exerciseID = exercise.exerciseID " +
 					 "WHERE setID=" + setID;
 		
@@ -39,6 +40,7 @@ public class GoalSet {
 			TV2.setText("Weight");
 			ET1.setText(j.get("reps").toString());
 			ET2.setText(j.get("weight").toString());
+			ET3.setText(j.get("notes").toString());
 			
 		} catch (JSONException e) {e.printStackTrace();}
 	}
@@ -49,10 +51,12 @@ public class GoalSet {
 		//EditText setnumET = (EditText)app.findViewById(R.id.goal_set_create_setnumber);
 		EditText ET1 = (EditText)app.findViewById(R.id.goal_set_create_reps);
 		EditText ET2 = (EditText)app.findViewById(R.id.goal_set_create_weight);
+		EditText ET3 = (EditText)app.findViewById(R.id.goal_set_create_notes);
+		
 		//TextView TV1 = (TextView)app.findViewById(R.id.goal_set_create_tv1);
 		//TextView TV2 = (TextView)app.findViewById(R.id.goal_set_create_tv2);
 		
-		String SQL = "SELECT exercise.name, reps, weight, setnumber " + 
+		String SQL = "SELECT exercise.name, reps, weight, setnumber, _set.notes" + 
 					 "FROM _set INNER JOIN exercise ON _set.exerciseID = exercise.exerciseID " +
 					 "WHERE setID=" + setID;
 		
@@ -70,7 +74,7 @@ public class GoalSet {
 			//setnumET.setText("N/A");
 			ET1.setText(j.get("reps").toString());
 			ET2.setText(j.get("weight").toString());
-			
+			ET3.setText(j.get("notes").toString());
 		} catch (JSONException e) {e.printStackTrace();}
 	}
 	
@@ -157,7 +161,7 @@ public class GoalSet {
 	 				  	 "VALUES("+ exerciseID + "," + 
 	 				  			  reps + "," +
 	 				  			  weight + "," +
-	 				  			  notes + "," +
+	 				  			  " '"+ notes + "'," +
 	 				  			  "0,1)";			
 			app.con.writeQuery(SQL);
 		}
@@ -170,19 +174,19 @@ public class GoalSet {
 				weight+
 				"' AND notes='"+
 				notes+
-				"' AND isGoal=true";
+				"' AND isGoal=1 AND isReal=0";
 		
 		Log.w("SQL", readSQL);
 		String JSONstring = app.con.readQuery(readSQL);
 		JSONObject jsonObject;
 
-		if (JSONstring.length() > 10) {
+		if (JSONstring.length() > 5) {
 			try {
 				jsonObject = new JSONObject(JSONstring);
 				JSONArray jArray = jsonObject.getJSONArray("data");
 				JSONObject j = jArray.getJSONObject(0);
 				setID = j.get("setID").toString();
-
+				System.out.println("Set ID : "+setID);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -190,46 +194,6 @@ public class GoalSet {
 			return "";
 		}
 		return setID;
-	}
-	//public static void createSetGoal(final MainActivity app, String exerciseID, final String setID)
-	public static void createSetGoal(final MainActivity app)
-	{
-		//TODO
-		String setID = null;
-		String exerciseID = null;
-		EditText ET1 = (EditText)app.findViewById(R.id.goal_editset_et1);
-		EditText ET2 = (EditText)app.findViewById(R.id.goal_editset_et2);
-		EditText notes = (EditText)app.findViewById(R.id.goal_editset_notes);
-		
-		String reps, weight;
-		if(setID != null) //exerciseID -> setID
-		{
-			reps = ET1.getText().toString();
-			weight = ET2.getText().toString();
-			
-			String note;
-			if(notes.getText().toString().length() < 1)
-				note = "NULL";
-			else
-				note = notes.getText().toString();
-			
-			String SQL = "INSERT INTO _set(exerciseID, reps, weight, setnumber, " +
-						 				  " notes, isReal, isGoal) " +
-					"VALUES("
-					+ exerciseID
-					+ ","
-					+ reps
-					+ ","
-					+ weight
-					+ ","
-					+ "0"  //trivial number for set number
-					+ ","
-					+ note
-					+ "," + "0,1)";
-	  	
-			app.con.writeQuery(SQL);
-					
-		}
 	}
 
 	public static void setBrowseResult(MainActivity app, String...strings) {
