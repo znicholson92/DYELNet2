@@ -21,8 +21,9 @@
         android:orientation="horizontal" >
             <LinearLayout
                 android:id="@+id/main_menu_col1"
-                android:layout_width="145dp"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:layout_weight=".5"
                 android:orientation="vertical" >
 
                 <Button
@@ -58,8 +59,10 @@
 
             <LinearLayout
                 android:id="@+id/main_menu_col2"
-                android:layout_width="145dp"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:layout_weight="0.5"
+                        
                 android:orientation="vertical" >
         
                     <Button
